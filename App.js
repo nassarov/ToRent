@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+       <Icon name="heart" size={30} color="red" />
       <StatusBar style="auto" />
     </View>
   );
