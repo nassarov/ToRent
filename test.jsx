@@ -1,12 +1,3 @@
-import React from 'react'
+ABDO YA ABDO
 
-const test = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default test
-
+Deez Nuts
