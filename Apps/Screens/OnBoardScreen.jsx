@@ -5,7 +5,7 @@ export default function OnBoardScreen() {
   return (
     <View >
       <Text>OnBoardScreen</Text>
-        <View style={{width:wp(5) , height:hp(5)}} className='bg-zinc-900 '>
+        <View style={{width:hp(5) , height:hp(5)}} className='bg-zinc-900 '>
 
         </View>
     </View>
