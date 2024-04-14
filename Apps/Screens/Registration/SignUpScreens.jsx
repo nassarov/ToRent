@@ -1,4 +1,4 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TextInput, StyleSheet } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import {useNavigation} from '@react-navigation/native';
@@ -27,8 +27,6 @@ export default function SignUpScreens() {
 </View>
   )
 }
-
-export default SignUpScreens
 
 const styles = StyleSheet.create({
     container: {
