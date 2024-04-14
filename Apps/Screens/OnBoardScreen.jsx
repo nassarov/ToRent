@@ -9,14 +9,20 @@ export default function OnBoardScreen() {
   const [showHomePage, setShowHomePage] = useState(false);
 
   const labelButton = (label) => (
-    <View className="bg-purple-700 p-3 rounded-lg">
-      <Text className="text-white">{label}</Text>
+    <View className="bg-purple-700 p-3 rounded-lg " style={{width: wp(20)}}>
+      <Text className="text-white text-center font-medium">{label}</Text>
+    </View>
+  );
+  
+  const skipButton = (label) => (
+    <View className='mt-2 ml-3'>
+      <Text className="text-purple-700 text-lg font-light">{label}</Text>
     </View>
   );
   const slides = [
     {
       id: 1,
-      title: "Discover best cars",
+      title: "Discover best cars in your city",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       image: require("./../../assets/OnBoard/s1.jpg"),
@@ -52,17 +58,17 @@ export default function OnBoardScreen() {
                 <Text className="font-bold text-black text-4xl">
                   {item.title}
                 </Text>
-                <Text className="font-bold text-black text-lg">
+                <Text className="font-bold text-black text-lg mt-8">
                   {item.description}
                 </Text>
               </View>
             </View>
           );
         }}
-        activeDotStyle={{ backgroundColor: "purple", width: wp(6) }}
+        activeDotStyle={{ backgroundColor: "purple", width: wp(8), }}
         renderNextButton={() => labelButton("Next")}
         showSkipButton
-        renderSkipButton={() => labelButton("Skip")}
+        renderSkipButton={() => skipButton("Skip")}
         renderDoneButton={() => labelButton("Done")}
         onDone={() => {
           setShowHomePage(true);
