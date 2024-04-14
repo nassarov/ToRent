@@ -5,8 +5,11 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import AppIntroSlider from "react-native-app-intro-slider";
-import { styled } from "nativewind";
-export default function OnBoardScreen() {
+import Registration from "../Navigations/Registration";
+import 'react-native-gesture-handler'
+
+
+export default function OnBoardScreen({navigation}) {
   const [showHomePage, setShowHomePage] = useState(false);
   StatusBar.setBarStyle('light-content', true);
 
@@ -74,14 +77,13 @@ export default function OnBoardScreen() {
         renderDoneButton={() => labelButton("Done")}
         onDone={() => {
           setShowHomePage(true);
+          navigation.navigate("Registration"); 
         }}
       />
     );
   }
 
   return (
-    <View className="flex-1 justify-center items-center">
-     <Text>Hello</Text>
-    </View>
+    <Registration/>
   );
 }
