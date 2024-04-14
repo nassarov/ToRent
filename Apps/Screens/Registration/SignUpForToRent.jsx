@@ -26,7 +26,7 @@ export default function SignUpForToRent() {
       style={{ paddingTop: StatusBar.currentHeight }}
     >
       <View style={{ width: wp(80) }}>
-        <Text className="font-bold text-3xl ">Sign Up For ToRent</Text>
+        <Text className="font-bold text-3xl mt-2 text-center">Sign Up For ToRent</Text>
         <Text>
           Create a profile, Drive easy, Rent your favorite car and more
         </Text>
@@ -68,7 +68,7 @@ export default function SignUpForToRent() {
               <TouchableOpacity
                 onPress={handleSubmit}
                 
-                className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 flex-row gap-x-2"
+                className="bg-violet-500 rounded-lg p-3 items-center justify-center mt-3 flex-row gap-x-2"
               >
                 <Ionicons name="person-outline" size={24} color="black" />
                 <Text className="text-white font-bold text-base ">
@@ -81,7 +81,7 @@ export default function SignUpForToRent() {
         <Text className="text-center text-xl font-bold my-4">Or</Text>
         <TouchableOpacity
                 onPress={()=>{}}
-                className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 "
+                className="bg-violet-500 rounded-lg p-3 items-center justify-center mt-3 "
               >
                 <Text className="text-white font-bold text-base ">
                   Continue as a guest
