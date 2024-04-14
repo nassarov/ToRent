@@ -9,22 +9,22 @@ import {
 import React, { useState } from "react";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Formik } from "formik";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Entypo, EvilIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SignUpForToRent() {
   const navigation = useNavigation();
-
-  const [loading, setLoading] = useState(false);
   const onSubmitMethod = (values) => {
-    setLoading(true);
-    console.log(values.phone_number);
+    console.log(values)
+    navigation.navigate('signup',{values});
+    
   };
   return (
     <View
       className="items-center "
-      style={{ paddingTop: StatusBar.currentHeight }}
+      
     >
+      <StatusBar />
       <View style={{ width: wp(80) }}>
         <Text className="font-bold text-3xl mt-2 text-center">Sign Up For ToRent</Text>
         <Text>
@@ -58,20 +58,23 @@ export default function SignUpForToRent() {
             errors,
           }) => (
             <View>
+              
               <TextInput
                 placeholder="Phone Number"
                 value={values?.phone_number}
                 keyboardType="number-pad"
                 onChangeText={handleChange("phone_number")}
-                className="bg-gray-100 p-3 rounded-lg mt-5"
+                className="bg-gray-300 p-3 rounded-lg mt-5 border-[1px] border-gray-400"
+                
+                
               />
               <TouchableOpacity
                 onPress={handleSubmit}
                 
-                className="bg-violet-500 rounded-lg p-3 items-center justify-center mt-3 flex-row gap-x-2"
+                className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 flex-row gap-x-2"
               >
-                <Ionicons name="person-outline" size={24} color="black" />
-                <Text className="text-white font-bold text-base ">
+                <Ionicons name="person-outline" size={17} color="white" />
+                <Text className="text-white font-bold text-base ml-1">
                   Use your phone number
                 </Text>
               </TouchableOpacity>
@@ -81,7 +84,7 @@ export default function SignUpForToRent() {
         <Text className="text-center text-xl font-bold my-4">Or</Text>
         <TouchableOpacity
                 onPress={()=>{}}
-                className="bg-violet-500 rounded-lg p-3 items-center justify-center mt-3 "
+                className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 "
               >
                 <Text className="text-white font-bold text-base ">
                   Continue as a guest
@@ -89,13 +92,13 @@ export default function SignUpForToRent() {
               </TouchableOpacity>
   
       </View>
-        
-          <View className="bg-gray-100 p-3 rounded-lg mt-5">
-          <TouchableOpacity onPress={()=>navigation.push('signup')}>
-            <Text className=" text-xl">Next</Text>
-            </TouchableOpacity>
-          </View>
-        
+
+      <View className="flex-row mt-3">
+        <Text>Already Have An Account?</Text>
+        <TouchableOpacity>
+          <Text className="text-purple-700"> Login</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
