@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 
 export default function Registration() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="signupforToRent"> 
       <Stack.Screen
         name='signupforToRent'
         component={SignUpForToRent}
@@ -17,7 +17,7 @@ export default function Registration() {
       <Stack.Screen
         name='signup'
         component={SignUpScreens}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
       <Stack.Screen
         name='login'
