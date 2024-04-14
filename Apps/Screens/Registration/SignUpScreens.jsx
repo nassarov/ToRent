@@ -1,16 +1,33 @@
-
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
 
-export default function SignUpScreen  (){
+export default function SignUpScreen () {
+
+
+    const [showPassword, setShowPassword] = useState(false);
+  
+    // Function to toggle password visibility
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
+  
+  
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+    // Function to toggle password visibility
+    const toggleConfirmPasswordVisibility = () => {
+      setShowConfirmPassword(!showConfirmPassword);
+    };
+  
   return (
     <Formik
       initialValues={{ name: '', email: '', password: '', confirmPassword: '', carType: 'rent' }}
       onSubmit={(values) => {
         console.log(values);
+        // You can add your form submission logic here
       }}
       validate={(values) => {
         const errors = {};
@@ -68,10 +85,10 @@ export default function SignUpScreen  (){
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 value={values.password}
-                secureTextEntry
+                secureTextEntry={!showPassword}
               />
-              <TouchableOpacity style={styles.iconContainer}>
-                <Icon name='eye' size={25} color="#7F5AF0" />
+              <TouchableOpacity style={styles.iconContainer} onPress={togglePasswordVisibility}>
+                <Icon name={showPassword ? 'eye-off' : 'eye'} size={25} color="#7F5AF0" />
               </TouchableOpacity>
             </View>
             {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
@@ -84,10 +101,13 @@ export default function SignUpScreen  (){
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
                 value={values.confirmPassword}
-                secureTextEntry
+                secureTextEntry={!showConfirmPassword}
               />
-              <TouchableOpacity style={styles.iconContainer}>
-                <Icon name='eye' size={25} color="#7F5AF0" />
+              <TouchableOpacity style={styles.iconContainer} onPress={toggleConfirmPasswordVisibility} >
+                <Icon   name={showConfirmPassword ? 'eye-off' : 'eye'}
+              size={25}
+              color="#7F5AF0"
+              />
               </TouchableOpacity>
             </View>
             {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
@@ -112,14 +132,12 @@ export default function SignUpScreen  (){
         </View>
       )}
     </Formik>
-
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     justifyContent: 'flex-start',
     paddingTop: 50,
   },
@@ -177,6 +195,5 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
 });
-
 
 
