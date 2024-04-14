@@ -14,16 +14,13 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function SignUpForToRent() {
   const navigation = useNavigation();
+  const [error, setError] = useState(false);
   const onSubmitMethod = (values) => {
-    console.log(values)
-    navigation.navigate('signup',{values});
-    
+    console.log(values);
+    navigation.navigate("signup", { values });
   };
   return (
-    <View
-      className="items-center "
-      
-    >
+    <View className="items-center ">
       <StatusBar />
       <View style={{ width: wp(80) }}>
         <Text className="font-bold text-3xl ">Sign Up For ToRent</Text>
@@ -42,10 +39,7 @@ export default function SignUpForToRent() {
             if (values.phone_number !== "") {
               onSubmitMethod(values);
             } else {
-              ToastAndroid.show(
-                "Please Enter your phone number",
-                ToastAndroid.SHORT
-              );
+              setError(true);
             }
           }}
         >
@@ -58,16 +52,20 @@ export default function SignUpForToRent() {
             errors,
           }) => (
             <View>
-              
               <TextInput
                 placeholder="Phone Number"
                 value={values?.phone_number}
                 keyboardType="number-pad"
                 onChangeText={handleChange("phone_number")}
                 className="bg-gray-300 p-3 rounded-lg mt-5 border-[1px] border-gray-400"
-                
-                
               />
+              {error ? (
+                <Text className="text-sm text-red-500">
+                  Please fill this field
+                </Text>
+              ) : (
+                ""
+              )}
               <TouchableOpacity
                 onPress={handleSubmit}
                 className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 flex-row "
