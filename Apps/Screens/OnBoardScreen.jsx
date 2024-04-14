@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, StatusBar } from "react-native";
 import React, { useState } from "react";
 import {
   heightPercentageToDP as hp,
@@ -7,6 +7,7 @@ import {
 import AppIntroSlider from "react-native-app-intro-slider";
 export default function OnBoardScreen() {
   const [showHomePage, setShowHomePage] = useState(false);
+  StatusBar.setBarStyle('light-content', true);
 
   const labelButton = (label) => (
     <View className="bg-purple-700 p-3 rounded-lg " style={{width: wp(20)}}>
@@ -25,7 +26,7 @@ export default function OnBoardScreen() {
       title: "Discover best cars in your city",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      image: require("./../../assets/OnBoard/s1.jpg"),
+      image: require("./../../assets/OnBoard/s1.webp"),
     },
     {
       id: 2,
@@ -44,7 +45,7 @@ export default function OnBoardScreen() {
   ];
   if (!showHomePage) {
     return (
-      <AppIntroSlider
+      <AppIntroSlider 
         data={slides}
         renderItem={({ item }) => {
           return (
@@ -52,7 +53,7 @@ export default function OnBoardScreen() {
               <Image
                 source={item.image}
                 className={""}
-                style={{ width: wp(100), height: hp(50) }}
+                style={{ width: wp(100), height: hp(55) }}
               />
               <View className={"p-5"}>
                 <Text className="font-bold text-black text-4xl">
