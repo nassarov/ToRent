@@ -5,6 +5,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import AppIntroSlider from "react-native-app-intro-slider";
+import { styled } from "nativewind";
 export default function OnBoardScreen() {
   const [showHomePage, setShowHomePage] = useState(false);
   StatusBar.setBarStyle('light-content', true);
@@ -53,9 +54,9 @@ export default function OnBoardScreen() {
               <Image
                 source={item.image}
                 className={""}
-                style={{ width: wp(100), height: hp(55) }}
+                style={{ width: wp(100), height: hp(50) }}
               />
-              <View className={"p-5"}>
+              <View className={"p-5"} style={{height: hp(50)}}>
                 <Text className="font-bold text-black text-4xl">
                   {item.title}
                 </Text>
