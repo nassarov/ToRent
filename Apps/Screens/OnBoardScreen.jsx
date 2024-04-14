@@ -6,7 +6,6 @@ import {
 } from "react-native-responsive-screen";
 import AppIntroSlider from "react-native-app-intro-slider";
 import Registration from "../Navigations/Registration";
-import 'react-native-gesture-handler'
 
 
 export default function OnBoardScreen({navigation}) {
@@ -83,7 +82,5 @@ export default function OnBoardScreen({navigation}) {
     );
   }
 
-  return (
-    <Registration/>
-  );
+  
 }

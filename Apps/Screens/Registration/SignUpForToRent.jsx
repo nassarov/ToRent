@@ -10,8 +10,11 @@ import React, { useState } from "react";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Formik } from "formik";
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'
 
 export default function SignUpForToRent() {
+  const navigation = useNavigation();
+
   const [loading, setLoading] = useState(false);
   const onSubmitMethod = (values) => {
     setLoading(true);
@@ -86,6 +89,11 @@ export default function SignUpForToRent() {
               </TouchableOpacity>
   
       </View>
+        <TouchableOpacity onPress={()=>navigation.push('signup')}>
+          <View className="bg-gray-100 p-3 rounded-lg mt-5">
+            <Text className="text-center text-xl">Next</Text>
+          </View>
+        </TouchableOpacity>
     </View>
   );
 }

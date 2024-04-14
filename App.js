@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import OnBoardScreen from "./Apps/Screens/OnBoardScreen";
 import Registration from "./Apps/Navigations/Registration";
+import 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
