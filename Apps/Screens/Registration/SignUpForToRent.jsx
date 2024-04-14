@@ -43,6 +43,7 @@ export default function SignUpForToRent() {
             Use your phone number
           </Text>
         </TouchableOpacity>
+
         <Text className="text-center text-xl font-bold my-4">Or</Text>
         <TouchableOpacity
           onPress={() => {}}
