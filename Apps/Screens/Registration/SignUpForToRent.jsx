@@ -40,19 +40,18 @@ export default function SignUpForToRent() {
           onSubmit={(values) => {
             if (values.phone_number !== "") {
               onSubmitMethod(values);
-            } else {
-              setError(true);
             }
           }}
+          validate={(values) => {
+            const errors = {};
+            if (!values.phone_number) {
+              errors.phone_number = "Please fill this field";
+            }
+
+            return errors;
+          }}
         >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            setFieldValue,
-            errors,
-          }) => (
+          {({ handleChange, handleSubmit, values, errors }) => (
             <View>
               <TextInput
                 placeholder="Phone Number"
@@ -61,12 +60,10 @@ export default function SignUpForToRent() {
                 onChangeText={handleChange("phone_number")}
                 className="bg-gray-300 p-3 rounded-lg mt-5 border-[1px] border-gray-400"
               />
-              {error ? (
-                <Text className="text-sm text-red-500">
-                  Please fill this field
+              {errors.phone_number && (
+                <Text className="text-red-500 text-sm">
+                  {errors.phone_number}
                 </Text>
-              ) : (
-                ""
               )}
               <TouchableOpacity
                 onPress={handleSubmit}
