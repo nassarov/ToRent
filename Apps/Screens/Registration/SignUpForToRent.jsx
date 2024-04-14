@@ -1,24 +1,18 @@
-import {
-  View,
-  Text,
-  StatusBar,
-  TouchableOpacity,
-  TextInput,
-  ToastAndroid,
-} from "react-native";
-import React, { useState } from "react";
+import React from "react";
+import { View, Text, StatusBar, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { Formik } from "formik";
-import { Ionicons, Entypo, EvilIcons } from "@expo/vector-icons";
+import { Ionicons, EvilIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import  PhoneInput  from 'react-native-phone-number-input';
 
 export default function SignUpForToRent() {
   const navigation = useNavigation();
-  const [error, setError] = useState(false);
-  const onSubmitMethod = (values) => {
-    console.log(values);
-    navigation.navigate("signup", { values });
+
+  const onSubmitMethod = (phoneNumber) => {
+    console.log(phoneNumber);
+    navigation.navigate("signup",{value});
   };
+
   return (
     <View className="items-center ">
       <StatusBar />
@@ -33,53 +27,22 @@ export default function SignUpForToRent() {
         <Text>
           Create a profile, Show your cars, Grow your business and more
         </Text>
-        <Formik
-          initialValues={{
-            phone_number: "",
-          }}
-          onSubmit={(values) => {
-            if (values.phone_number !== "") {
-              onSubmitMethod(values);
-            } else {
-              setError(true);
-            }
-          }}
+        <PhoneInput
+          defaultCode="LEB"
+          layout="first"
+          containerStyle={{ backgroundColor: 'white', borderRadius: 10 }}
+          textInputProps={{ autoFocus: true }}
+          onChangeText={(text) => onSubmitMethod(text)}
+        />
+        <TouchableOpacity
+          onPress={() => {}}
+          className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 flex-row "
         >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            setFieldValue,
-            errors,
-          }) => (
-            <View>
-              <TextInput
-                placeholder="Phone Number"
-                value={values?.phone_number}
-                keyboardType="number-pad"
-                onChangeText={handleChange("phone_number")}
-                className="bg-gray-300 p-3 rounded-lg mt-5 border-[1px] border-gray-400"
-              />
-              {error ? (
-                <Text className="text-sm text-red-500">
-                  Please fill this field
-                </Text>
-              ) : (
-                ""
-              )}
-              <TouchableOpacity
-                onPress={handleSubmit}
-                className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 flex-row "
-              >
-                <Ionicons name="person-outline" size={17} color="white" />
-                <Text className="text-white font-bold text-base ml-1">
-                  Use your phone number
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </Formik>
+          <Ionicons name="person-outline" size={17} color="white" />
+          <Text className="text-white font-bold text-base ml-1">
+            Use your phone number
+          </Text>
+        </TouchableOpacity>
         <Text className="text-center text-xl font-bold my-4">Or</Text>
         <TouchableOpacity
           onPress={() => {}}
