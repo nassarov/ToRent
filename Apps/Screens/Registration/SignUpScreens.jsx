@@ -1,27 +1,30 @@
-import { View, Text , StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import { View, Text, TextInput } from 'react-native'
 import React from 'react'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import {useNavigation} from '@react-navigation/native';
 
-const SignUpScreens = () => {
+export default function SignUpScreens() {
+  const navigation=useNavigation();
   return (
     <View >
-        <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-      </View>
-      
-      <View>
-        <TextInput placeholder='Name'/>
+    <View >
+  <Text>Sign Up</Text>
+  </View>
+  
+  <View>
+  <TextInput placeholder='Name'/>
 
-       < TextInput placeholder='Email' />
+   <TextInput placeholder='Email' />
 
-       < TextInput placeholder='Password' />
+   <TextInput placeholder='Password' />
 
-       < TextInput placeholder='Confirm Password' />
+   <TextInput placeholder='Confirm Password' />
 
        <TouchableOpacity onPress={{}}><Text>Sign Up</Text></TouchableOpacity>
 
 
-      </View>
-    </View>
+  </View>
+</View>
   )
 }
 

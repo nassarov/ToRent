@@ -79,8 +79,10 @@ export default function OnBoardScreen({navigation}) {
           navigation.replace("Registration"); 
         }}
       />
+      
     );
+    
   }
-
-  
+ 
+    
 }
