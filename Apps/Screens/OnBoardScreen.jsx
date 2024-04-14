@@ -76,7 +76,7 @@ export default function OnBoardScreen({navigation}) {
         renderDoneButton={() => labelButton("Done")}
         onDone={() => {
           setShowHomePage(true);
-          navigation.navigate("Registration"); 
+          navigation.replace("Registration"); 
         }}
       />
     );

@@ -17,7 +17,7 @@ const SignUpScreens = () => {
 
        < TextInput placeholder='Confirm Password' />
 
-       <TouchableOpacity onPress={{}}>Sign Up</TouchableOpacity>
+       <TouchableOpacity onPress={{}}><Text>Sign Up</Text></TouchableOpacity>
 
 
       </View>
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     },
 
     title: {
-      fontFamily: 'bold',
+      fontWeight: 'bold',
       fontSize: 30,
       textAlign: 'center',
     },

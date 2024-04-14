@@ -9,8 +9,8 @@ import {
 import React, { useState } from "react";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Formik } from "formik";
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native'
+import { Ionicons, Entypo ,EvilIcons} from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SignUpForToRent() {
   const navigation = useNavigation();
@@ -67,11 +67,10 @@ export default function SignUpForToRent() {
               />
               <TouchableOpacity
                 onPress={handleSubmit}
-                
-                className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 flex-row gap-x-2"
+                className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 flex-row "
               >
-                <Ionicons name="person-outline" size={24} color="black" />
-                <Text className="text-white font-bold text-base ">
+                <Ionicons name="person-outline" size={17} color="white" />
+                <Text className="text-white font-bold text-base ml-1">
                   Use your phone number
                 </Text>
               </TouchableOpacity>
@@ -80,20 +79,20 @@ export default function SignUpForToRent() {
         </Formik>
         <Text className="text-center text-xl font-bold my-4">Or</Text>
         <TouchableOpacity
-                onPress={()=>{}}
-                className="bg-purple-700 rounded-lg p-3 items-center justify-center mt-3 "
-              >
-                <Text className="text-white font-bold text-base ">
-                  Continue as a guest
-                </Text>
-              </TouchableOpacity>
-  
-      </View>
-        <TouchableOpacity onPress={()=>navigation.push('signup')}>
-          <View className="bg-gray-100 p-3 rounded-lg mt-5">
-            <Text className="text-center text-xl">Next</Text>
-          </View>
+          onPress={() => {}}
+          className="bg-purple-700 rounded-lg p-3 items-center justify-center  flex-row"
+        >
+         <EvilIcons name="arrow-right" size={24} color="white" />
+          <Text className="text-white font-bold text-base ml-1">
+            Continue as a guest
+          </Text>
         </TouchableOpacity>
+      </View>
+      <TouchableOpacity onPress={() => navigation.push("signup")}>
+        <Text>Next</Text>
+      </TouchableOpacity>
+      
+
     </View>
   );
 }
