@@ -67,13 +67,16 @@ StatusBar.setBarStyle('light-content', true);
           defaultCode="LB"
           layout="first"
           value={phoneNumber}
-          disableCountryChange={true}  
+          countryPickerProps={{
+            countryCodes: ['LB'],
+          }}
           disableArrowIcon={true} 
           containerStyle={{ backgroundColor: 'white', borderRadius: 10 }}
           textInputProps={{ 
             autoFocus: true,
             maxLength: 8,
             keyboardType: 'numeric',
+            selectionColor:'#C5C5C5'
           }}
           onChangeText={validatePhoneNumber}
         />
