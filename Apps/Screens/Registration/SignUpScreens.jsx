@@ -137,7 +137,7 @@ export default function SignUpScreen () {
                             inputSearchStyle={styles.inputSearchStyle}
                             iconStyle={styles.iconStyle}
                             data={DropDowndata} 
-                            search
+                            search={false}
                             maxHeight={300}
                             labelField="label"
                             valueField="value"
