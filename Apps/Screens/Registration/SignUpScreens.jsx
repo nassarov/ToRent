@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
 
+
 export default function SignUpScreen () {
 
 
