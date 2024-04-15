@@ -53,7 +53,7 @@ export default function SignUpScreen () {
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
         <View style={styles.container}>
           {/* Title */}
-          <Text style={styles.title}>Sign Up</Text>
+          {/* <Text style={styles.title}>Sign Up</Text> */}
 
           {/* Input Fields */}
           <View>
