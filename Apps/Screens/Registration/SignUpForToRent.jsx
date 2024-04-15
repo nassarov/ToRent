@@ -67,7 +67,9 @@ StatusBar.setBarStyle('light-content', true);
           defaultCode="LB"
           layout="first"
           value={phoneNumber}
-          disableCountryChange={true}  
+          countryPickerProps={{
+            countryCodes: ['LB'],
+          }}
           disableArrowIcon={true} 
           containerStyle={{ backgroundColor: 'white', borderRadius: 10 }}
           textInputProps={{ 
