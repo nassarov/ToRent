@@ -8,7 +8,7 @@ import CustomHeader from "../Components/CustomHeader";
 const Stack = createStackNavigator();
 
 export default function Registration() {
-  const headers=[{id:1,title:"Sign Up",nextPage:'login'}]
+  const headers=[{id:1,title:"Sign Up",nextPage:'Login'},{id:2,title:"Login"}]
   return (
     <Stack.Navigator initialRouteName="signupforToRent"> 
       <Stack.Screen
@@ -20,12 +20,12 @@ export default function Registration() {
       <Stack.Screen
         name='signup'
         component={SignUpScreens}
-        options={ { header:() => <CustomHeader props={headers[0]} />,}}
+        options={ { header:() => <CustomHeader props={headers[0]} />}}
       />
       <Stack.Screen
         name='login'
         component={LoginScreen}
-        options={{ headerShown: false }}
+        options={{ header:() => <CustomHeader props={headers[1]} /> }}
       />
     </Stack.Navigator>
   );

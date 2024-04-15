@@ -31,7 +31,7 @@ export default function SignUpForToRent() {
 
   // Function to handle submission of the phone number
 const onSubmitMethod = () => {
-  if (isValidPhone) { // Check if the phone number is valid
+  if (isValidPhone) {
     if (phoneNumber.length === 8) { // Check if the phone number consists of exactly 8 digits
       const phoneNumberCCode = `+961${phoneNumber}`;
       console.log(phoneNumberCCode);
@@ -85,7 +85,7 @@ StatusBar.setBarStyle('light-content', true);
           </Text>
         )}</View>
         <View className='my-12'>
-        <TouchableOpacity className='bg-violet-600  ' 
+        <TouchableOpacity className='bg-[#7F5AF0]  ' 
           onPress={validatePhoneNumber&&onSubmitMethod}
           style={{ width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
         >
@@ -101,7 +101,7 @@ StatusBar.setBarStyle('light-content', true);
         Not ready to create an account yet?
       </Text>
 
-        <TouchableOpacity className='bg-violet-600 '
+        <TouchableOpacity className='bg-[#7F5AF0] '
           onPress={() => {}}
           style={{ width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
         >

@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
 
+
 export default function SignUpScreen () {
 
 
@@ -114,15 +115,17 @@ export default function SignUpScreen () {
 
             {/* Dropdown Menu */}
             <View style={styles.dropdownContainer}>
-              <Picker
-                selectedValue={values.carType}
-                style={styles.dropdown}
-                onValueChange={handleChange('carType')}
-              >
-                <Picker.Item label="Rent a Car" value="rent" />
-                <Picker.Item label="Offer a car" value="offer" />
-              </Picker>
-            </View>
+            <Picker
+              selectedValue={values.carType}
+              style={styles.dropdown}
+              onValueChange={(itemValue) => handleChange('carType')(itemValue)}
+            >
+              <Picker.Item label="Why are you using the app" value="" enabled={false} />
+              <Picker.Item label="Rent a Car" value="rent" />
+              <Picker.Item label="Offer a Car" value="offer" />
+            </Picker>
+          </View>
+
 
             {/* Sign Up Button */}
             <TouchableOpacity style={styles.signupButton} onPress={handleSubmit}>
