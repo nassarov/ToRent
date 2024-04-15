@@ -31,7 +31,7 @@ export default function SignUpForToRent() {
 
   // Function to handle submission of the phone number
 const onSubmitMethod = () => {
-  if (isValidPhone) { // Check if the phone number is valid
+  if (isValidPhone) {
     if (phoneNumber.length === 8) { // Check if the phone number consists of exactly 8 digits
       const phoneNumberCCode = `+961${phoneNumber}`;
       console.log(phoneNumberCCode);
