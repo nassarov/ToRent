@@ -83,7 +83,7 @@ StatusBar.setBarStyle('light-content', true);
           </Text>
         )}</View>
         <View className='my-12'>
-        <TouchableOpacity className='bg-violet-600  ' 
+        <TouchableOpacity className='bg-[#7F5AF0]  ' 
           onPress={validatePhoneNumber&&onSubmitMethod}
           style={{ width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
         >
@@ -99,7 +99,7 @@ StatusBar.setBarStyle('light-content', true);
         Not ready to create an account yet?
       </Text>
 
-        <TouchableOpacity className='bg-violet-600 '
+        <TouchableOpacity className='bg-[#7F5AF0] '
           onPress={() => {}}
           style={{ width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
         >
