@@ -3,12 +3,12 @@ import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-
+import Constants from 'expo-constants';
 
 export default function CustomHeader({ props }) {
   const navigation = useNavigation();
   return (
-    <View style={{paddingTop:Platform.OS==='ios'?StatusBar.currentHeight:0}}>
+    <View style={{paddingTop:Platform.OS==='ios'?Constants.statusBarHeight:0}}>
       <StatusBar />
       <View className="flex-row p-3 justify-between items-center ">
         <TouchableOpacity onPress={() => navigation.goBack()}>

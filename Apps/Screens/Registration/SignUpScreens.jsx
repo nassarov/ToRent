@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform , StatusBar } from 'react-native';
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Constants from 'expo-constants';
 
 export default function SignUpScreen () {
     const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +40,8 @@ export default function SignUpScreen () {
         }
         return null;
     };
-
+    console.log(Platform.OS==="ios");
+    console.log(StatusBar.currentHeight);
     return (
         <Formik
             initialValues={{ name: '', email: '', password: '', confirmPassword: '', carType: 'rent' }}
