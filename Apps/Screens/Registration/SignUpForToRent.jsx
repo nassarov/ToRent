@@ -76,6 +76,7 @@ StatusBar.setBarStyle('light-content', true);
             autoFocus: true,
             maxLength: 8,
             keyboardType: 'numeric',
+            selectionColor:'#C5C5C5'
           }}
           onChangeText={validatePhoneNumber}
         />
