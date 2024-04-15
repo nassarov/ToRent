@@ -2,10 +2,11 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-nativ
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
-  
+  const navigation = useNavigation();
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -73,7 +74,12 @@ export default function LoginScreen() {
             <TouchableOpacity >
               <Text className='text-center'>Forgot Your Password?</Text>
             </TouchableOpacity>
-            
+
+            <View className='flex-row justify-center mt-10'>
+              <Text className='text-center'>Don't Have an Account?</Text>
+              <TouchableOpacity onPress={() => navigation.replace('signup')}><Text className='text-violet-600'> Register</Text></TouchableOpacity>
+              
+           </View>
           </View>
         </View>
       )}
