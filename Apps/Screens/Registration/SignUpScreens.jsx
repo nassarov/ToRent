@@ -66,7 +66,7 @@ export default function SignUpScreen () {
                 } else if (values.confirmPassword !== values.password) {
                     errors.confirmPassword = 'Passwords must match';
                 }
-                if (!values.Role) {
+                if (values.Role!='Offer' || values.Role!='Rent' ) {
                   errors.Role = 'Required: Choose one';
               }
                 
