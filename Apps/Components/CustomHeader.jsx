@@ -7,11 +7,9 @@ import Constants from 'expo-constants';
 
 export default function CustomHeader({ props }) {
   const navigation = useNavigation();
-  StatusBar.setBarStyle('light-content', true);
 
   return (
-    <View style={{paddingTop:Platform.OS==='ios'?Constants.statusBarHeight:0}}>
-     
+    <View style={{paddingTop:Constants.statusBarHeight}}>
       <View className="flex-row p-3 justify-between items-center ">
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="close" size={24} color="black" />

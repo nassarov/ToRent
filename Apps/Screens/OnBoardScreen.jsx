@@ -69,7 +69,7 @@ export default function OnBoardScreen({navigation}) {
             </View>
           );
         }}
-        activeDotStyle={{ backgroundColor: "purple", width: wp(8), }}
+        activeDotStyle={{ backgroundColor: "#7F5AF0", width: wp(8), }}
         renderNextButton={() => labelButton("Next")}
         showSkipButton
         renderSkipButton={() => skipButton("Skip")}
