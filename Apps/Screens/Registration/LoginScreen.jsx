@@ -70,6 +70,10 @@ export default function LoginScreen() {
             <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
+            <TouchableOpacity >
+              <Text className='text-center'>Forgot Your Password?</Text>
+            </TouchableOpacity>
+            
           </View>
         </View>
       )}
