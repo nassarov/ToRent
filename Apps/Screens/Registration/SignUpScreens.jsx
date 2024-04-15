@@ -44,7 +44,7 @@ export default function SignUpScreen () {
     console.log(StatusBar.currentHeight);
     return (
         <Formik
-            initialValues={{ name: '', email: '', password: '', confirmPassword: '', carType: 'rent' }}
+            initialValues={{ name: '', email: '', password: '', confirmPassword: '', Role: '' }}
             onSubmit={(values) => {
                 console.log(values);
             }}
@@ -66,9 +66,13 @@ export default function SignUpScreen () {
                 } else if (values.confirmPassword !== values.password) {
                     errors.confirmPassword = 'Passwords must match';
                 }
+                if (!values.Role) {
+                  errors.Role = 'Required: Choose one';
+              }
+                
                 return errors;
             }}
-        >
+         >
             {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
                 <View style={styles.container}>
 
@@ -131,6 +135,7 @@ export default function SignUpScreen () {
                         
                         </View>
                         {/* Dropdown Menu */}
+                        <View>
                         <Dropdown
                             style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                             placeholderStyle={styles.placeholderStyle}
@@ -160,6 +165,9 @@ export default function SignUpScreen () {
                                 />
                             )}
                         />
+                        {errors.Role && <Text style={styles.errorText}>{errors.Role}</Text>}
+                       
+                        </View>
                         
                         {/* Sign Up Button */}
                         <TouchableOpacity style={styles.signupButton} onPress={handleSubmit}>
