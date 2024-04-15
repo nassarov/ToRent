@@ -8,7 +8,7 @@ import CustomHeader from "../Components/CustomHeader";
 const Stack = createStackNavigator();
 
 export default function Registration() {
-  const headers=[{id:1,title:"Sign Up",nextPage:'Login'},{id:2,title:"Login"}]
+  const headers=[{id:1,title:"Sign Up",nextPage:'Login'},{id:2,title:"Login    ",}]
   return (
     <Stack.Navigator initialRouteName="signupforToRent"> 
       <Stack.Screen
