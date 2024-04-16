@@ -7,8 +7,6 @@ import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsi
 
 export default function LoginScreen() {
   StatusBar.setBarStyle('dark-content', true);
-  StatusBar.setTranslucent(true);
-  StatusBar.setBackgroundColor('#F6F6F6');
 
   const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();
@@ -41,7 +39,7 @@ export default function LoginScreen() {
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
         <View style={styles.container}>
-          
+          <StatusBar backgroundColor={'#F6F6F6'} translucent={true}/>
           {/* Input Fields */}
           <View >
             {/* Email */}

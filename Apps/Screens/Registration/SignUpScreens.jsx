@@ -17,8 +17,8 @@ import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsi
 
 export default function SignUpScreen() {
   StatusBar.setBarStyle('dark-content', true);
-  StatusBar.setTranslucent(true);
-  StatusBar.setBackgroundColor('#F6F6F6');
+  // StatusBar.setTranslucent(true);
+  // StatusBar.setBackgroundColor('#F6F6F6');
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -94,6 +94,7 @@ export default function SignUpScreen() {
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
         <View style={styles.container}>
+          <StatusBar backgroundColor={'#F6F6F6'} translucent={true}/>
           {/* Input Fields */}
           <View>
             {/* Render Label */}

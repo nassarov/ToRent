@@ -8,8 +8,7 @@ import PhoneInput from 'react-native-phone-number-input';
 export default function SignUpForToRent() {
   
   StatusBar.setBarStyle('dark-content', true);
-  StatusBar.setTranslucent(true);
-  StatusBar.setBackgroundColor('#F6F6F6');
+
 
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -48,6 +47,7 @@ const onSubmitMethod = () => {
 
   return (
     <View style={{ alignItems: 'center' }}>
+      <StatusBar backgroundColor={'#F6F6F6'} translucent={true}/>
       <View style={{ width: wp(80) }} className='items-center justify-center mt-14'>
         <Text className='mt-4' style={{ fontWeight: 'bold', fontSize: 24, marginTop: 8, textAlign: 'center' }}>
           Sign Up For ToRent
