@@ -43,8 +43,9 @@ export default function LoginScreen() {
         <View style={styles.container}>
           
           {/* Input Fields */}
-          <View style={{height:heightPercentageToDP(12)}}>
+          <View >
             {/* Email */}
+            <View style={{height:heightPercentageToDP(12)}}>
             <TextInput
               placeholder='Email'
               style={styles.input}
@@ -53,7 +54,7 @@ export default function LoginScreen() {
               value={values.email}
             />
             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-
+          </View>
             {/* Password with Eye Icon */}
             <View style={{height:heightPercentageToDP(12)}}>
             <View style={styles.passwordContainer}>
@@ -74,6 +75,7 @@ export default function LoginScreen() {
             </View>
 
             {/*  Login Button */}
+            <View className='items-center'>
             <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
@@ -84,7 +86,7 @@ export default function LoginScreen() {
             <View className='flex-row justify-center mt-10'>
               <Text className='text-center'>Don't Have an Account?</Text>
               <TouchableOpacity onPress={() => navigation.replace('signup')}><Text className='text-violet-600'> Register</Text></TouchableOpacity>
-              
+              </View>
            </View>
           </View>
         </View>
@@ -125,18 +127,20 @@ const styles = StyleSheet.create({
   },
   
   loginButton: {
-    backgroundColor: '#7F5AF0',
+    backgroundColor: "#7F5AF0",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     margin: 15,
+    width: heightPercentageToDP(32),
+    height: widthPercentageToDP(18),
   },
   loginButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   errorText: {
     color: 'red',
