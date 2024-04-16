@@ -84,7 +84,6 @@ export default function SignUpScreen() {
         if (values.role !== "Offer" && values.role !== "Rent") {
           errors.role = "Required: Choose one";
         }
-console.log(values.role)
         return errors;
       }}
     >
