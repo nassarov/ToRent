@@ -5,6 +5,8 @@ import LoginScreen from "../Screens/Registration/LoginScreen";
 import SignUpForToRent from "../Screens/Registration/SignUpForToRent";
 
 import CustomHeader from "../Components/CustomHeader";
+import ForgotPasswordScreen from "../Screens/Registration/ForgotPasswordScreen";
+import VerificationCodeScreen from "../Screens/Registration/VerificationCodeScreen";
 const Stack = createStackNavigator();
 
 export default function Registration() {
@@ -26,6 +28,16 @@ export default function Registration() {
         name='login'
         component={LoginScreen}
         options={{ header:() => <CustomHeader props={headers[1]} /> }}
+      />
+      <Stack.Screen
+        name='forgotpassword'
+        component={ForgotPasswordScreen}
+        options={{headerShown:false}}
+      />
+      <Stack.Screen
+        name='recoveraccount'
+        component={VerificationCodeScreen}
+        options={{headerShown:false}}
       />
     </Stack.Navigator>
   );

@@ -66,7 +66,7 @@ export default function LoginScreen() {
                 secureTextEntry={!showPassword}
               />
               <TouchableOpacity style={styles.iconContainer} onPress={togglePasswordVisibility}>
-                <Icon name={showPassword ? 'eye-off' : 'eye'} size={25} color="#7F5AF0" />
+                <Icon name={!showPassword ? 'eye-off' : 'eye'} size={25} color="#7F5AF0" />
               </TouchableOpacity>
             </View>
             {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
@@ -77,8 +77,8 @@ export default function LoginScreen() {
             <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity >
-              <Text className='text-center'>Forgot Your Password?</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate('forgotpassword')}>
+              <Text className='text-center text-violet-600'>Forgot Your Password?</Text>
             </TouchableOpacity>
 
             <View className='flex-row justify-center mt-10'>
