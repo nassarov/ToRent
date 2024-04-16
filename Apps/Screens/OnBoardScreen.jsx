@@ -5,7 +5,6 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import AppIntroSlider from "react-native-app-intro-slider";
-import Registration from "../Navigations/Registration";
 
 
 export default function OnBoardScreen({navigation}) {
@@ -13,14 +12,14 @@ export default function OnBoardScreen({navigation}) {
   StatusBar.setBarStyle('light-content', true);
 
   const labelButton = (label) => (
-    <View className="bg-purple-700 p-3 rounded-lg " style={{width: wp(20)}}>
+    <View className="bg-violet-600 p-3 rounded-lg " style={{width: wp(20)}}>
       <Text className="text-white text-center font-medium">{label}</Text>
     </View>
   );
   
   const skipButton = (label) => (
     <View className='mt-2 ml-3'>
-      <Text className="text-purple-700 text-lg font-light">{label}</Text>
+      <Text className="text-violet-600 text-lg font-light">{label}</Text>
     </View>
   );
   const slides = [

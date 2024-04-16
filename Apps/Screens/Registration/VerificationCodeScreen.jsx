@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native'
+import { View, Text,SafeAreaView } from 'react-native'
 import React from 'react'
 
 export default function VerificationCodeScreen (){
   return (
-    <SafeArrayView style={{flex: 1 }}>
+    <SafeAreaView style={{flex: 1 }}>
 <View style={{flex:1 , padding:16}}>
 
 <Text style={{marginVertical: 12}}>Enter Verification code</Text>
@@ -30,7 +30,7 @@ theme={{
 
   
 </View>
-    </SafeArrayView>
+    </SafeAreaView>
   )
 }
 
