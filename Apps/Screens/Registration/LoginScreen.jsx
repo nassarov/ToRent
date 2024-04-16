@@ -7,6 +7,7 @@ import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsi
 
 export default function LoginScreen() {
   StatusBar.setBarStyle('dark-content', true);
+  StatusBar.setBackgroundColor('#F6F6F6');
 
   const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();

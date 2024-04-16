@@ -17,6 +17,7 @@ import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsi
 
 export default function SignUpScreen() {
   StatusBar.setBarStyle('dark-content', true);
+  StatusBar.setBackgroundColor('#F6F6F6');
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -273,10 +274,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 15,
+    width: heightPercentageToDP(42),
+    height: widthPercentageToDP(18),
   },
   signupButtonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
   errorText: {

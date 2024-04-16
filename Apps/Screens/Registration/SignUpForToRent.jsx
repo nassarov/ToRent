@@ -8,6 +8,7 @@ import PhoneInput from 'react-native-phone-number-input';
 export default function SignUpForToRent() {
   
   StatusBar.setBarStyle('dark-content', true);
+  StatusBar.setBackgroundColor('#F6F6F6');
 
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = useState('');
