@@ -84,7 +84,7 @@ export default function ChangePasswordScreen() {
           </View>
 
           {/* Confirm Password with Eye Icon */}
-          <View style={{ height: 80 }}>
+          <View style={{ height: 80 }} className='mb-6 mt-3'>
             <View style={styles.passwordContainer}>
               <TextInput
                 placeholder="Retype Password"
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     margin: 15,
     padding: 18,
+    marginBottom:5
   },
   passwordContainer: {
     position: "relative",
@@ -167,6 +168,7 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 12,
     marginLeft: 15,
+    
   },
   buttonContainer: {
     alignItems: "center",

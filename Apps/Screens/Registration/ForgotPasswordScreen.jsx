@@ -58,9 +58,9 @@ const onSubmitMethod = () => {
           Forgot Password? <Icon name="lock-closed" size={22} color="#7F5AF0" />
         </Text>
         <Text className='text-[#7F5AF0] mb-8'>
-          Please input your email or phone number to recover your acount
+          Please input your phone number to recover your account
         </Text>
-        <Text className='text-[18px] font-semibold' >Email address OR Phone number </Text>
+        <Text className='text-[18px] font-semibold' >Your Phone Number </Text>
         <View className='mt-6' style={{height:heightPercentageToDP(9)}}>
         <PhoneInput 
           defaultCode="LB"
