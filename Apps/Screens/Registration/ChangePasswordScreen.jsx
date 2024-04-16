@@ -5,6 +5,7 @@ export default function ChangePasswordScreen() {
   return (
     <View>
       <Text className='font-bold text-2xl'>Change Your Password</Text>
+      <Text></Text>
     </View>
   )
 }
