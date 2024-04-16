@@ -17,6 +17,7 @@ import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsi
 
 export default function SignUpScreen() {
   StatusBar.setBarStyle('dark-content', true);
+  StatusBar.setTranslucent(true);
   StatusBar.setBackgroundColor('#F6F6F6');
 
   const [showPassword, setShowPassword] = useState(false);
@@ -98,6 +99,7 @@ export default function SignUpScreen() {
             {/* Render Label */}
 
             {/* Name */}
+            <View style={{height:heightPercentageToDP(12)}}>
             <TextInput
               placeholder="Name"
               style={styles.input}
@@ -106,8 +108,10 @@ export default function SignUpScreen() {
               value={values.name}
             />
             {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+            </View>
 
             {/* Email */}
+            <View style={{height:heightPercentageToDP(12)}}>
             <TextInput
               placeholder="Email"
               style={styles.input}
@@ -118,8 +122,10 @@ export default function SignUpScreen() {
             {errors.email && (
               <Text style={styles.errorText}>{errors.email}</Text>
             )}
+            </View>
 
             {/* Password with Eye Icon */}
+            <View style={{height:heightPercentageToDP(12)}}>
             <View style={styles.passwordContainer}>
               <TextInput
                 placeholder="Password"
@@ -143,8 +149,9 @@ export default function SignUpScreen() {
             {errors.password && (
               <Text style={styles.errorText}>{errors.password}</Text>
             )}
-
+            </View>
             {/* Confirm Password with Eye Icon */}
+            <View style={{height:heightPercentageToDP(12)}}>
             <View style={styles.passwordContainer}>
               <TextInput
                 placeholder="Confirm Password"
@@ -167,12 +174,12 @@ export default function SignUpScreen() {
             </View>
             {errors.confirmPassword && (
               <Text style={styles.errorText}>{errors.confirmPassword}</Text>
-            )}
+            )}</View>
             <View></View>
             {/* Dropdown Menu */}
-            <View>
+            <View style={{height:heightPercentageToDP(12)}}>
               <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+                style={[styles.dropdown, isFocus && { borderColor: "#7F5AF0" }]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
@@ -208,12 +215,14 @@ export default function SignUpScreen() {
             </View>
 
             {/* Sign Up Button */}
+            <View className='items-center text-center justify-center'>
             <TouchableOpacity
               style={styles.signupButton}
               onPress={handleSubmit}
             >
               <Text style={styles.signupButtonText}>Sign Up</Text>
             </TouchableOpacity>
+            </View>
           </View>
         </View>
       )}
@@ -274,7 +283,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 15,
-    width: heightPercentageToDP(42),
+    width: heightPercentageToDP(32),
     height: widthPercentageToDP(18),
   },
   signupButtonText: {

@@ -7,6 +7,7 @@ import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsi
 
 export default function LoginScreen() {
   StatusBar.setBarStyle('dark-content', true);
+  StatusBar.setTranslucent(true);
   StatusBar.setBackgroundColor('#F6F6F6');
 
   const [showPassword, setShowPassword] = useState(false);
@@ -42,7 +43,7 @@ export default function LoginScreen() {
         <View style={styles.container}>
           
           {/* Input Fields */}
-          <View>
+          <View style={{height:heightPercentageToDP(12)}}>
             {/* Email */}
             <TextInput
               placeholder='Email'
@@ -54,6 +55,7 @@ export default function LoginScreen() {
             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
             {/* Password with Eye Icon */}
+            <View style={{height:heightPercentageToDP(12)}}>
             <View style={styles.passwordContainer}>
               <TextInput
                 placeholder='Password'
@@ -69,7 +71,7 @@ export default function LoginScreen() {
             </View>
             {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
-            
+            </View>
 
             {/*  Login Button */}
             <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>

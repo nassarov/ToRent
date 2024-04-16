@@ -11,7 +11,9 @@ import Registration from "../Navigations/Registration";
 export default function OnBoardScreen({navigation}) {
   const [showHomePage, setShowHomePage] = useState(false);
   StatusBar.setBarStyle('dark-content', true);
-
+  StatusBar.setTranslucent(true);
+  StatusBar.setBackgroundColor('transparent');
+  
   const labelButton = (label) => (
     <View className="bg-purple-700 p-3 rounded-lg " style={{width: wp(20)}}>
       <Text className="text-white text-center font-medium">{label}</Text>
