@@ -69,7 +69,7 @@ const onSubmitMethod = () => {
           countryPickerProps={{
             countryCodes: ['LB'],
           }}
-          disableArrowIcon={true} 
+          disableArrowIcon={false} 
           containerStyle={{ backgroundColor: 'white', borderRadius: 10 }}
           textInputProps={{ 
             autoFocus: true,
