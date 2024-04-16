@@ -7,7 +7,7 @@ import PhoneInput from 'react-native-phone-number-input';
 
 export default function SignUpForToRent() {
   
-  StatusBar.setBarStyle('light-content', true);
+  StatusBar.setBarStyle('dark-content', true);
 
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -43,7 +43,6 @@ const onSubmitMethod = () => {
     setIsValidPhone(false);
   }
 };
-StatusBar.setBarStyle('light-content', true);
 
   return (
     <View style={{ alignItems: 'center' }}>
