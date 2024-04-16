@@ -9,6 +9,7 @@ import {
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Formik } from "formik";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 export default function ChangePasswordScreen() {
   StatusBar.setBarStyle('dark-content', true);
@@ -50,12 +51,12 @@ export default function ChangePasswordScreen() {
       }}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-        <View style={styles.container}>
+        <View style={styles.container} className='mt-5 ' >
           <StatusBar backgroundColor={'#F6F6F6'} translucent={true}/>
+          
 
-
-          <Text style={styles.title}>Change Your Password</Text>
-          <Text style={styles.subtext}>Please type in your new password of your account </Text>
+          <Text style={styles.title}  className="font-bold text-3xl text-center ">Change Your Password</Text>
+          <Text style={styles.subtext} className='text-center'>Please type in your new password of your account </Text>
           {/* Password with Eye Icon */}
           <View style={{ height: 80 }}>
             <View style={styles.passwordContainer}>
@@ -84,7 +85,7 @@ export default function ChangePasswordScreen() {
           </View>
 
           {/* Confirm Password with Eye Icon */}
-          <View style={{ height: 80 }} className='mb-6 mt-3'>
+          <View style={{ height: 80 }} className='mb-3 mt-3'>
             <View style={styles.passwordContainer}>
               <TextInput
                 placeholder="Retype Password"
@@ -110,13 +111,13 @@ export default function ChangePasswordScreen() {
             )}
           </View>
 
-          {/* Sign Up Button */}
+          {/* Confirm Button */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={styles.signupButton}
+              style={styles.confirmButton}
               onPress={handleSubmit}
             >
-              <Text style={styles.signupButtonText}>Confirm</Text>
+              <Text style={styles.confirmButtonText}>Confirm</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -129,7 +130,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-start",
-    paddingTop: 50,
   },
   input: {
     borderColor: "#7F5AF0",
@@ -149,17 +149,18 @@ const styles = StyleSheet.create({
     top: "50%",
     transform: [{ translateY: -10 }],
   },
-  signupButton: {
+  confirmButton: {
     backgroundColor: "#7F5AF0",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24,
     justifyContent: "center",
     alignItems: "center",
-    width: "70%",
-    alignSelf: "center",
+    margin: 15,
+    width: heightPercentageToDP(32),
+    height: widthPercentageToDP(18),
   },
-  signupButtonText: {
+  confirmButtonText: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
@@ -175,7 +176,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   title:{
-    fontSize: 24,
     fontWeight:"bold",
     margin:15,
   },
