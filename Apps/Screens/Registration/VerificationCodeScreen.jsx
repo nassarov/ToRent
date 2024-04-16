@@ -12,7 +12,7 @@ export default function VerificationCodeScreen (){
 <View style={{marginVertical : 22, width:50}}>
 
 
-<OtpInput
+{/* <OtpInput
 numberOfDigits={4}
 onTextChange={(text) =>console.log(text)}
 focusColor={"red"}
@@ -22,10 +22,9 @@ theme={{
     width:58,
     height:58,
     borderRadius:12,
-
   }
 }}
-/>
+/> */}
 </View>
 
   

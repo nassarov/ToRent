@@ -34,7 +34,7 @@ const onSubmitMethod = () => {
     if (phoneNumber.length === 8) { // Check if the phone number consists of exactly 8 digits
       const phoneNumberCCode = `+961${phoneNumber}`;
       console.log(phoneNumberCCode);
-      navigation.navigate("signup", { value: phoneNumberCCode });
+      navigation.navigate("changepassword", { value: phoneNumberCCode });
     } else {
       setIsValidPhone(false);
     }
@@ -79,10 +79,17 @@ const onSubmitMethod = () => {
           }}
           onChangeText={validatePhoneNumber}
         />   
+         {!isValidPhone && (
+          <Text style={{ color: 'red', fontSize: 14, marginTop: 4 }} >
+            Invalid phone number
+          </Text>
+        )}
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("changepassword")}>
-          <Text>Recover Account</Text>
+        <View className='items-center mt-10'>
+        <TouchableOpacity onPress={onSubmitMethod} style={styles.recoverButton}>
+          <Text style={styles.recoverButtonText}>Recover Account</Text>
         </TouchableOpacity>
+        </View>
       </View>
     </View>
     </View>
@@ -103,6 +110,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
+  },
+  recoverButton: {
+    backgroundColor: "#7F5AF0",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 15,
+    width: heightPercentageToDP(32),
+    height: widthPercentageToDP(18),
+  },
+  recoverButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 
 });
