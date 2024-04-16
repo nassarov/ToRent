@@ -9,7 +9,7 @@ import AppIntroSlider from "react-native-app-intro-slider";
 
 export default function OnBoardScreen({navigation}) {
   const [showHomePage, setShowHomePage] = useState(false);
-  StatusBar.setBarStyle('light-content', true);
+  StatusBar.setBarStyle('dark-content', true);
 
   const labelButton = (label) => (
     <View className="bg-violet-600 p-3 rounded-lg " style={{width: wp(20)}}>

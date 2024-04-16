@@ -13,8 +13,12 @@ import { Formik } from "formik";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Constants from "expo-constants";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 export default function SignUpScreen() {
+  StatusBar.setBarStyle('dark-content', true);
+  StatusBar.setBackgroundColor('#F6F6F6');
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [value, setValue] = useState(null); // Add this line
@@ -84,7 +88,6 @@ export default function SignUpScreen() {
         if (values.role !== "Offer" && values.role !== "Rent") {
           errors.role = "Required: Choose one";
         }
-console.log(values.role)
         return errors;
       }}
     >
@@ -225,12 +228,14 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   input: {
-    borderColor: "#16213E",
+    borderColor: "#7F5AF0",
     borderWidth: 1,
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
     margin: 15,
-    padding: 20,
+    padding: 18,
+    width: heightPercentageToDP(42),
+    height: widthPercentageToDP(15)
   },
   passwordContainer: {
     position: "relative",
@@ -242,20 +247,24 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -10 }],
   },
   dropdownContainer: {
-    width: "100%",
+    width: heightPercentageToDP(42),
     borderColor: "#16213E",
     borderWidth: 1,
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
     marginVertical: 15,
     color: "",
+    margin: 15,
   },
   dropdown: {
     height: 50,
-    borderColor: "gray",
-    borderWidth: 0.5,
+    borderColor: "#7F5AF0",
+    borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 8,
+    width: heightPercentageToDP(42),
+    height: widthPercentageToDP(15),
+    margin: 15,
   },
   signupButton: {
     backgroundColor: "#7F5AF0",
@@ -265,10 +274,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 15,
+    width: heightPercentageToDP(42),
+    height: widthPercentageToDP(18),
   },
   signupButtonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
   errorText: {

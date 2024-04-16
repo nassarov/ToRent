@@ -1,10 +1,14 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity ,StatusBar} from 'react-native';
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
+import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 
 export default function LoginScreen() {
+  StatusBar.setBarStyle('dark-content', true);
+  StatusBar.setBackgroundColor('#F6F6F6');
+
   const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();
   // Function to toggle password visibility
@@ -99,12 +103,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    borderColor: '#16213E',
+    borderColor: "#7F5AF0",
     borderWidth: 1,
     borderRadius: 8,
-    backgroundColor: '#F6F6F6',
+    backgroundColor: "#F6F6F6",
     margin: 15,
-    padding: 20,
+    padding: 18,
+    width: heightPercentageToDP(42),
+    height: widthPercentageToDP(15)
   },
   passwordContainer: {
     position: 'relative',
