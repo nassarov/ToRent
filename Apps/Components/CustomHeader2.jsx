@@ -12,7 +12,7 @@ export default function CustomHeader2() {
     <View style={{paddingTop:Constants.statusBarHeight}}>
       <View className="flex-row p-3 justify-between items-center ">
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name="arrowleft" size={24} color="black"/>
+          <AntDesign name="arrowleft" size={24} color="#7F5AF0"/>
         </TouchableOpacity>
       </View>
     </View>
