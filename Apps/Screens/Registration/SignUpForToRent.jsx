@@ -17,7 +17,7 @@ export default function SignUpForToRent() {
   // Function to handle real-time validation of the phone number
   const validatePhoneNumber = (text) => {
     const containsNonDigit = /\D/.test(text);
-    const allowedPrefixes = ["81", "71", "70", "03", "76"];
+    const allowedPrefixes = ["81", "71", "70", "03", "76","78","79"];
     const isValidPrefix = allowedPrefixes.includes(text.slice(0, 2));
   
     if (!containsNonDigit && text.length <= 8 && isValidPrefix) {
