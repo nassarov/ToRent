@@ -7,6 +7,7 @@ import SignUpForToRent from "../Screens/Registration/SignUpForToRent";
 import CustomHeader from "../Components/CustomHeader";
 import ForgotPasswordScreen from "../Screens/Registration/ForgotPasswordScreen";
 import VerificationCodeScreen from "../Screens/Registration/VerificationCodeScreen";
+import CustomHeader2 from "../Components/CustomHeader2";
 const Stack = createStackNavigator();
 
 export default function Registration() {
@@ -32,12 +33,12 @@ export default function Registration() {
       <Stack.Screen
         name='forgotpassword'
         component={ForgotPasswordScreen}
-        options={{headerShown:false}}
+        options={{ header:() => <CustomHeader2/> }}
       />
       <Stack.Screen
         name='recoveraccount'
         component={VerificationCodeScreen}
-        options={{headerShown:false}}
+        options={{ header:() => <CustomHeader2/> }}
       />
     </Stack.Navigator>
   );
