@@ -83,7 +83,7 @@ export default function LoginScreen() {
 
             <View className='flex-row justify-center mt-10'>
               <Text className='text-center'>Don't Have an Account?</Text>
-              <TouchableOpacity onPress={() => navigation.push('signup')}><Text className='text-violet-600'> Register</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.replace('signup')}><Text className='text-violet-600'> Register</Text></TouchableOpacity>
               </View>
            </View>
           </View>

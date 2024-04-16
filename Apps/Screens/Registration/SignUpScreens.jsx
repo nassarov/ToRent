@@ -14,12 +14,13 @@ import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Constants from "expo-constants";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SignUpScreen() {
   StatusBar.setBarStyle('dark-content', true);
   // StatusBar.setTranslucent(true);
   // StatusBar.setBackgroundColor('#F6F6F6');
-
+  const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [value, setValue] = useState(null); // Add this line
@@ -65,6 +66,7 @@ export default function SignUpScreen() {
       }}
       onSubmit={(values) => {
         console.log(values);
+        navigation.push('login');
       }}
       validate={(values) => {
         const errors = {};
