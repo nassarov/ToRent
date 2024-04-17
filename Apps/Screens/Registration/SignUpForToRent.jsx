@@ -17,7 +17,7 @@ export default function SignUpForToRent() {
   // Function to handle real-time validation of the phone number
   const validatePhoneNumber = (text) => {
     const containsNonDigit = /\D/.test(text);
-    const allowedPrefixes = ["81", "71", "70", "03", "76"];
+    const allowedPrefixes = ["81", "71", "70", "03", "76","78","79"];
     const isValidPrefix = allowedPrefixes.includes(text.slice(0, 2));
   
     if (!containsNonDigit && text.length <= 8 && isValidPrefix) {
@@ -71,7 +71,7 @@ const onSubmitMethod = () => {
           countryPickerProps={{
             countryCodes: ['LB'],
           }}
-          disableArrowIcon={true} 
+          disableArrowIcon={false} 
           containerStyle={{ backgroundColor: 'white', borderRadius: 10 }}
           textInputProps={{ 
             autoFocus: true,
@@ -89,7 +89,7 @@ const onSubmitMethod = () => {
         <View className='my-12'>
         <TouchableOpacity className='bg-[#7F5AF0]  ' 
           onPress={validatePhoneNumber&&onSubmitMethod}
-          style={{ width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
+          style={{height:wp(18), width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
         >
           <Ionicons name="person-sharp" size={24} color="white" />
           <Text style={{ color: 'white', fontWeight: 'bold' }}>
@@ -105,7 +105,7 @@ const onSubmitMethod = () => {
 
         <TouchableOpacity className='bg-[#7F5AF0] '
           onPress={() => {}}
-          style={{ width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
+          style={{height:wp(18), width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
         >
           <FontAwesome6 name="car-side" size={24} color="white" />
           <Text style={{ color: 'white', fontWeight: 'bold'}}>
@@ -115,10 +115,10 @@ const onSubmitMethod = () => {
         </View>
       </View>
 
-      <View style={{ flexDirection: 'row', marginTop: 12 }}>
-        <Text>Already Have An Account?</Text>
+      <View style={{ flexDirection: 'row', marginTop: 28 }}>
+        <Text className='text-[16px] font-semibold'>Already Have An Account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("login")}>
-          <Text className='text-violet-600 text-[15px] mt-[-2px]'> Login</Text>
+          <Text className='text-violet-600 text-[18px] mt-[-2px] '> Login</Text>
         </TouchableOpacity>
       </View>
     </View>
