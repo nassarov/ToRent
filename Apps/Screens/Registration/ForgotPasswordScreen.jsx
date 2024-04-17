@@ -59,11 +59,7 @@ export default function ForgotPasswordScreen() {
         className="flex-1 items-center"
         style={{ paddingTop: Constants.statusBarHeight }}
       >
-        <View className="w-full p-2">
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="chevron-back-outline" size={27} color={"#7F5AF0"} />
-          </TouchableOpacity>
-        </View>
+     
         <View
           style={{
             width: widthPercentageToDP(90),
