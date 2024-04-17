@@ -12,19 +12,7 @@ export default function HomeScreen() {
         require('../../../assets/HomeSlider/s1.png'),
     ];
     
-     // Define a function to render each image with rounded corners
-     const renderRoundedImage = (imageUri, index) => (
-        <Image
-            key={index}
-            source={imageUri}
-            style={{
-                width: '100%',
-                height: '100%',
-                borderRadius: 10, // Adjust the radius to your preference
-            }}
-            resizeMode="cover"
-        />
-    );
+     
 
     return (
         
