@@ -1,5 +1,7 @@
+
 import { View, Text, TextInput, TouchableOpacity,StyleSheet } from "react-native";
 import React from "react";
+
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 import Constants from "expo-constants";
@@ -9,6 +11,7 @@ import PhoneInput from 'react-native-phone-number-input';
 
 export default function ForgotPasswordScreen() {
   const navigation = useNavigation();
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isValidPhone, setIsValidPhone] = useState(true);
 
@@ -43,20 +46,27 @@ const onSubmitMethod = () => {
   }
 };
 
+
   return (
     <View style={styles.container}>
     <View
       className="flex-1 items-center"
       style={{ paddingTop: Constants.statusBarHeight }}
     >
+      <View className="w-full p-2">
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon name="chevron-back-outline" size={27} color={"#7F5AF0"} />
+        </TouchableOpacity>
+      </View>
       <View
         style={{
-          width: widthPercentageToDP(80),
+          width: widthPercentageToDP(90),
         }}
       >
         <Text className="font-bold text-3xl mb-5">
           Forgot Password? <Icon name="lock-closed" size={22} color="#7F5AF0" />
         </Text>
+
         <Text className='text-[#7F5AF0] mb-8'>
           Please input your phone number to recover your account
         </Text>
@@ -89,6 +99,7 @@ const onSubmitMethod = () => {
         <TouchableOpacity onPress={onSubmitMethod} style={styles.recoverButton}>
           <Text style={styles.recoverButtonText}>Recover Account</Text>
         </TouchableOpacity>
+
         </View>
       </View>
     </View>
