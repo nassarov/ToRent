@@ -9,6 +9,7 @@ import ForgotPasswordScreen from "../Screens/Registration/ForgotPasswordScreen";
 import VerificationCodeScreen from "../Screens/Registration/VerificationCodeScreen";
 import CustomHeader2 from "../Components/CustomHeader2";
 import ChangePasswordScreen from "../Screens/Registration/ChangePasswordScreen";
+import HomeScreen from "../Screens/HomeScreen/HomeScreen";
 const Stack = createStackNavigator();
 
 export default function Registration() {
@@ -45,6 +46,11 @@ export default function Registration() {
         name='recoveraccount'
         component={VerificationCodeScreen}
         options={{ header:() => <CustomHeader2/> }}
+      />
+      <Stack.Screen
+        name='homescreen'
+        component={HomeScreen}
+        options={ {headerShown:false}}
       />
     </Stack.Navigator>
   );

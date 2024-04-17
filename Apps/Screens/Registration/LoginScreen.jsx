@@ -20,6 +20,7 @@ export default function LoginScreen() {
       initialValues={{  email: '', password: '' }}
       onSubmit={(values) => {
         console.log(values);
+        navigation.navigate('homescreen')
         // You can add your form submission logic here
       }}
       validate={(values) => {
