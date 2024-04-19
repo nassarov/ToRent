@@ -31,11 +31,7 @@ export default function Carousel() {
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, [activeIndex]); // Add activeIndex as a dependency
 
-  const getItemLayout = (data, index) => ({
-    length: screenWidth,
-    offset: screenWidth * index,
-    index: index,
-  });
+
   const renderItem = ({ item, index }) => {
     return (
       <View key={index}>
