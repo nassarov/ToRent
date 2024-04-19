@@ -5,7 +5,7 @@ import PostCard from "./PostCard";
 
 export default function Slider({ cars }) {
   const renderItem = ({ item, index }) => {
-    return <PostCard car={item}  />;
+    return <PostCard car={item} key={index}  />;
   };
 
   return (
