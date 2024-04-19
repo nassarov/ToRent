@@ -84,6 +84,7 @@ export default function HomeScreen() {
 
   return (
     <View className="mt-12 ">
+      
       <View className="flex-row mb-2">
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
         <Text className="text-xl"> Your Favorite Car</Text>
@@ -91,7 +92,7 @@ export default function HomeScreen() {
       <Carousel />
       {companyData.map((company, index) => (
         <View className=" py-2">
-          <View className="flex-row justify-between p-1 items-center">
+          <View className="flex-row justify-between px-1 items-center">
             <Text className="font-bold">{company.name}</Text>
             <TouchableOpacity>
               <Text className="text-violet-600 text-xs">See More</Text>
