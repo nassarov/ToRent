@@ -23,9 +23,9 @@ export default function SignUpScreen() {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [value, setValue] = useState(null); // Add this line
-  const [isFocus, setIsFocus] = useState(false); // Add this line
-  const [selectedValue, setSelectedValue] = useState(null); // Add this line
+  const [value, setValue] = useState(null); 
+  const [isFocus, setIsFocus] = useState(false); 
+  const [selectedValue, setSelectedValue] = useState(null); 
 
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
