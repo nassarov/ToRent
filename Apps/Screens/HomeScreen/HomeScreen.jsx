@@ -5,7 +5,12 @@ import Carousel from "../../Components/HomeComponents/Carousel";
 import PostCard from "../../Components/HomeComponents/PostCard";
 import Slider from "../../Components/HomeComponents/Slider";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import SearchBarCar from "../../Components/HomeComponents/SearchBar";
+import { useNavigation } from "@react-navigation/native";
+
 export default function HomeScreen() {
+
+  const navigation = useNavigation();
   const images = [
     require("../../../assets/HomeSlider/s0.jpg"),
     require("../../../assets/HomeSlider/s3.jpg"),
@@ -82,6 +87,12 @@ export default function HomeScreen() {
     },
   ];
 
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+    setShowSearchResults(true);
+  };
+
+
   return (
     <View className="mt-12 ">
       
@@ -90,15 +101,20 @@ export default function HomeScreen() {
         <Text className="text-xl"> Your Favorite Car</Text>
       </View>
       <Carousel />
+      <View className='flex-row justify-between px-1 items-center'>
+        <SearchBarCar/>
+        <TouchableOpacity ><Text>Filter</Text></TouchableOpacity>
+      </View>
+      
       {companyData.map((company, index) => (
-        <View className=" py-2">
+        <View key={index} className=" py-2">
           <View className="flex-row justify-between px-1 items-center">
             <Text className="font-bold">{company.name}</Text>
             <TouchableOpacity>
               <Text className="text-violet-600 text-xs">See More</Text>
             </TouchableOpacity>
           </View>
-          <Slider key={index} cars={company.cars} />
+          <Slider cars={company.cars} />
         </View>
       ))}
     </View>
