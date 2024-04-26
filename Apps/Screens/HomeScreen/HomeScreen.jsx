@@ -7,6 +7,8 @@ import Slider from "../../Components/HomeComponents/Slider";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import SearchBarCar from "../../Components/HomeComponents/SearchBar";
 import { useNavigation } from "@react-navigation/native";
+import { FontAwesome6 } from '@expo/vector-icons';
+
 
 export default function HomeScreen() {
 
@@ -103,7 +105,8 @@ export default function HomeScreen() {
       <Carousel />
       <View className='flex-row justify-between px-1 items-center'>
         <SearchBarCar/>
-        <TouchableOpacity onPress={() => navigation.navigate('filter')}><Text>Filter</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('filter')} 
+        className='mr-2 mt-1'><FontAwesome6 name="sliders" size={24} color="black" /></TouchableOpacity>
       </View>
       
       {companyData.map((company, index) => (
