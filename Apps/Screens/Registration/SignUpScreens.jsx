@@ -66,7 +66,7 @@ export default function SignUpScreen() {
       }}
       onSubmit={(values) => {
         console.log(values);
-        navigation.push('login');
+        navigation.push('address');
       }}
       validate={(values) => {
         const errors = {};
