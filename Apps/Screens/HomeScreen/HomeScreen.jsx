@@ -103,7 +103,7 @@ export default function HomeScreen() {
       <Carousel />
       <View className='flex-row justify-between px-1 items-center'>
         <SearchBarCar/>
-        <TouchableOpacity ><Text>Filter</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('filter')}><Text>Filter</Text></TouchableOpacity>
       </View>
       
       {companyData.map((company, index) => (
