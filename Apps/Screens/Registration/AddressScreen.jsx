@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, StyleSheet, TextInput, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import { Formik } from "formik";
 import { AntDesign } from "@expo/vector-icons";
+import {useNavigation} from '@react-navigation/native';
+
 export default function AddressScreen() {
+  const navigation = useNavigation();
+
   const [selectedCity, setSelectedCity] = useState(null); 
   const [isFocus, setIsFocus] = useState(false); 
   const [valuesList, setValuesList] = useState([]); 
   const [yourAdd, setYourAdd] = useState('');
+  const[addAnotherAdd, setAddAnotherAdd] = useState('');
 
   const lebaneseCities = [
     { label: "Beirut", value: "Beirut" },
@@ -48,13 +53,28 @@ export default function AddressScreen() {
     resetForm();
   };
 
+  const confirmAndNavigate = () => {
+    // Show an alert dialog
+    Alert.alert(
+      "Account Added", // Alert Title
+      "Your account has been successfully added! Time to log in.", // Alert message
+      [
+        {
+          text: "OK",
+          onPress: () => navigation.replace('login') // Navigate on pressing OK
+        }
+      ]
+    );
+  };
+  
+
   useEffect(() => {
     // Update the state outside the rendering process
     if (valuesList.length > 0) {
       setYourAdd("Your Addresses");
+      setAddAnotherAdd(" + Add Another Address");
     }
   }, [valuesList]);
-
 
   return (
     <Formik
@@ -85,6 +105,7 @@ export default function AddressScreen() {
           <View style={styles.container}>
           <View style={{height:heightPercentageToDP(33), marginBottom:2}}>
             <View style={{ height: heightPercentageToDP(12)}}>
+            <Text style={{ fontSize: 16, fontWeight: "bold",marginLeft:15 ,color:'#7F5AF0'}}>{addAnotherAdd}</Text>
               <Dropdown
                 style={[styles.dropdown, isFocus && { borderColor: "#7F5AF0" }]}
                 placeholderStyle={styles.placeholderStyle}
@@ -158,7 +179,7 @@ export default function AddressScreen() {
             ))}
             {valuesList.length > 0 && (
               <View className='items-center text-center justify-center'>
-                <TouchableOpacity
+                <TouchableOpacity  onPress={confirmAndNavigate}
                   style={styles.signupButton}
                 >
                   <Text style={styles.signupButtonText}>Confirm</Text>
