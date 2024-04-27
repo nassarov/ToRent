@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TextInput, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
@@ -47,6 +47,14 @@ export default function AddressScreen() {
     setValuesList([...valuesList, { city: values.City, googleMapLink: values.GoogleMapLink }]);
     resetForm();
   };
+
+  useEffect(() => {
+    // Update the state outside the rendering process
+    if (valuesList.length > 0) {
+      setYourAdd("Your Addresses");
+    }
+  }, [valuesList]);
+
 
   return (
     <Formik
@@ -149,7 +157,6 @@ export default function AddressScreen() {
               </View>
             ))}
             {valuesList.length > 0 && (
-              setYourAdd('Your Addresses'),
               <View className='items-center text-center justify-center'>
                 <TouchableOpacity
                   style={styles.signupButton}
@@ -159,7 +166,7 @@ export default function AddressScreen() {
               </View>
             )}
           </View>
-        </ScrollView>
+        </ScrollView> 
       )}
     </Formik>
   );
