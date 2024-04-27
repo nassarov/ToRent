@@ -38,7 +38,7 @@ export default function Carousel() {
         <Image
           source={item.image}
           style={{
-            height: 200,
+            height: 140,
             width: screenWidth,
             marginHorizontal: 10,
             borderRadius: 10,
@@ -61,8 +61,8 @@ export default function Carousel() {
   };
 
   return (
-    <View>
-      <FlatList
+    <View >
+      <FlatList className=''
         data={carouselSlides}
         renderItem={renderItem}
         horizontal={true}
