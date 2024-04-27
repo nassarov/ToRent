@@ -5,15 +5,16 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import Constants from 'expo-constants';
 import { MaterialIcons } from '@expo/vector-icons';
-export default function CustomHeader2() {
+export default function CustomHeader2({text}) {
   const navigation = useNavigation();
 
   return (
     <View style={{paddingTop:Constants.statusBarHeight}}>
-      <View className="flex-row p-3 justify-between items-center ">
+      <View className="flex-row p-3  items-center ">
         <TouchableOpacity onPress={() => navigation.goBack()}>
         <MaterialIcons name="arrow-back-ios" size={24} color="#7F5AF0" />
         </TouchableOpacity>
+        <Text>{text}</Text>
       </View>
     </View>
   );
