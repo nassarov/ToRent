@@ -2,18 +2,22 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { Dropdown } from "react-native-element-dropdown";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Filter() {
+
+    const navigation = useNavigation();
+
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [selectBrand, setSelectBrand] = useState(null);
-    const [selectModel, setSelectModel] = useState(null);
+    const [selectType, setSelectType] = useState(null);
     const [selectPrice, setSelectPrice] = useState(null);
     const [selectColor, setSelectColor] = useState(null);
     const [selectSeats, setSelectSeats] = useState(null);
 
     const dataAdd = [{ label: "Beirut", value: "Beirut" }, { label: "Tripoli", value: "Tripoli" }];
     const dataBrand = [{ label: "Toyota", value: "Toyota" }, { label: "Honda", value: "Honda" }];
-    const dataModel = [{ label: "Corolla", value: "Corolla" }, { label: "Civic", value: "Civic" }];
+    const dataType = [{ label: "SUV", value: "SUV" }, { label: "Sedan", value: "Sedan" }];
     const dataPrice = [{ label: "$10,000 - $20,000", value: "10-20" }, { label: "$20,000 - $30,000", value: "20-30" }];
     const dataColor = [{ label: "Red", value: "Red" }, { label: "Blue", value: "Blue" }];
     const dataSeats = [{ label: "2 Seats", value: "2" }, { label: "5 Seats", value: "5" }];
@@ -21,7 +25,7 @@ export default function Filter() {
     const clearAllSelections = () => {
         setSelectedAddress(null);
         setSelectBrand(null);
-        setSelectModel(null);
+        setSelectType(null);
         setSelectPrice(null);
         setSelectColor(null);
         setSelectSeats(null);
@@ -37,16 +41,17 @@ export default function Filter() {
                 placeholder="Address"
             />
             <DropdownComponent
+                data={dataType}
+                value={selectType}
+                setValue={setSelectType}
+                placeholder="Type"
+            />
+
+             <DropdownComponent
                 data={dataBrand}
                 value={selectBrand}
                 setValue={setSelectBrand}
                 placeholder="Brand"
-            />
-            <DropdownComponent
-                data={dataModel}
-                value={selectModel}
-                setValue={setSelectModel}
-                placeholder="Model"
             />
             <DropdownComponent
                 data={dataPrice}
@@ -66,11 +71,11 @@ export default function Filter() {
                 setValue={setSelectSeats}
                 placeholder="Number of Seats"
             />
-             <View style={styles.bottomContainer} className='bg-slate-300 flex-1 w-full'>
+             <View style={styles.bottomContainer} className='bg-slate-300  '>
              <TouchableOpacity onPress={clearAllSelections}>
                     <Text style={styles.clearAllText}>Clear All</Text>
                 </TouchableOpacity>
-            <TouchableOpacity style={styles.ApplyButton} onPress={()=>console.log('apply')}>
+            <TouchableOpacity style={styles.ApplyButton} onPress={()=>navigation.goBack()}>
               <Text style={styles.ApplyButtonText}>Apply</Text>
             </TouchableOpacity>
             </View>
@@ -113,27 +118,28 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent:"flex-start",
         paddingTop: 2,
-        paddingHorizontal:15,
     },
     text: {
         fontWeight: "bold",
-        fontSize: 25,
-        margin: 15,
-        marginLeft:0,
+        fontSize: 29,
+        margin: 10,
+        marginLeft:18,
     },
     dropdownContainer: {
         width: widthPercentageToDP('90%'),
         borderWidth: 1,
         borderRadius: 8,
         backgroundColor: "#F6F6F6",
+        
     },
     dropdown: {
         height: 50,
         borderColor: "#7F5AF0",
         borderWidth: 1,
         borderRadius: 8,
-        paddingHorizontal: 8,
-        marginVertical: 5,
+        paddingHorizontal: 15,
+        marginVertical: 2,
+        marginHorizontal:18,
     },
     placeholderStyle: {
         fontSize: 16,
@@ -149,7 +155,8 @@ const styles = StyleSheet.create({
         color: '#7F5AF0',
         fontWeight: 'bold',
         marginBottom: 0,
-        marginLeft: 5,
+        marginLeft: 25,
+        
     },
     bottomContainer: {
         flexDirection: 'row',
@@ -157,6 +164,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         paddingHorizontal: 15,
         alignItems:'center',
+        height:heightPercentageToDP(13),
+        position:'absolute',
+        bottom:0,
+        width: '100%'
     },
     clearAllText: {
         color: '#7F5AF0',
@@ -168,7 +179,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingHorizontal: 24,
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "center",   
         width: heightPercentageToDP(16),
         height: widthPercentageToDP(13),
       },
