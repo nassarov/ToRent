@@ -8,6 +8,7 @@ export default function AddressScreen() {
   const [selectedCity, setSelectedCity] = useState(null); 
   const [isFocus, setIsFocus] = useState(false); 
   const [valuesList, setValuesList] = useState([]); 
+  const [yourAdd, setYourAdd] = useState('');
 
   const lebaneseCities = [
     { label: "Beirut", value: "Beirut" },
@@ -60,7 +61,7 @@ export default function AddressScreen() {
         }
         if (values.GoogleMapLink === "") {
           errors.GoogleMapLink = "Required: Please enter Google Maps link";
-        } else if (!values.GoogleMapLink.startsWith("https://maps.google.com")) {
+        } else if (!values.GoogleMapLink.startsWith("https://maps.app.goo.gl/")) {
           errors.GoogleMapLink = "Invalid Google Maps link";
         }
         return errors;
@@ -74,7 +75,8 @@ export default function AddressScreen() {
       {({ handleChange, handleSubmit, values, errors, resetForm }) => (
         <ScrollView>
           <View style={styles.container}>
-            <View style={{ height: heightPercentageToDP(12) }}>
+          <View style={{height:heightPercentageToDP(33), marginBottom:2}}>
+            <View style={{ height: heightPercentageToDP(12)}}>
               <Dropdown
                 style={[styles.dropdown, isFocus && { borderColor: "#7F5AF0" }]}
                 placeholderStyle={styles.placeholderStyle}
@@ -82,7 +84,7 @@ export default function AddressScreen() {
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={lebaneseCities}
-                search={false}
+                search={true}
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
@@ -109,10 +111,10 @@ export default function AddressScreen() {
               )}
             </View>
             {values.City && (
-              <View style={{ marginTop: 20 }}>
+              <View style={{ height:heightPercentageToDP(11)}}>
                 <TextInput
                   style={styles.input}
-                  placeholder="Enter Google Maps link"
+                  placeholder="Google Maps link(https://maps.app.goo.gl/abc)"
                   value={values.GoogleMapLink}
                   onChangeText={(text) => handleChange("GoogleMapLink")(text)}
                 />
@@ -122,6 +124,7 @@ export default function AddressScreen() {
               </View>
             )}
             {/* Done Button */}
+            {values.City && (
             <View className='items-center text-center justify-center'>
               <TouchableOpacity
                 style={styles.DoneButton}
@@ -130,21 +133,26 @@ export default function AddressScreen() {
                 <Text style={styles.signupButtonText}>Done</Text>
               </TouchableOpacity>
             </View>
+            )}</View>
 
+
+            {/* Addresses */}
+           <View className='mt-2'>
+            <Text style={{ fontSize: 18, fontWeight: "bold",marginLeft:15 }}>{yourAdd}</Text>
+           </View>
             {valuesList.map((item, index) => (
               <View key={index} style={styles.AddressContainer}>
                 <View style={styles.rectangle}>
-                  <Text style={{ fontSize: 15, fontWeight: "bold" }}>Address: {'\n'}</Text>
-                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>City:</Text> {item.city} {'\n'}</Text>
-                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>Google Maps Link:</Text> {item.googleMapLink}</Text>
+                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>City:</Text> {item.city} </Text>
+                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>Google Maps Link:</Text> <TouchableOpacity><Text className='text-blue-500'>{item.googleMapLink}</Text></TouchableOpacity></Text>
                 </View>
               </View>
             ))}
             {valuesList.length > 0 && (
+              setYourAdd('Your Addresses'),
               <View className='items-center text-center justify-center'>
                 <TouchableOpacity
                   style={styles.signupButton}
-                
                 >
                   <Text style={styles.signupButtonText}>Confirm</Text>
                 </TouchableOpacity>
@@ -161,7 +169,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-start",
-    paddingTop: 50,
+    paddingTop: 20,
+    
   },
   input: {
     borderColor: "#7F5AF0",
@@ -169,7 +178,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
     margin: 15,
+    marginBottom:0,
     padding: 18,
+    paddingRight:10,
     width: heightPercentageToDP(42),
     height: widthPercentageToDP(15)
   },
@@ -193,7 +204,6 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   dropdown: {
-    height: 50,
     borderColor: "#7F5AF0",
     borderWidth: 1,
     borderRadius: 8,
@@ -201,6 +211,7 @@ const styles = StyleSheet.create({
     width: heightPercentageToDP(42),
     height: widthPercentageToDP(15),
     margin: 15,
+    
   },
   signupButton: {
     backgroundColor: "#7F5AF0",
@@ -221,6 +232,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 15,
+    marginTop:9,
     width: heightPercentageToDP(16),
     height: widthPercentageToDP(18),
   },
@@ -263,7 +275,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   AddressContainer:{
-    marginTop: 20,
+    marginTop: 15,
    
   },
   rectangle: {
@@ -271,5 +283,6 @@ const styles = StyleSheet.create({
     borderColor: '#7F5AF0',
     borderRadius: 5,
     padding: 10,
+    marginHorizontal:19,
   },
 });

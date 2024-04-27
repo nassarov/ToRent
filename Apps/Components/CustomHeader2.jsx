@@ -14,7 +14,7 @@ export default function CustomHeader2({text}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
         <MaterialIcons name="arrow-back-ios" size={24} color="#7F5AF0" />
         </TouchableOpacity>
-        <Text>{text}</Text>
+        <Text className=' text-lg ml-2'>{text}</Text>
       </View>
     </View>
   );

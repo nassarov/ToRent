@@ -49,7 +49,7 @@ export default function Registration() {
          <Stack.Screen
         name='address'
         component={AddressScreen}
-        options={{ header:() => <CustomHeader2/> }}
+        options={{ header:() => <CustomHeader2 text={'Select Fixed Address'}/> }}
       />
     </Stack.Navigator>
   );
