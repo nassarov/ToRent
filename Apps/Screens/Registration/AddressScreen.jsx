@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 
 export default function AddressScreen() {
   const navigation = useNavigation();
-
+  
   const [selectedCity, setSelectedCity] = useState(null); 
   const [isFocus, setIsFocus] = useState(false); 
   const [valuesList, setValuesList] = useState([]); 
