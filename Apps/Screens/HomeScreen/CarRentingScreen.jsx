@@ -152,7 +152,7 @@ export default function CarRentingScreen() {
           horizontal
         />
       </View>
-      <View className="m-4 mr-3 border-t-2  border-l-2 border-violet-600">
+      <View className="m-3 border-t-2  border-l-2 border-violet-600 " style={{width: widthPercentageToDP(93)}}>
         <FlatList
           scrollEnabled={false}
           numColumns={2}
