@@ -143,7 +143,7 @@ export default function CarRentingScreen() {
                 source={item.image}
                 style={{
                   width: widthPercentageToDP(86 / images.length),
-                  height: widthPercentageToDP(20),
+                  height: widthPercentageToDP(15),
                 }}
                 resizeMode="contain"
               />
@@ -152,7 +152,9 @@ export default function CarRentingScreen() {
           horizontal
         />
       </View>
-      <View className="m-3 border-t-2  border-l-2 border-violet-600 " style={{width: widthPercentageToDP(93)}}>
+      <Text className='ml-2 font-bold text-lg mb-[-12px] mt-2'>Car Details</Text>
+      <View className="m-3 border-t-2 border-l-2 border-violet-600 " style={{width: widthPercentageToDP(93)}}>
+      
         <FlatList
           scrollEnabled={false}
           numColumns={2}
@@ -201,6 +203,7 @@ export default function CarRentingScreen() {
         </Text>
       </View>
 
+      <View className='border-2 border-violet-600 rounded-lg p-2 m-1' style={{height:heightPercentageToDP(37)}}>
       <CalendarPicker
         startFromMonday={true}
         allowRangeSelection={true}
@@ -210,8 +213,27 @@ export default function CarRentingScreen() {
         selectedDayColor="#7300e6"
         selectedDayTextColor="#FFFFFF"
         onDateChange={onDateChange}
+        dayLabelsWrapper={{
+        borderTopWidth: 2,
+        borderBottomWidth: 2,
+        borderColor: '#7F5AF0'
+      }}
+      
+      nextComponent={
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <MaterialCommunityIcons name="car-door" size={24} color="#7300e6" style={{ transform: [{ scaleX: -1 }] }}/>
+        </View>
+      }
+      previousComponent={
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <MaterialCommunityIcons name="car-door" size={24} color="#7300e6" style={{ transform: [{ scaleX: 1 }] }}/></View>
+      }
+      style={{
+        width: '100%', // Use 100% of the container's width
+        height: '100%', // Use 100% of the container's height
+      }}
       />
-
+      </View>
       <View>
         <Text>
           {startDate
