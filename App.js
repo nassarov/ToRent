@@ -6,6 +6,7 @@ import Registration from "./Apps/Navigations/Registration";
 import 'react-native-gesture-handler';
 import HomeScreen from "./Apps/Screens/HomeScreen/HomeScreen";
 import HomeScreenNavigation from "./Apps/Navigations/HomeScreenNavigation";
+import TabNaviagtion from "./Apps/Navigations/TabNavigation";
 
 const Stack = createStackNavigator();
 
@@ -24,8 +25,8 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Home"
-          component={HomeScreenNavigation}
+          name="TabNav"
+          component={TabNaviagtion}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
