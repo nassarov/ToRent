@@ -152,20 +152,21 @@ export default function CarRentingScreen() {
           horizontal
         />
       </View>
-      <View className="m-4 border-b-2 border-violet-600">
+      <View className="m-4 mr-3 border-t-2  border-l-2 border-violet-600">
         <FlatList
           scrollEnabled={false}
           numColumns={2}
           columnWrapperStyle={{ justifyContent: "space-around" }}
           data={details}
           renderItem={({ item, index }) => (
+            
             <View
               key={index}
-              className="flex-row p-4  border-t-2 border-r-2  border-violet-600 items-center "
-              style={{ width: widthPercentageToDP(50) }}
+              className="flex-row p-4 border-r-2 border-b-2 border-violet-600 items-center  "
+              style={{ width: widthPercentageToDP(46) }}
             >
-              <View className="m-2">{item.icon}</View>
-              <View>
+              <View className="mr-1">{item.icon}</View>
+              <View className='ml-2'>
                 <Text className="font-bold ">{item.attribute}</Text>
                 <Text className="text-xs text-violet-600">{item.value}</Text>
               </View>
@@ -185,15 +186,15 @@ export default function CarRentingScreen() {
           culpa qui officia deserunt mollit anim id est laborum
         </Text>
       </View>
-      <View className="m-4 border-2 border-violet-600 rounded-lg p-2">
-        <View className=" flex-row ">
-          <Text className="font-bold">Address:</Text>
+      <View className="m-4 border-2 border-violet-600 rounded-lg p-2" style={{height:heightPercentageToDP(10)}}>
+        <View className=" flex-row mb-1">
+          <Text className="font-bold">City:</Text>
           <Text>Beirut</Text>
         </View>
-        <Text className="font-bold leading-3">
+        <Text className="font-bold ">
           Google maps Link:
           <TouchableOpacity>
-            <Text className="text-blue-400 leading-3">
+            <Text className="text-blue-400">
               https://maps.app.goo.gl/sdfaewf
             </Text>
           </TouchableOpacity>
