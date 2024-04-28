@@ -1,6 +1,10 @@
 import { View, Text, Image, Dimensions } from "react-native";
 import React, { useState } from "react";
-import { FlatList, ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import {
   heightPercentageToDP,
   widthPercentageToDP,
@@ -14,11 +18,21 @@ import {
   Ionicons,
   FontAwesome6,
 } from "@expo/vector-icons/";
+import CalendarPicker from "react-native-calendar-picker";
 export default function CarRentingScreen() {
   const screenWidth = Dimensions.get("window").width - 20;
+
   const [selectedImage, setSelectedImage] = useState(
     require("./../../../assets/CarPosts/toyota.png")
   );
+  const [selectedEndDate, setSelectedEndDate] = useState("");
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+
+  const minDate = new Date(); // Today
+  const maxDate = new Date(2025, 6, 3);
+  const startDate = selectedStartDate ? new Date(selectedStartDate) : "";
+  const endDate = selectedEndDate ? new Date(selectedEndDate) : "";
+
   const images = [
     {
       id: 1,
@@ -87,6 +101,14 @@ export default function CarRentingScreen() {
     },
   ];
 
+  const onDateChange = (date, type) => {
+    if (type === "END_DATE") {
+      setSelectedEndDate(date);
+    } else {
+      setSelectedStartDate(date);
+      setSelectedEndDate(null);
+    }
+  };
   return (
     <ScrollView>
       <CustomHeader2 text={"CARCAR"} />
@@ -103,7 +125,7 @@ export default function CarRentingScreen() {
       </View>
       <View className="flex-row gap-x-1 rounded-xl  mt-2">
         <FlatList
-        scrollEnabled={false}
+          scrollEnabled={false}
           data={images}
           renderItem={({ item, index }) => (
             <TouchableOpacity
@@ -130,16 +152,16 @@ export default function CarRentingScreen() {
           horizontal
         />
       </View>
-      <View className="m-4 border-b-2 border-slate-300">
+      <View className="m-4 border-b-2 border-violet-600">
         <FlatList
-        scrollEnabled={false}
+          scrollEnabled={false}
           numColumns={2}
           columnWrapperStyle={{ justifyContent: "space-around" }}
           data={details}
           renderItem={({ item, index }) => (
             <View
               key={index}
-              className="flex-row p-4  border-t-2 border-r-2  border-slate-300 items-center "
+              className="flex-row p-4  border-t-2 border-r-2  border-violet-600 items-center "
               style={{ width: widthPercentageToDP(50) }}
             >
               <View className="m-2">{item.icon}</View>
@@ -151,7 +173,7 @@ export default function CarRentingScreen() {
           )}
         />
       </View>
-      <View className="m-4 border-2 border-slate-300 p-4 rounded-lg">
+      <View className="m-4 border-2 border-violet-600 p-4 rounded-lg">
         <Text className="font-bold text-lg">Description</Text>
         <Text>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -162,6 +184,60 @@ export default function CarRentingScreen() {
           pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
           culpa qui officia deserunt mollit anim id est laborum
         </Text>
+      </View>
+      <View className="m-4 border-2 border-violet-600 rounded-lg p-2">
+        <View className=" flex-row ">
+          <Text className="font-bold">Address:</Text>
+          <Text>Beirut</Text>
+        </View>
+        <Text className="font-bold leading-3">
+          Google maps Link:
+          <TouchableOpacity>
+            <Text className="text-blue-400 leading-3">
+              https://maps.app.goo.gl/sdfaewf
+            </Text>
+          </TouchableOpacity>
+        </Text>
+      </View>
+
+      <CalendarPicker
+        startFromMonday={true}
+        allowRangeSelection={true}
+        minDate={minDate}
+        maxDate={maxDate}
+        todayBackgroundColor="#f2e6ff"
+        selectedDayColor="#7300e6"
+        selectedDayTextColor="#FFFFFF"
+        onDateChange={onDateChange}
+      />
+
+      <View>
+        <Text>
+          {startDate
+            ? startDate.getFullYear() +
+              "/" +
+              (startDate.getMonth() + 1) +
+              "/" +
+              startDate.getDate()
+            : ""}
+        </Text>
+        <Text>
+          {endDate
+            ? endDate.getFullYear() +
+              "/" +
+              (endDate.getMonth() + 1) +
+              "/" +
+              endDate.getDate()
+            : ""}
+        </Text>
+      </View>
+      <View className="items-end mb-4">
+        <TouchableOpacity
+          className="bg-violet-600 mr-5 p-4 rounded-xl "
+          style={{ width: widthPercentageToDP(30) }}
+        >
+          <Text className="text-white text-center font-bold">Rent</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
