@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, StatusBar, TouchableOpacity } from "react-native";
+import { View, Text, StatusBar, TouchableOpacity, Keyboard } from "react-native";
 import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Ionicons, EvilIcons , FontAwesome6} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from 'react-native-phone-number-input';
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 export default function SignUpForToRent() {
   
@@ -46,7 +47,7 @@ const onSubmitMethod = () => {
 };
 
   return (
-    <View style={{ alignItems: 'center' }}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} style={{ alignItems: 'center' }}>
       <StatusBar backgroundColor={'#F6F6F6'} translucent={true}/>
       <View style={{ width: wp(80) }} className='items-center justify-center mt-14'>
         <Text className='mt-4' style={{ fontWeight: 'bold', fontSize: 24, marginTop: 8, textAlign: 'center' }}>
@@ -121,6 +122,6 @@ const onSubmitMethod = () => {
           <Text className='text-violet-600 text-[18px] mt-[-2px] '> Login</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }

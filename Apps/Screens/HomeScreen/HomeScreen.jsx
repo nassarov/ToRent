@@ -4,7 +4,7 @@ import PropTypes from "deprecated-react-native-prop-types"; // Import PropTypes 
 import Carousel from "../../Components/HomeComponents/Carousel";
 import PostCard from "../../Components/HomeComponents/PostCard";
 import Slider from "../../Components/HomeComponents/Slider";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import SearchBarCar from "../../Components/HomeComponents/SearchBar";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome6 } from '@expo/vector-icons';
@@ -87,6 +87,40 @@ export default function HomeScreen() {
         },
       ],
     },
+    {
+      id: 3,
+      name: "DEF Motors",
+      cars: [
+        {
+          id: 1,
+          image: require("./../../../assets/CarPosts/hyundai.png"),
+          brand: "Hyundai",
+          model: "Creta-2018",
+          price:'30'
+        },
+        {
+          id: 2,
+          image: require("./../../../assets/CarPosts/mahindra.jpeg"),
+          brand: "Mahindra",
+          model: "Scorpion-2020",
+          price:'55'
+        },
+        {
+          id: 3,
+          image: require("./../../../assets/CarPosts/suzuki.jpeg"),
+          brand: "Suzuki",
+          model: "Fronx-2012",
+          price:'35'
+    },
+        {
+          id: 4,
+          image: require("./../../../assets/CarPosts/toyota.png"),
+          brand: "Toyota",
+          model: "Urban Cruiser Taysor-2010",
+          price:'70'
+        },
+      ],
+    },
   ];
 
   const handleSearch = (text) => {
@@ -96,7 +130,7 @@ export default function HomeScreen() {
 
 
   return (
-    <View className="mt-12 ">
+    <ScrollView className="mt-12 ">
       
       <View className="flex-row mb-2">
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
@@ -120,6 +154,6 @@ export default function HomeScreen() {
           <Slider cars={company.cars} />
         </View>
       ))}
-    </View>
+    </ScrollView>
   );
 }
