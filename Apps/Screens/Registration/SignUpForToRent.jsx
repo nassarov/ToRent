@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StatusBar, TouchableOpacity } from "react-native";
+import { View, Text, StatusBar, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Ionicons, EvilIcons , FontAwesome6} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -46,6 +46,7 @@ const onSubmitMethod = () => {
 };
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <View style={{ alignItems: 'center' }}>
       <StatusBar backgroundColor={'#F6F6F6'} translucent={true}/>
       <View style={{ width: wp(80) }} className='items-center justify-center mt-14'>
@@ -122,5 +123,6 @@ const onSubmitMethod = () => {
         </TouchableOpacity>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 }

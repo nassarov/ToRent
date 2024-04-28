@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity ,StatusBar} from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity ,StatusBar,TouchableWithoutFeedback,Keyboard} from 'react-native';
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -39,6 +39,7 @@ export default function LoginScreen() {
       }}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <StatusBar backgroundColor={'#F6F6F6'} translucent={true}/>
           {/* Input Fields */}
@@ -88,7 +89,7 @@ export default function LoginScreen() {
               </View>
            </View>
           </View>
-        </View>
+        </View></TouchableWithoutFeedback>
       )}
     </Formik>
   );
