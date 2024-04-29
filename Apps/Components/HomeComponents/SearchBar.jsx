@@ -21,6 +21,21 @@ const carData = [
     brand: "Honda",
     model: "Civic",
   },
+  {
+    id: "3",
+    brand: "Ford",
+    model: "Focus",
+  },
+  {
+    id: "4",
+    brand: "Nissan",
+    model: "Altima",
+  },
+  {
+    id: "5",
+    brand: "Hyundai",
+    model: "Elantra",
+  }
   // Add more car data as needed
 ];
 

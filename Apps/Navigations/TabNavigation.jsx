@@ -32,6 +32,7 @@ export default function TabNaviagtion() {
                  tabBarIcon:({color,size}) =>(
                     <FontAwesome5 name="home" size={24} color={color}/>
                 ),
+                tabBarHideOnKeyboard:true
                 
 
                }}   
