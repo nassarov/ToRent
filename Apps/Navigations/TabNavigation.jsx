@@ -87,7 +87,7 @@ const TabNavigation = () => {
       <Tab.Screen
       
         name="Post"
-        component={CarRentingScreen}
+        component={CarRegistrationScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (<MaterialIcons focused={focused} name="add"  size={24} color="white"  style={{
