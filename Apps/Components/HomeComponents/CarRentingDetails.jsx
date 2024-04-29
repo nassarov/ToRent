@@ -1,10 +1,33 @@
-import { View, Text } from "react-native";
-import React from "react";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Modal, Button } from 'react-native';
 import { FontAwesome5 } from "@expo/vector-icons";
-import { widthPercentageToDP } from "react-native-responsive-screen";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import CalendarPicker from "react-native-calendar-picker";
+import {
+  MaterialCommunityIcons,
+} from "@expo/vector-icons/";
 
 export default function CarRentingDetails({ startDate, endDate }) {
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
+  const [selectedEndDate, setSelectedEndDate] = useState("");
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+
+  const minDate = new Date(); // Today
+  const maxDate = new Date(2025, 6, 3);
+
+  const toggleCalendar = () => {
+    setIsCalendarVisible(!isCalendarVisible);
+  };
+
+  const onDateChange = (date, type) => {
+    if (type === "END_DATE") {
+      setSelectedEndDate(date);
+    } else {
+      setSelectedStartDate(date);
+      setSelectedEndDate(null);
+    }
+  };
+
   formatedStartDate = startDate
     ? startDate.getFullYear() +
       "/" +
@@ -19,32 +42,38 @@ export default function CarRentingDetails({ startDate, endDate }) {
       "/" +
       endDate.getDate()
     : "";
-  var oneDay = 24 * 60 * 60 * 1000; // Number of milliseconds in a day
 
-  var startDateMilliseconds = startDate ? startDate.getTime() : 0;
-  var endDateMilliseconds = endDate ? endDate.getTime() : 0;
+  const handleApply = () => {
+    // Handle applying selected dates
+    // For example, you can set the selected dates to the state of the parent component
+    // or perform any other action you need
+    // Here, I'm just closing the modal
+    setIsCalendarVisible(false);
+  };
 
-  var daysDifference = Math.round(
-    Math.abs((endDateMilliseconds - startDateMilliseconds) / oneDay)
-  )+1;
-
+  const handleClear = () => {
+    setSelectedStartDate(null);
+    setSelectedEndDate(null);
+  };
 
   return (
     <View className="bg-violet-300  rounded-lg  w-11/12  m-auto mt-2 py-2">
       <View className="flex-row  justify-around">
         <View style={{ width: "45%" }}>
+          {/* Pick-up date */}
           <Text className="font-bold mb-2 text-white">Pick-up date</Text>
-          <View className="flex-row rounded-lg bg-violet-600 p-2 items-center ">
+          <TouchableOpacity onPress={toggleCalendar} className="flex-row rounded-lg bg-violet-600 p-2 items-center ">
             <FontAwesome5 name="calendar" size={20} color="white" />
             <Text className="text-white ml-2">{formatedStartDate}</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={{ width: "45%" }}>
+          {/* Drop-off date */}
           <Text className="font-bold mb-2 text-white">Drop-off date</Text>
-          <View className="flex-row rounded-lg bg-violet-600 p-2 items-center">
+          <TouchableOpacity className="flex-row rounded-lg bg-violet-600 p-2 items-center">
             <FontAwesome5 name="calendar" size={20} color="white" />
             <Text className="text-white ml-2">{formatedEndDate}</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       <View className="p-2">
@@ -76,6 +105,72 @@ export default function CarRentingDetails({ startDate, endDate }) {
           </View>
         </View>
       </View>
+       {/* Modal for displaying the calendar */}
+       <Modal
+        visible={isCalendarVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={toggleCalendar}
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <View style={{ width: "100%", height: heightPercentageToDP(46), backgroundColor: '#FFFFFF', borderRadius: 10 }}>
+            <Text className='text-lg font-bold text-center'>Calendar</Text>
+            {/* CalendarPicker component */}
+            <View
+        className="border-2 border-violet-600 rounded-lg p-2 m-1 "
+        style={{ height: heightPercentageToDP(37) }}
+      >
+        <CalendarPicker
+          startFromMonday={true}
+          allowRangeSelection={true}
+          minDate={minDate}
+          maxDate={maxDate}
+          todayBackgroundColor="#f2e6ff"
+          selectedDayColor="#7300e6"
+          selectedDayTextColor="#FFFFFF"
+          onDateChange={onDateChange}
+          dayLabelsWrapper={{
+            borderTopWidth: 2,
+            borderBottomWidth: 2,
+            borderColor: "#7F5AF0",
+          }}
+          nextComponent={
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name="car-door"
+                size={24}
+                color="#7300e6"
+                style={{ transform: [{ scaleX: -1 }] }}
+              />
+            </View>
+          }
+          previousComponent={
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name="car-door"
+                size={24}
+                color="#7300e6"
+                style={{ transform: [{ scaleX: 1 }] }}
+              />
+            </View>
+          }
+          style={{
+            width: "100%", // Use 100% of the container's width
+            height: "100%", // Use 100% of the container's height
+          }}
+        />
+       </View>
+       {/* Button to apply selected dates */}
+       <TouchableOpacity onPress={handleApply} style={{ position: 'absolute', bottom: 20, right: 20 }}>
+          <Text style={{ color: 'blue' }}>Apply</Text>
+        </TouchableOpacity>
+       {/* Button to clear selected dates */}
+       <TouchableOpacity onPress={handleClear} style={{ position: 'absolute', bottom: 20, left: 20 }}>
+          <Text style={{ color: 'blue' }}>Clear</Text>
+        </TouchableOpacity>
+        </View>
+        </View>
+      </Modal>
     </View>
   );
 }

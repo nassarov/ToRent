@@ -153,50 +153,7 @@ export default function CarRentingScreen() {
       <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
         Car Pick-up and Drop-off Dates
       </Text>
-      <View
-        className="border-2 border-violet-600 rounded-lg p-2 m-1 mt-4"
-        style={{ height: heightPercentageToDP(37) }}
-      >
-        <CalendarPicker
-          startFromMonday={true}
-          allowRangeSelection={true}
-          minDate={minDate}
-          maxDate={maxDate}
-          todayBackgroundColor="#f2e6ff"
-          selectedDayColor="#7300e6"
-          selectedDayTextColor="#FFFFFF"
-          onDateChange={onDateChange}
-          dayLabelsWrapper={{
-            borderTopWidth: 2,
-            borderBottomWidth: 2,
-            borderColor: "#7F5AF0",
-          }}
-          nextComponent={
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-              <MaterialCommunityIcons
-                name="car-door"
-                size={24}
-                color="#7300e6"
-                style={{ transform: [{ scaleX: -1 }] }}
-              />
-            </View>
-          }
-          previousComponent={
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-              <MaterialCommunityIcons
-                name="car-door"
-                size={24}
-                color="#7300e6"
-                style={{ transform: [{ scaleX: 1 }] }}
-              />
-            </View>
-          }
-          style={{
-            width: "100%", // Use 100% of the container's width
-            height: "100%", // Use 100% of the container's height
-          }}
-        />
-      </View>
+      
       <View>
        <CarRentingDetails startDate={startDate} endDate={endDate}/>
       </View>
