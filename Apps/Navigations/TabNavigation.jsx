@@ -84,6 +84,7 @@ const TabNavigation = () => {
         name="Car"
         component={CarRentingScreen}
         options={{
+            headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -105,6 +106,7 @@ const TabNavigation = () => {
         name="Post"
         component={CarRentingScreen}
         options={{
+            headerShown: false,
           tabBarIcon: ({ focused }) => <AddIconWithBorder focused={focused} />,
         }}
       />
@@ -112,6 +114,7 @@ const TabNavigation = () => {
         name="Notification"
         component={HomeScreen}
         options={{
+            headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -133,6 +136,7 @@ const TabNavigation = () => {
         name="Profile"
         component={CarRentingScreen}
         options={{
+            headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{
