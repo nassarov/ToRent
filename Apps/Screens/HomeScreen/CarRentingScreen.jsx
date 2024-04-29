@@ -152,6 +152,7 @@ export default function CarRentingScreen() {
           horizontal
         />
       </View>
+      {/* Grid */}
       <Text className='ml-2 font-bold text-lg mb-[-12px] mt-2'>Car Details</Text>
       <View className="m-3 border-t-2 border-l-2 border-violet-600 " style={{width: widthPercentageToDP(93)}}>
       
@@ -176,8 +177,10 @@ export default function CarRentingScreen() {
           )}
         />
       </View>
+      {/* Description */}
+      <Text className="ml-2 font-bold text-lg mb-[-12px] ">Description</Text>
       <View className="m-4 border-2 border-violet-600 p-4 rounded-lg">
-        <Text className="font-bold text-lg">Description</Text>
+        
         <Text>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -188,6 +191,8 @@ export default function CarRentingScreen() {
           culpa qui officia deserunt mollit anim id est laborum
         </Text>
       </View>
+      {/* Address  */}
+      <Text className="ml-2 font-bold text-lg mb-[-12px] ">Address</Text>
       <View className="m-4 border-2 border-violet-600 rounded-lg p-2" style={{height:heightPercentageToDP(10)}}>
         <View className=" flex-row mb-1">
           <Text className="font-bold">City:</Text>
@@ -202,8 +207,9 @@ export default function CarRentingScreen() {
           </TouchableOpacity>
         </Text>
       </View>
-
-      <View className='border-2 border-violet-600 rounded-lg p-2 m-1' style={{height:heightPercentageToDP(37)}}>
+        {/* Calendar */}
+        <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">Car Pick-up and Drop-off Dates</Text>
+      <View className='border-2 border-violet-600 rounded-lg p-2 m-1 mt-4' style={{height:heightPercentageToDP(37)}}>
       <CalendarPicker
         startFromMonday={true}
         allowRangeSelection={true}

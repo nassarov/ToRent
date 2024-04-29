@@ -136,13 +136,13 @@ export default function HomeScreen() {
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
         <Text className="text-xl"> Your Favorite Car</Text>
       </View>
-      <Carousel />
+      
       <View className='flex-row justify-between px-1 items-center'>
         <SearchBarCar/>
         <TouchableOpacity onPress={() => navigation.navigate('filter')} 
         className='mr-2 mt-1'><FontAwesome6 name="sliders" size={24} color="black" /></TouchableOpacity>
       </View>
-      
+      <Carousel />
       {companyData.map((company, index) => (
         <View key={index} className=" py-2">
           <View className="flex-row justify-between px-1 items-center">
