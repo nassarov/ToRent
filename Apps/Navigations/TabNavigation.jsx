@@ -64,6 +64,7 @@ const TabNavigation = () => {
         name="Car"
         component={CarRentingScreen}
         options={{
+            headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
               <FontAwesome5 name={focused ? 'car' : 'car'} size={24} color={focused ? '#7F5AF0' : '#A4A4A4'} />
@@ -75,6 +76,7 @@ const TabNavigation = () => {
         name="Post"
         component={CarRentingScreen}
         options={{
+            headerShown: false,
           tabBarIcon: ({ focused }) => <AddIconWithBorder focused={focused} />,
         }}
       />
@@ -82,6 +84,7 @@ const TabNavigation = () => {
         name="Notification"
         component={HomeScreen}
         options={{
+            headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
               <Fontisto name={focused ? 'bell' : 'bell-alt'} size={24} color={focused ? '#7F5AF0' : '#A4A4A4'} />
@@ -93,6 +96,7 @@ const TabNavigation = () => {
         name="Profile"
         component={CarRentingScreen}
         options={{
+            headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
               <Entypo name={focused ? 'user' : 'user'} size={24} color={focused ? '#7F5AF0' : '#A4A4A4'} />
