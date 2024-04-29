@@ -38,15 +38,14 @@ const TabNavigation = () => {
         tabBarShowLabel: true,
         tabBarStyle: {
           position: "absolute",
-          bottom: 5,
-          left: 20,
-          right: 20,
+          bottom: 0,
+          left: 0,
+          right: 0,
           elevation: 0,
           backgroundColor: "#DADADA",
           borderRadius: 15,
           height: 50,
-          paddingBottom: Platform.OS === 'ios' ? 0 : insets.bottom, // Adding padding bottom for iOS
-          marginBottom:Platform.OS === 'ios' ? insets.bottom :0 ,
+          paddingBottom: Platform.OS === 'ios' ? 0 : 5, // Adding padding bottom for iOS
           ...styles.shadow,
         },
         tabBarActiveTintColor: "#7F5AF0",
