@@ -108,7 +108,7 @@ const onSubmitMethod = () => {
       </Text>
 
         <TouchableOpacity className='bg-[#7F5AF0] '
-          onPress={() => navigation.navigate('TabNav')}
+          onPress={() => navigation.navigate("Home")}
           style={{height:wp(18), width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
         >
           <FontAwesome6 name="car-side" size={24} color="white" />

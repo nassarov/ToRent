@@ -25,8 +25,8 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="TabNav"
-          component={TabNaviagtion}
+          name="Home"
+          component={HomeScreenNavigation}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
