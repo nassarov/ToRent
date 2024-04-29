@@ -1,33 +1,38 @@
 import React from "react";
-import { View, StyleSheet, Platform } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign, FontAwesome5, Entypo, Fontisto, MaterialIcons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import HomeScreen from "../Screens/HomeScreen/HomeScreen";
-import CarRentingScreen from "../Screens/HomeScreen/CarRentingScreen";
+import CarRentingScreen from '../Screens/HomeScreen/CarRentingScreen';
+import CarRegistrationScreen from "../Screens/CarRegister/CarRegistrationScreen";
 
 const Tab = createBottomTabNavigator();
 
-const AddIconWithBorder = ({ focused }) => (
-  <View
-    style={{
-      alignItems: "center",
-      justifyContent: "center",
-      top: 10,
-      borderWidth: focused ? 2 : 0,
-      borderColor: focused ? "#7F5AF0" : "transparent",
-      borderRadius: 12,
-      padding: focused ? 5 : 0,
-    }}
-  >
-    <MaterialIcons
-      name="add"
-      size={24}
-      color={focused ? "#7F5AF0" : "#A4A4A4"}
-    />
-  </View>
-);
+const CustomTabButton = ({children , onPress})=>{
+  return (
+    <TouchableOpacity
+      style ={{
+        top:-30,
+        justifyContent: "center",
+        alignItems: "center",
+        ...styles.shadow
+      }}
+      onPress={onPress}
+    >
+      <View style={{
+        width: 40,
+        height:40,
+        borderRadius:20,
+        backgroundColor:"#7F5AF0",
+      }}>
+        {children}
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 
 const TabNavigation = () => {
   const insets = useSafeAreaInsets();  // Use safe area insets for better compatibility with iOS devices
@@ -80,11 +85,20 @@ const TabNavigation = () => {
         }}
       />
       <Tab.Screen
+      
         name="Post"
         component={CarRentingScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ focused }) => <AddIconWithBorder focused={focused} />,
+          tabBarIcon: ({ focused }) => (<MaterialIcons focused={focused} name="add"  size={24} color="white"  style={{
+            width: 30,
+            height:30,
+            
+          }} />
+        ),
+          tabBarButton:(props)=> (
+            <CustomTabButton {...props}/>
+          )
         }}
       />
       <Tab.Screen
