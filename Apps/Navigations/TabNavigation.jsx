@@ -46,6 +46,7 @@ const TabNavigation = () => {
           borderRadius: 15,
           height: 50,
           paddingBottom: Platform.OS === 'ios' ? 0 : insets.bottom, // Adding padding bottom for iOS
+          marginBottom:Platform.OS === 'ios' ? insets.bottom :0 ,
           ...styles.shadow,
         },
         tabBarActiveTintColor: "#7F5AF0",
