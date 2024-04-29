@@ -131,8 +131,7 @@ export default function HomeScreen() {
 
   return (
     <ScrollView className="mt-12 flex-1" keyboardShouldPersistTaps='handled' >
-      
-      <View className="flex-row mb-2">
+      <View className="flex-row mb-2 ">
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
         <Text className="text-xl"> Your Favorite Car</Text>
       </View>

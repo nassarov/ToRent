@@ -1,13 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  AntDesign,
-  FontAwesome5,
-  Entypo,
-  Fontisto,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { AntDesign, FontAwesome5, Entypo, Fontisto, MaterialIcons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import HomeScreen from "../Screens/HomeScreen/HomeScreen";
 import CarRentingScreen from "../Screens/HomeScreen/CarRentingScreen";
@@ -27,7 +22,7 @@ const AddIconWithBorder = ({ focused }) => (
     }}
   >
     <MaterialIcons
-      name={focused ? "add" : "add"}
+      name="add"
       size={24}
       color={focused ? "#7F5AF0" : "#A4A4A4"}
     />
@@ -35,27 +30,25 @@ const AddIconWithBorder = ({ focused }) => (
 );
 
 const TabNavigation = () => {
+  const insets = useSafeAreaInsets();  // Use safe area insets for better compatibility with iOS devices
+
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
         tabBarStyle: {
-          display: "flex",
+          position: "absolute",
+          bottom: 2,
+          left: 20,
+          right: 20,
+          elevation: 0,
+          backgroundColor: "#DADADA",
+          borderRadius: 15,
+          height: 50,
+          paddingBottom: Platform.OS === 'ios' ? insets.bottom : 0, // Adding padding bottom for iOS
+          ...styles.shadow,
         },
-        tabBarOptions: {
-          style: {
-            position: "absolute",
-            bottom: 25,
-            left: 20,
-            right: 20,
-            elevation: 0,
-            backgroundColor: "#DADADA",
-            borderRadius: 15,
-            height: 90,
-            ...styles.shadow,
-          },
-          activeTintColor: "#7F5AF0",
-        },
+        tabBarActiveTintColor: "#7F5AF0",
       }}
     >
       <Tab.Screen
@@ -64,19 +57,11 @@ const TabNavigation = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                top: 10,
-              }}
-            >
-              <AntDesign
-                name={focused ? "home" : "home"}
-                size={24}
-                color={focused ? "#7F5AF0" : "#A4A4A4"}
-              />
-            </View>
+            <AntDesign
+              name="home"
+              size={24}
+              color={focused ? "#7F5AF0" : "#A4A4A4"}
+            />
           ),
         }}
       />
@@ -84,21 +69,13 @@ const TabNavigation = () => {
         name="Car"
         component={CarRentingScreen}
         options={{
-            headerShown: false,
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                top: 10,
-              }}
-            >
-              <FontAwesome5
-                name={focused ? "car" : "car"}
-                size={24}
-                color={focused ? "#7F5AF0" : "#A4A4A4"}
-              />
-            </View>
+            <FontAwesome5
+              name="car"
+              size={24}
+              color={focused ? "#7F5AF0" : "#A4A4A4"}
+            />
           ),
         }}
       />
@@ -106,7 +83,7 @@ const TabNavigation = () => {
         name="Post"
         component={CarRentingScreen}
         options={{
-            headerShown: false,
+          headerShown: false,
           tabBarIcon: ({ focused }) => <AddIconWithBorder focused={focused} />,
         }}
       />
@@ -114,21 +91,13 @@ const TabNavigation = () => {
         name="Notification"
         component={HomeScreen}
         options={{
-            headerShown: false,
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                top: 10,
-              }}
-            >
-              <Fontisto
-                name={focused ? "bell" : "bell-alt"}
-                size={24}
-                color={focused ? "#7F5AF0" : "#A4A4A4"}
-              />
-            </View>
+            <Fontisto
+              name="bell"
+              size={24}
+              color={focused ? "#7F5AF0" : "#A4A4A4"}
+            />
           ),
         }}
       />
@@ -136,21 +105,13 @@ const TabNavigation = () => {
         name="Profile"
         component={CarRentingScreen}
         options={{
-            headerShown: false,
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                top: 10,
-              }}
-            >
-              <Entypo
-                name={focused ? "user" : "user"}
-                size={24}
-                color={focused ? "#7F5AF0" : "#A4A4A4"}
-              />
-            </View>
+            <Entypo
+              name="user"
+              size={24}
+              color={focused ? "#7F5AF0" : "#A4A4A4"}
+            />
           ),
         }}
       />
@@ -158,17 +119,18 @@ const TabNavigation = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: "#7F5DF0",
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.5,
-    elevation: 5,
-  },
-});
 
-export default TabNavigation;
+const styles = StyleSheet.create({
+    shadow: {
+      shadowColor: "#7F5DF0",
+      shadowOffset: {
+        width: 0,
+        height: 10,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.5,
+      elevation: 5,
+    },
+  });
+  
+  export default TabNavigation;
