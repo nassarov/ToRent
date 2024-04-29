@@ -5,7 +5,6 @@ import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-re
 import { Ionicons, EvilIcons , FontAwesome6} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from 'react-native-phone-number-input';
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 export default function SignUpForToRent() {
   
