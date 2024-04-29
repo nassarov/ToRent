@@ -19,12 +19,11 @@ import {
   FontAwesome6,
 } from "@expo/vector-icons/";
 import CalendarPicker from "react-native-calendar-picker";
+import PictureSwitching from "../../Components/HomeComponents/PictureSwitching";
+import DetailsGrid from "../../Components/HomeComponents/DetailsGrid";
+import CarRentingDetails from "../../Components/HomeComponents/CarRentingDetails";
 export default function CarRentingScreen() {
-  const screenWidth = Dimensions.get("window").width - 20;
-
-  const [selectedImage, setSelectedImage] = useState(
-    require("./../../../assets/CarPosts/toyota.png")
-  );
+ 
   const [selectedEndDate, setSelectedEndDate] = useState("");
   const [selectedStartDate, setSelectedStartDate] = useState("");
 
@@ -112,75 +111,15 @@ export default function CarRentingScreen() {
   return (
     <ScrollView>
       <CustomHeader2 text={"CARCAR"} />
-      <View className="items-center">
-        <Image
-          source={selectedImage}
-          style={{
-            objectFit: "cover",
-            width: screenWidth,
-            height: 200,
-            borderRadius: 10,
-          }}
-        />
-      </View>
-      <View className="flex-row gap-x-1 rounded-xl  mt-2">
-        <FlatList
-          scrollEnabled={false}
-          data={images}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedImage(item.image);
-              }}
-              key={index}
-              className={`border-2 ${
-                selectedImage == item.image
-                  ? "border-violet-600"
-                  : "border-gray-200"
-              } rounded-lg ml-1`}
-            >
-              <Image
-                source={item.image}
-                style={{
-                  width: widthPercentageToDP(86 / images.length),
-                  height: widthPercentageToDP(15),
-                }}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          )}
-          horizontal
-        />
-      </View>
+      <PictureSwitching images={images} />
       {/* Grid */}
-      <Text className='ml-2 font-bold text-lg mb-[-12px] mt-2'>Car Details</Text>
-      <View className="m-3 border-t-2 border-l-2 border-violet-600 " style={{width: widthPercentageToDP(93)}}>
-      
-        <FlatList
-          scrollEnabled={false}
-          numColumns={2}
-          columnWrapperStyle={{ justifyContent: "space-around" }}
-          data={details}
-          renderItem={({ item, index }) => (
-            
-            <View
-              key={index}
-              className="flex-row p-4 border-r-2 border-b-2 border-violet-600 items-center  "
-              style={{ width: widthPercentageToDP(46) }}
-            >
-              <View className="mr-1">{item.icon}</View>
-              <View className='ml-2'>
-                <Text className="font-bold ">{item.attribute}</Text>
-                <Text className="text-xs text-violet-600">{item.value}</Text>
-              </View>
-            </View>
-          )}
-        />
-      </View>
+      <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
+        Car Details
+      </Text>
+     <DetailsGrid details={details}/>
       {/* Description */}
       <Text className="ml-2 font-bold text-lg mb-[-12px] ">Description</Text>
       <View className="m-4 border-2 border-violet-600 p-4 rounded-lg">
-        
         <Text>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -193,7 +132,10 @@ export default function CarRentingScreen() {
       </View>
       {/* Address  */}
       <Text className="ml-2 font-bold text-lg mb-[-12px] ">Address</Text>
-      <View className="m-4 border-2 border-violet-600 rounded-lg p-2" style={{height:heightPercentageToDP(10)}}>
+      <View
+        className="m-4 border-2 border-violet-600 rounded-lg p-2"
+        style={{ height: heightPercentageToDP(10) }}
+      >
         <View className=" flex-row mb-1">
           <Text className="font-bold">City:</Text>
           <Text>Beirut</Text>
@@ -207,67 +149,58 @@ export default function CarRentingScreen() {
           </TouchableOpacity>
         </Text>
       </View>
-        {/* Calendar */}
-        <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">Car Pick-up and Drop-off Dates</Text>
-      <View className='border-2 border-violet-600 rounded-lg p-2 m-1 mt-4' style={{height:heightPercentageToDP(37)}}>
-      <CalendarPicker
-        startFromMonday={true}
-        allowRangeSelection={true}
-        minDate={minDate}
-        maxDate={maxDate}
-        todayBackgroundColor="#f2e6ff"
-        selectedDayColor="#7300e6"
-        selectedDayTextColor="#FFFFFF"
-        onDateChange={onDateChange}
-        dayLabelsWrapper={{
-        borderTopWidth: 2,
-        borderBottomWidth: 2,
-        borderColor: '#7F5AF0'
-      }}
-      
-      nextComponent={
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <MaterialCommunityIcons name="car-door" size={24} color="#7300e6" style={{ transform: [{ scaleX: -1 }] }}/>
-        </View>
-      }
-      previousComponent={
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <MaterialCommunityIcons name="car-door" size={24} color="#7300e6" style={{ transform: [{ scaleX: 1 }] }}/></View>
-      }
-      style={{
-        width: '100%', // Use 100% of the container's width
-        height: '100%', // Use 100% of the container's height
-      }}
-      />
+      {/* Calendar */}
+      <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
+        Car Pick-up and Drop-off Dates
+      </Text>
+      <View
+        className="border-2 border-violet-600 rounded-lg p-2 m-1 mt-4"
+        style={{ height: heightPercentageToDP(37) }}
+      >
+        <CalendarPicker
+          startFromMonday={true}
+          allowRangeSelection={true}
+          minDate={minDate}
+          maxDate={maxDate}
+          todayBackgroundColor="#f2e6ff"
+          selectedDayColor="#7300e6"
+          selectedDayTextColor="#FFFFFF"
+          onDateChange={onDateChange}
+          dayLabelsWrapper={{
+            borderTopWidth: 2,
+            borderBottomWidth: 2,
+            borderColor: "#7F5AF0",
+          }}
+          nextComponent={
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name="car-door"
+                size={24}
+                color="#7300e6"
+                style={{ transform: [{ scaleX: -1 }] }}
+              />
+            </View>
+          }
+          previousComponent={
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name="car-door"
+                size={24}
+                color="#7300e6"
+                style={{ transform: [{ scaleX: 1 }] }}
+              />
+            </View>
+          }
+          style={{
+            width: "100%", // Use 100% of the container's width
+            height: "100%", // Use 100% of the container's height
+          }}
+        />
       </View>
       <View>
-        <Text>
-          {startDate
-            ? startDate.getFullYear() +
-              "/" +
-              (startDate.getMonth() + 1) +
-              "/" +
-              startDate.getDate()
-            : ""}
-        </Text>
-        <Text>
-          {endDate
-            ? endDate.getFullYear() +
-              "/" +
-              (endDate.getMonth() + 1) +
-              "/" +
-              endDate.getDate()
-            : ""}
-        </Text>
+       <CarRentingDetails startDate={startDate} endDate={endDate}/>
       </View>
-      <View className="items-end mb-4">
-        <TouchableOpacity
-          className="bg-violet-600 mr-5 p-4 rounded-xl "
-          style={{ width: widthPercentageToDP(30) }}
-        >
-          <Text className="text-white text-center font-bold">Rent</Text>
-        </TouchableOpacity>
-      </View>
+    
     </ScrollView>
   );
 }
