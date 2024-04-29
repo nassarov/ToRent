@@ -130,7 +130,7 @@ export default function HomeScreen() {
 
 
   return (
-    <ScrollView className="mt-12 ">
+    <ScrollView className="mt-12 flex-1" keyboardShouldPersistTaps='handled' >
       
       <View className="flex-row mb-2">
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
@@ -142,7 +142,7 @@ export default function HomeScreen() {
         <TouchableOpacity onPress={() => navigation.navigate('filter')} 
         className='mr-2 mt-1'><FontAwesome6 name="sliders" size={24} color="black" /></TouchableOpacity>
       </View>
-      <Carousel />
+      <Carousel/>
       {companyData.map((company, index) => (
         <View key={index} className=" py-2">
           <View className="flex-row justify-between px-1 items-center">
