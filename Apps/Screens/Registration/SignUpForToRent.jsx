@@ -20,6 +20,7 @@ export default function SignUpForToRent() {
   const [isValidPhone, setIsValidPhone] = useState(true);
   const [phoneInUse, setPhoneInUse] = useState(false);
   const [loading, setLoading] = useState(false); // New state for loading indicator
+  const [isCheckingCredentials, setIsCheckingCredentials] = useState(false); // State to track if credentials are being checked
 
   // Function to handle real-time validation of the phone number
   const validatePhoneNumber = (text) => {
@@ -38,10 +39,12 @@ export default function SignUpForToRent() {
   
   const checkPhoneNumberInUse = async (fullPhoneNumber) => {
     setLoading(true); // Set loading to true while checking
+    setIsCheckingCredentials(true);
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("phoneNumber", "==", fullPhoneNumber));
     const querySnapshot = await getDocs(q);
     setLoading(false); // Set loading to false after checking
+    setIsCheckingCredentials(false);
     if (!querySnapshot.empty) {
       setPhoneInUse(true);
     } else {
@@ -61,10 +64,8 @@ export default function SignUpForToRent() {
   };
 
   return (
-
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <View style={{ alignItems: 'center' }}>
-
       <StatusBar backgroundColor={'#F6F6F6'} translucent={true}/>
       <View style={{ width: wp(80) }} className='items-center justify-center mt-14'>
         <Text className='mt-4' style={{ fontWeight: 'bold', fontSize: 24, marginTop: 8, textAlign: 'center' }}>
@@ -106,14 +107,12 @@ export default function SignUpForToRent() {
         )}
         </View>
         <View className='my-12'>
-        <TouchableOpacity className='bg-[#7F5AF0]  ' 
-         onPress={() => {
-          if (validatePhoneNumber && !loading) {
-            onSubmitMethod();
-          }
-        }}
-          style={{height:wp(18), width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
-        >
+        <TouchableOpacity 
+            disabled={isCheckingCredentials || loading} // Disable the button if credentials are being checked or loading
+            className={`bg-[#7F5AF0]  ${isCheckingCredentials || loading ? 'opacity-100' : ''}`}
+            onPress={onSubmitMethod}
+            style={{height:wp(18), width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
+          >
           <Ionicons name="person-sharp" size={24} color="white" />
           <Text style={{ color: 'white', fontWeight: 'bold' }}>
             Use Your Phone Number
