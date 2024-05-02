@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, StyleSheet, TextInput, Text, TouchableOpacity, ScrollView, Alert,ActivityIndicator  } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import { Formik } from "formik";
@@ -16,13 +16,22 @@ export default function AddressScreen() {
   const [yourAdd, setYourAdd] = useState('');
   const[addAnotherAdd, setAddAnotherAdd] = useState('');
   const [lebaneseCities, setLebaneseCities] = useState(null); // Define state to hold dropdown data
+  const [loading, setLoading] = useState(false);
 
+  // get cities from firestore
   const fetchLebaneseCities = async () => {
+    setLoading(true);
     const citiesCollection = collection(db, "lebaneseCities");
     const citiesQuery = query(citiesCollection, orderBy("label"));
-    const querySnapshot = await getDocs(citiesQuery);
-    const cityList = querySnapshot.docs.map(doc => ({ label: doc.data().label, value: doc.data().value }));
-    setLebaneseCities(cityList);
+    try {
+      const querySnapshot = await getDocs(citiesQuery);
+      const cityList = querySnapshot.docs.map(doc => ({ label: doc.data().label, value: doc.data().value }));
+      setLebaneseCities(cityList);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

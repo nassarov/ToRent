@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-
 import { View, Text, StatusBar, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Ionicons, EvilIcons , FontAwesome6} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from 'react-native-phone-number-input';
-import { getAuth, RecaptchaVerifier } from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
+import { Alert } from "react-native";
 
 const auth = getAuth();
+const db = getFirestore();  // Assuming you've already initialized Firestore
 
 export default function SignUpForToRent() {
   
@@ -16,6 +18,7 @@ export default function SignUpForToRent() {
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isValidPhone, setIsValidPhone] = useState(true);
+  const [phoneInUse, setPhoneInUse] = useState(false);
 
   // Function to handle real-time validation of the phone number
   const validatePhoneNumber = (text) => {
@@ -24,29 +27,35 @@ export default function SignUpForToRent() {
     const isValidPrefix = allowedPrefixes.includes(text.slice(0, 2));
   
     if (!containsNonDigit && text.length <= 8 && isValidPrefix) {
-      setIsValidPhone(true); 
-      setPhoneNumber(text); 
+      setIsValidPhone(true);
+      setPhoneNumber(text);
+      checkPhoneNumberInUse(`+961${text}`);
     } else {
       setIsValidPhone(false);
     }
   };
   
+  const checkPhoneNumberInUse = async (fullPhoneNumber) => {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("phoneNumber", "==", fullPhoneNumber));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      setPhoneInUse(true);
+    } else {
+      setPhoneInUse(false);
+    }
+  };
   
 
   // Function to handle submission of the phone number
-const onSubmitMethod = () => {
-  if (isValidPhone) {
-    if (phoneNumber.length === 8) { // Check if the phone number consists of exactly 8 digits
+  const onSubmitMethod = () => {
+    if (isValidPhone && !phoneInUse) {
       const phoneNumberCCode = `+961${phoneNumber}`;
-      console.log(phoneNumberCCode);
       navigation.navigate("signup", { value: phoneNumberCCode });
     } else {
-      setIsValidPhone(false);
+      Alert.alert("Phone Number In Use", "The phone number entered is already associated with another account.");
     }
-  } else {
-    setIsValidPhone(false);
-  }
-};
+  };
 
   return (
 
