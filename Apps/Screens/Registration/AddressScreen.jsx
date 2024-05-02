@@ -6,48 +6,31 @@ import { Formik } from "formik";
 import { AntDesign } from "@expo/vector-icons";
 import {useNavigation} from '@react-navigation/native';
 import { app, auth } from "../../../firebaseConfig";
-import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import { doc, getFirestore, updateDoc, collection, getDocs,query, orderBy, } from "firebase/firestore";
 
 export default function AddressScreen() {
   const navigation = useNavigation();
   const db = getFirestore(app); // Make sure you have initialized your app
-  const [selectedCity, setSelectedCity] = useState(null); 
   const [isFocus, setIsFocus] = useState(false); 
   const [valuesList, setValuesList] = useState([]); 
   const [yourAdd, setYourAdd] = useState('');
   const[addAnotherAdd, setAddAnotherAdd] = useState('');
+  const [lebaneseCities, setLebaneseCities] = useState(null); // Define state to hold dropdown data
 
-  const lebaneseCities = [
-    { label: "Beirut", value: "Beirut" },
-    { label: "Tripoli", value: "Tripoli" },
-    { label: "Sidon", value: "Sidon" },
-    { label: "Tyre", value: "Tyre" },
-    { label: "Jbeil", value: "Jbeil" },
-    { label: "Baalbek", value: "Baalbek" },
-    { label: "Nabatieh", value: "Nabatieh" },
-    { label: "Jounieh", value: "Jounieh" },
-    { label: "Batroun", value: "Batroun" },
-    { label: "Bint Jbeil", value: "Bint Jbeil" },
-    { label: "Hermel", value: "Hermel" },
-    { label: "Marjayoun", value: "Marjayoun" },
-    { label: "Aley", value: "Aley" },
-    { label: "Chouf", value: "Chouf" },
-    { label: "Bsharri", value: "Bsharri" },
-    { label: "Rashaya", value: "Rashaya" },
-    { label: "Zahlé", value: "Zahlé" },
-    { label: "Baabda", value: "Baabda" },
-    { label: "Anjar", value: "Anjar" },
-    { label: "Chekka", value: "Chekka" },
-    { label: "Dahr El Ahmar", value: "Dahr El Ahmar" },
-    { label: "Deir el Qamar", value: "Deir el Qamar" },
-    { label: "Ebel El Saqi", value: "Ebel El Saqi" },
-    { label: "Ghazir", value: "Ghazir" },
-    { label: "Halba", value: "Halba" },
-    { label: "Hasbaya", value: "Hasbaya" },
-    { label: "Jezzine", value: "Jezzine" },
-    { label: "Marjeyoun", value: "Marjeyoun" },
-   
-  ];
+  const fetchLebaneseCities = async () => {
+    const citiesCollection = collection(db, "lebaneseCities");
+    const citiesQuery = query(citiesCollection, orderBy("label"));
+    const querySnapshot = await getDocs(citiesQuery);
+    const cityList = querySnapshot.docs.map(doc => ({ label: doc.data().label, value: doc.data().value }));
+    setLebaneseCities(cityList);
+  };
+
+  useEffect(() => {
+    // Fetch Lebanese cities data only when the dropdown is not yet loaded
+    if (!lebaneseCities) {
+      fetchLebaneseCities();
+    }
+  }, [lebaneseCities]);
 
   const handleAddValue = (values, resetForm) => {
     setValuesList([...valuesList, { city: values.City, googleMapLink: values.GoogleMapLink }]);
@@ -113,35 +96,37 @@ export default function AddressScreen() {
           <View style={{height:heightPercentageToDP(33), marginBottom:2}}>
             <View style={{ height: heightPercentageToDP(12)}}>
             <Text style={{ fontSize: 16, fontWeight: "bold",marginLeft:15 ,color:'#7F5AF0'}}>{addAnotherAdd}</Text>
-              <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: "#7F5AF0" }]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={lebaneseCities}
-                search={true}
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus ? "Address" : "Select one"}
-                searchPlaceholder="Search..."
-                value={values.City}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={(item) => {
-                  handleChange("City")(item.value);
-                  setIsFocus(false);
-                }}
-                renderLeftIcon={() => (
-                  <AntDesign
-                    style={styles.icon}
-                    color={isFocus ? "blue" : "black"}
-                    name="Safety"
-                    size={20}
-                  />
-                )}
-              />
+              {lebaneseCities && (
+                <Dropdown
+                  style={[styles.dropdown, isFocus && { borderColor: "#7F5AF0" }]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={lebaneseCities}
+                  search={true}
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!isFocus ? "Address" : "Select one"}
+                  searchPlaceholder="Search..."
+                  value={values.City}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={(item) => {
+                    handleChange("City")(item.value);
+                    setIsFocus(false);
+                  }}
+                  renderLeftIcon={() => (
+                    <AntDesign
+                      style={styles.icon}
+                      color={isFocus ? "blue" : "black"}
+                      name="Safety"
+                      size={20}
+                    />
+                  )}
+                />
+              )}
               {errors.City && (
                 <Text style={styles.errorText}>{errors.City}</Text>
               )}

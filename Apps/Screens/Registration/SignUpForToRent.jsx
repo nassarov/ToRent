@@ -13,7 +13,6 @@ export default function SignUpForToRent() {
   
   StatusBar.setBarStyle('dark-content', true);
 
-
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isValidPhone, setIsValidPhone] = useState(true);
