@@ -34,7 +34,7 @@ const handleSubmit = async (values) => {
     // For example, you can set an error state to display an error message to the user
   }
 };
-  
+
   return (
     <Formik
       initialValues={{  email: '', password: '' }}
@@ -104,7 +104,7 @@ const handleSubmit = async (values) => {
 
             <View className='flex-row justify-center mt-10'>
               <Text className='text-center'>Don't Have an Account?</Text>
-              <TouchableOpacity onPress={() => navigation.replace('signup')}><Text className='text-violet-600'> Register</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.replace('signupforToRent')}><Text className='text-violet-600'> Register</Text></TouchableOpacity>
               </View>
            </View>
           </View>
