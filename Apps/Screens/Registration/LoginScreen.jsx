@@ -21,22 +21,24 @@ export default function LoginScreen() {
   };
 
   // Inside your handleSubmit function
-const handleSubmit = async (values) => {
-  
-  try {
-    const auth = getAuth();
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    // User is signed in, navigate to Home screen
-    navigation.navigate("Home");
-    console.log("User is signed in:", user.email);
-  } catch (error) {
-    // Handle errors here, such as displaying a notification or error message
-    console.error("Error signing in:", error.message);
-    // For example, you can set an error state to display an error message to the user
-  }
-};
-  
+  const handleSubmit = async (values) => {
+    setIsCheckingCredentials(true); // Set isCheckingCredentials to true when checking credentials
+    try {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // User is signed in, navigate to Home screen
+      navigation.navigate("Home");
+      console.log("User is signed in:", user.email);
+    } catch (error) {
+      // Handle errors here, such as displaying a notification or error message
+      console.error("Error signing in:", error.message);
+      // For example, you can set an error state to display an error message to the user
+    } finally {
+      setIsCheckingCredentials(false); // Reset isCheckingCredentials to false after checking credentials
+    }
+  };
+
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
@@ -47,13 +49,13 @@ const handleSubmit = async (values) => {
       }}
       validate={(values) => {
         const errors = {};
-      
+
         if (!email) {
           errors.email = 'Required';
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
           errors.email = 'Invalid email address';
         }
-        if (password.length==0) {
+        if (password.length === 0) {
           errors.password = 'Required';
         }
 
@@ -108,9 +110,12 @@ const handleSubmit = async (values) => {
                   <Text className='text-center text-violet-600'>Forgot Your Password?</Text>
                 </TouchableOpacity>
 
-            <View className='flex-row justify-center mt-10'>
-              <Text className='text-center'>Don't Have an Account?</Text>
-              <TouchableOpacity onPress={() => navigation.replace('signup')}><Text className='text-violet-600'> Register</Text></TouchableOpacity>
+                <View className='flex-row justify-center mt-10'>
+                  <Text className='text-center'>Don't Have an Account?</Text>
+                  <TouchableOpacity onPress={() => navigation.replace('signup')}>
+                    <Text className='text-violet-600'> Register</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
