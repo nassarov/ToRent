@@ -16,9 +16,14 @@ export default function AddressScreen() {
   const [valuesList, setValuesList] = useState([]); 
   const [yourAdd, setYourAdd] = useState('');
   const[addAnotherAdd, setAddAnotherAdd] = useState('');
+  const [lebaneseCities, setLebaneseCities] = useState(null); // Define state to hold dropdown data
 
-  const lebaneseCities = [
-    { label: "Beirut", value: "Beirut" },
+  const fetchLebaneseCities = () => {
+    // Simulate an API call or any asynchronous operation to fetch the data
+    // Here, we are setting a timeout to simulate the delay
+    setTimeout(() => {
+      const citiesData = [
+        { label: "Beirut", value: "Beirut" },
     { label: "Tripoli", value: "Tripoli" },
     { label: "Sidon", value: "Sidon" },
     { label: "Tyre", value: "Tyre" },
@@ -46,8 +51,18 @@ export default function AddressScreen() {
     { label: "Hasbaya", value: "Hasbaya" },
     { label: "Jezzine", value: "Jezzine" },
     { label: "Marjeyoun", value: "Marjeyoun" },
-   
-  ];
+       
+      ];
+      setLebaneseCities(citiesData);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    // Fetch Lebanese cities data only when the dropdown is not yet loaded
+    if (!lebaneseCities) {
+      fetchLebaneseCities();
+    }
+  }, [lebaneseCities]);
 
   const handleAddValue = (values, resetForm) => {
     setValuesList([...valuesList, { city: values.City, googleMapLink: values.GoogleMapLink }]);
@@ -113,35 +128,37 @@ export default function AddressScreen() {
           <View style={{height:heightPercentageToDP(33), marginBottom:2}}>
             <View style={{ height: heightPercentageToDP(12)}}>
             <Text style={{ fontSize: 16, fontWeight: "bold",marginLeft:15 ,color:'#7F5AF0'}}>{addAnotherAdd}</Text>
-              <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: "#7F5AF0" }]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={lebaneseCities}
-                search={true}
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus ? "Address" : "Select one"}
-                searchPlaceholder="Search..."
-                value={values.City}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={(item) => {
-                  handleChange("City")(item.value);
-                  setIsFocus(false);
-                }}
-                renderLeftIcon={() => (
-                  <AntDesign
-                    style={styles.icon}
-                    color={isFocus ? "blue" : "black"}
-                    name="Safety"
-                    size={20}
-                  />
-                )}
-              />
+              {lebaneseCities && (
+                <Dropdown
+                  style={[styles.dropdown, isFocus && { borderColor: "#7F5AF0" }]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={lebaneseCities}
+                  search={true}
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!isFocus ? "Address" : "Select one"}
+                  searchPlaceholder="Search..."
+                  value={values.City}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={(item) => {
+                    handleChange("City")(item.value);
+                    setIsFocus(false);
+                  }}
+                  renderLeftIcon={() => (
+                    <AntDesign
+                      style={styles.icon}
+                      color={isFocus ? "blue" : "black"}
+                      name="Safety"
+                      size={20}
+                    />
+                  )}
+                />
+              )}
               {errors.City && (
                 <Text style={styles.errorText}>{errors.City}</Text>
               )}

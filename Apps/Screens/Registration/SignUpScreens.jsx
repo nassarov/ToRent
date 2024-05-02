@@ -20,7 +20,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, app } from "../../../firebaseConfig";
-import { getFirestore, doc, setDoc } from "firebase/firestore"; // Import Firestore functions
+import { getFirestore, doc, setDoc } from "firebase/firestore"; 
 
 export default function SignUpScreen({ route }) {
   StatusBar.setBarStyle("dark-content", true);
@@ -33,6 +33,7 @@ export default function SignUpScreen({ route }) {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState(route.params?.value);
   const [userid, setUserid] = useState("");
+  const [isSigningUp, setIsSigningUp] = useState(false); // State to track if signing up is in progress
 
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
@@ -50,7 +51,9 @@ export default function SignUpScreen({ route }) {
     { label: "Rent a car", value: "0" },
   ];
 
+  // Function to handle signup
   const handelSignUp = async (values) => {
+    setIsSigningUp(true); // Set isSigningUp to true when signing up
     const auth = getAuth();
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -61,17 +64,16 @@ export default function SignUpScreen({ route }) {
       const user = userCredential.user;
 
       // Firestore: Add additional user data
-      const db = getFirestore(app); // Make sure you have initialized your app
-      const userRef = doc(db, "users", user.uid); // Create a document reference with the UID
+      const db = getFirestore(app);
+      const userRef = doc(db, "users", user.uid);
       setUserid(user.uid);
-      // Set the user data in Firestore
       await setDoc(userRef, {
         name: values.name,
-        email: email, // this is the authenticated user's email
+        email: email,
         phoneNumber: values.phoneNumber,
         role: values.role,
-        // any other fields you want to save
       });
+
       console.log(userCredential);
       if (values.role === "1") {
         navigation.push("address");
@@ -79,10 +81,11 @@ export default function SignUpScreen({ route }) {
         Alert.alert("Success", "You have successfully signed up!");
         navigation.push("login");
       }
-      // Navigation or other actions after successful signup
     } catch (error) {
       console.log("Error in signup:", error.message);
-      // Handle errors here, such as displaying a notification
+      // Handle errors here
+    } finally {
+      setIsSigningUp(false); // Reset isSigningUp to false after signup process finishes
     }
   };
 
@@ -94,7 +97,7 @@ export default function SignUpScreen({ route }) {
         password: "",
         confirmPassword: "",
         role: "",
-        phoneNumber: phoneNumber, // Using the phone number from the first screen
+        phoneNumber: phoneNumber, 
         userid: userid,
       }}
       onSubmit={(values) => {
@@ -130,8 +133,6 @@ export default function SignUpScreen({ route }) {
           <StatusBar backgroundColor={"#F6F6F6"} translucent={true} />
           {/* Input Fields */}
           <View>
-            {/* Render Label */}
-            {/* Display Phone Number */}
             <Text className="text-lg text-center">
               Phone Number: {values.phoneNumber}
             </Text>
@@ -190,6 +191,7 @@ export default function SignUpScreen({ route }) {
                 <Text style={styles.errorText}>{errors.password}</Text>
               )}
             </View>
+            
             {/* Confirm Password with Eye Icon */}
             <View style={{ height: heightPercentageToDP(12) }}>
               <View style={styles.passwordContainer}>
@@ -216,7 +218,7 @@ export default function SignUpScreen({ route }) {
                 <Text style={styles.errorText}>{errors.confirmPassword}</Text>
               )}
             </View>
-            <View></View>
+
             {/* Dropdown Menu */}
             <View style={{ height: heightPercentageToDP(12) }}>
               <Dropdown
@@ -258,10 +260,13 @@ export default function SignUpScreen({ route }) {
             {/* Sign Up Button */}
             <View className="items-center text-center justify-center">
               <TouchableOpacity
-                style={styles.signupButton}
+                style={[styles.signupButton, isSigningUp && { opacity: 0.5 }]}
                 onPress={() => handleSubmit()}
+                disabled={isSigningUp}
               >
-                <Text style={styles.signupButtonText}>Sign Up</Text>
+                <Text style={styles.signupButtonText}>
+                  {isSigningUp ? "Signing Up..." : "Sign Up"}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -296,16 +301,6 @@ const styles = StyleSheet.create({
     top: "50%",
     transform: [{ translateY: -10 }],
   },
-  dropdownContainer: {
-    width: heightPercentageToDP(42),
-    borderColor: "#16213E",
-    borderWidth: 1,
-    borderRadius: 8,
-    backgroundColor: "#F6F6F6",
-    marginVertical: 15,
-    color: "",
-    margin: 15,
-  },
   dropdown: {
     height: 50,
     borderColor: "#7F5AF0",
@@ -337,19 +332,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 15,
   },
-
   icon: {
     marginRight: 5,
-  },
-
-  label: {
-    position: "absolute",
-    backgroundColor: "white",
-    left: 22,
-    top: 8,
-    zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
   },
   placeholderStyle: {
     fontSize: 16,
