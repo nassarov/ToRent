@@ -4,34 +4,37 @@ import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 export default function LoginScreen() {
   StatusBar.setBarStyle('dark-content', true);
 
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigation = useNavigation();
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = () => {
+  // Inside your handleSubmit function
+const handleSubmit = async (values) => {
+  
+  try {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/auth.user
-    const uid = user.uid;
-    navigation.navigate("Home")
-    console.log(user.email);
-    // ...
-  } else {
-    // User is signed out
-    // ...
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    // User is signed in, navigate to Home screen
+    navigation.navigate("Home");
+    console.log("User is signed in:", user.email);
+  } catch (error) {
+    // Handle errors here, such as displaying a notification or error message
+    console.error("Error signing in:", error.message);
+    // For example, you can set an error state to display an error message to the user
   }
-});
-  }
+};
+  
   return (
     <Formik
       initialValues={{  email: '', password: '' }}
@@ -43,12 +46,12 @@ export default function LoginScreen() {
       validate={(values) => {
         const errors = {};
       
-        if (!values.email) {
+        if (!email) {
           errors.email = 'Required';
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
           errors.email = 'Invalid email address';
         }
-        if (!values.password) {
+        if (password.length==0) {
           errors.password = 'Required';
         }
         
@@ -66,9 +69,9 @@ export default function LoginScreen() {
             <TextInput
               placeholder='Email'
               style={styles.input}
-              onChangeText={handleChange('email')}
+              onChangeText={setEmail}
               onBlur={handleBlur('email')}
-              value={values.email}
+              value={email}
             />
             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
           </View>
@@ -78,9 +81,9 @@ export default function LoginScreen() {
               <TextInput
                 placeholder='Password'
                 style={styles.input}
-                onChangeText={handleChange('password')}
+                onChangeText={setPassword}
                 onBlur={handleBlur('password')}
-                value={values.password}
+                value={password}
                 secureTextEntry={!showPassword}
               />
               <TouchableOpacity style={styles.iconContainer} onPress={togglePasswordVisibility}>
