@@ -9,6 +9,7 @@ import VerificationCodeScreen from "../Screens/Registration/VerificationCodeScre
 import CustomHeader2 from "../Components/CustomHeader2";
 import ChangePasswordScreen from "../Screens/Registration/ChangePasswordScreen";
 import AddressScreen from "../Screens/Registration/AddressScreen";
+import HomescreenNavigation from "../Navigations/HomeScreenNavigation"
 const Stack = createStackNavigator();
 
 export default function Registration() {
@@ -50,6 +51,11 @@ export default function Registration() {
         name='address'
         component={AddressScreen}
         options={{ header:() => <CustomHeader2 text={'Where Your Cars Are Located'}/> }}
+      />
+         <Stack.Screen
+        name='homescreen'
+        component={HomescreenNavigation}
+        options={{ headerShown: false }}
       />
 
       

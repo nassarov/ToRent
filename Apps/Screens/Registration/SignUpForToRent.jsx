@@ -5,6 +5,9 @@ import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-re
 import { Ionicons, EvilIcons , FontAwesome6} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from 'react-native-phone-number-input';
+import { getAuth, RecaptchaVerifier } from "firebase/auth";
+
+const auth = getAuth();
 
 export default function SignUpForToRent() {
   

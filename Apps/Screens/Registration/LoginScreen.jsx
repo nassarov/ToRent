@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function LoginScreen() {
   StatusBar.setBarStyle('dark-content', true);
@@ -15,6 +16,22 @@ export default function LoginScreen() {
     setShowPassword(!showPassword);
   };
 
+  const handleSubmit = () => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/auth.user
+    const uid = user.uid;
+    navigation.navigate("Home")
+    console.log(user.email);
+    // ...
+  } else {
+    // User is signed out
+    // ...
+  }
+});
+  }
   return (
     <Formik
       initialValues={{  email: '', password: '' }}
@@ -38,7 +55,7 @@ export default function LoginScreen() {
         return errors;
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+      {({ handleChange, handleBlur, values, errors }) => (
          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <StatusBar backgroundColor={'#F6F6F6'} translucent={true}/>

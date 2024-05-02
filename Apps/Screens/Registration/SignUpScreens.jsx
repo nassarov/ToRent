@@ -6,26 +6,30 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Formik } from "formik";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import Constants from "expo-constants";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {auth,app} from "../../../firebaseConfig"
+import { getFirestore, doc, setDoc } from "firebase/firestore"; // Import Firestore functions
 
-export default function SignUpScreen() {
+export default function SignUpScreen({route}) {
   StatusBar.setBarStyle('dark-content', true);
-  // StatusBar.setTranslucent(true);
-  // StatusBar.setBackgroundColor('#F6F6F6');
+ 
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [value, setValue] = useState(null); 
   const [isFocus, setIsFocus] = useState(false); 
-  const [selectedValue, setSelectedValue] = useState(null); 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(route.params?.value);
+  const [userid, setUserid]= useState('');
 
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
@@ -39,21 +43,35 @@ export default function SignUpScreen() {
 
   // DropDownMenu Data
   const DropDowndata = [
-    { label: "Offer a car", value: "Offer" },
-    { label: "Rent a car", value: "Rent" },
+    { label: "Offer a car", value: "1" },
+    { label: "Rent a car", value: "0" },
   ];
 
-  // Moved renderLabel inside the SignUpScreen component
-  const renderLabel = () => {
-    if (value || isFocus) {
-      return (
-        <Text style={[styles.label, isFocus && { color: "blue" }]}>
-          Why you are using the app
-        </Text>
-      );
+  const handelSignUp = async(values) => {
+    const auth = getAuth();
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      // Firestore: Add additional user data
+      const db = getFirestore(app); // Make sure you have initialized your app
+      const userRef = doc(db, "users", user.uid); // Create a document reference with the UID
+      setUserid(user.uid);
+      // Set the user data in Firestore
+      await setDoc(userRef, {
+        name: values.name,
+        email:email, // this is the authenticated user's email
+        phoneNumber: values.phoneNumber,
+        role: values.role,
+        // any other fields you want to save
+      });
+      console.log(userCredential)
+      // Navigation or other actions after successful signup
+    } catch (error) {
+      console.log("Error in signup:", error.message);
+      // Handle errors here, such as displaying a notification
     }
-    return null;
-  };
+  }
 
   return (
     <Formik
@@ -63,32 +81,42 @@ export default function SignUpScreen() {
         password: "",
         confirmPassword: "",
         role: "",
+        phoneNumber: phoneNumber ,// Using the phone number from the first screen
+        userid:userid
       }}
       onSubmit={(values) => {
         console.log(values);
-        navigation.push('address');
+        handelSignUp(values);
+        if(values.role === "1"){
+          navigation.push('address');
+        }
+        else{
+          Alert.alert("Success", "You have successfully signed up!")
+          navigation.push('login');
+        }
+        
       }}
       validate={(values) => {
         const errors = {};
         if (!values.name) {
           errors.name = "Required";
         }
-        if (!values.email) {
+        if (!email) {
           errors.email = "Required";
         } else if (
-          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)
         ) {
           errors.email = "Invalid email address";
         }
-        if (!values.password) {
+        if (!password) {
           errors.password = "Required";
         }
         if (!values.confirmPassword) {
           errors.confirmPassword = "Required";
-        } else if (values.confirmPassword !== values.password) {
+        } else if (values.confirmPassword !== password) {
           errors.confirmPassword = "Passwords must match";
         }
-        if (values.role !== "Offer" && values.role !== "Rent") {
+        if (values.role !== "1" && values.role !== "0") {
           errors.role = "Required: Choose one";
         }
         return errors;
@@ -100,6 +128,8 @@ export default function SignUpScreen() {
           {/* Input Fields */}
           <View>
             {/* Render Label */}
+            {/* Display Phone Number */}
+        <Text className='text-lg text-center'>Phone Number: {values.phoneNumber}</Text>
 
             {/* Name */}
             <View style={{height:heightPercentageToDP(12)}}>
@@ -118,9 +148,9 @@ export default function SignUpScreen() {
             <TextInput
               placeholder="Email"
               style={styles.input}
-              onChangeText={handleChange("email")}
+              onChangeText={text =>setEmail(text)}
               onBlur={handleBlur("email")}
-              value={values.email}
+              value={email}
             />
             {errors.email && (
               <Text style={styles.errorText}>{errors.email}</Text>
@@ -133,9 +163,9 @@ export default function SignUpScreen() {
               <TextInput
                 placeholder="Password"
                 style={styles.input}
-                onChangeText={handleChange("password")}
+                onChangeText={text=>setPassword(text)}
                 onBlur={handleBlur("password")}
-                value={values.password}
+                value={password}
                 secureTextEntry={!showPassword}
               />
               <TouchableOpacity
@@ -221,7 +251,7 @@ export default function SignUpScreen() {
             <View className='items-center text-center justify-center'>
             <TouchableOpacity
               style={styles.signupButton}
-              onPress={handleSubmit}
+              onPress={() => handleSubmit()} 
             >
               <Text style={styles.signupButtonText}>Sign Up</Text>
             </TouchableOpacity>

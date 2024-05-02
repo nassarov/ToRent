@@ -5,10 +5,12 @@ import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsi
 import { Formik } from "formik";
 import { AntDesign } from "@expo/vector-icons";
 import {useNavigation} from '@react-navigation/native';
+import { app, auth } from "../../../firebaseConfig";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 
 export default function AddressScreen() {
   const navigation = useNavigation();
-  
+  const db = getFirestore(app); // Make sure you have initialized your app
   const [selectedCity, setSelectedCity] = useState(null); 
   const [isFocus, setIsFocus] = useState(false); 
   const [valuesList, setValuesList] = useState([]); 
@@ -22,7 +24,6 @@ export default function AddressScreen() {
     { label: "Tyre", value: "Tyre" },
     { label: "Jbeil", value: "Jbeil" },
     { label: "Baalbek", value: "Baalbek" },
-    { label: "Zahle", value: "Zahle" },
     { label: "Nabatieh", value: "Nabatieh" },
     { label: "Jounieh", value: "Jounieh" },
     { label: "Batroun", value: "Batroun" },
@@ -53,20 +54,26 @@ export default function AddressScreen() {
     resetForm();
   };
 
-  const confirmAndNavigate = () => {
-    // Show an alert dialog
-    Alert.alert(
-      "Account Added", // Alert Title
-      "Your account has been successfully added! Time to log in.", // Alert message
-      [
-        {
-          text: "OK",
-          onPress: () => navigation.replace('login') // Navigate on pressing OK
-        }
-      ]
-    );
+  const confirmAndSendAddresses = async () => {
+    try {
+      // Get the current user from Firebase Auth
+      const user = auth.currentUser;
+
+      // Update the Firestore document for the current user with all addresses
+      await updateDoc(doc(db, "users", user.uid), {
+        addresses: valuesList
+      });
+
+      // Show success message
+      Alert.alert(
+        "Addresses Added",
+        "Your addresses have been successfully added!",
+        [{ text: "OK", onPress: () => navigation.replace('login') }]
+      );
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
   };
-  
 
   useEffect(() => {
     // Update the state outside the rendering process
@@ -179,7 +186,7 @@ export default function AddressScreen() {
             ))}
             {valuesList.length > 0 && (
               <View className='items-center text-center justify-center'>
-                <TouchableOpacity  onPress={confirmAndNavigate}
+                <TouchableOpacity  onPress={confirmAndSendAddresses}
                   style={styles.signupButton}
                 >
                   <Text style={styles.signupButtonText}>Confirm</Text>
