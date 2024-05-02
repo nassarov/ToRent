@@ -28,12 +28,14 @@ export default function SignUpForToRent() {
     const allowedPrefixes = ["81", "71", "70", "03", "76","78","79"];
     const isValidPrefix = allowedPrefixes.includes(text.slice(0, 2));
   
-    if (!containsNonDigit && text.length <= 8 && isValidPrefix) {
+    if (!containsNonDigit && text.length == 8 && isValidPrefix) {
       setIsValidPhone(true);
       setPhoneNumber(text);
       checkPhoneNumberInUse(`+961${text}`);
     } else {
       setIsValidPhone(false);
+      setPhoneNumber('');
+
     }
   };
   
@@ -47,6 +49,7 @@ export default function SignUpForToRent() {
     setIsCheckingCredentials(false);
     if (!querySnapshot.empty) {
       setPhoneInUse(true);
+      setPhoneNumber('');
     } else {
       setPhoneInUse(false);
     }
@@ -58,8 +61,15 @@ export default function SignUpForToRent() {
     if (isValidPhone && !phoneInUse) {
       const phoneNumberCCode = `+961${phoneNumber}`;
       navigation.navigate("signup", { value: phoneNumberCCode });
-    } else {
+    }
+     else if( phoneInUse){
       Alert.alert("Phone Number In Use", "The phone number entered is already associated with another account.");
+      setPhoneNumber('');
+    }
+    else if (!isValidPhone || phoneNumber.length<8) {
+      Alert.alert("Invalid Phone Number", "Please enter a valid phone number.");
+      setPhoneNumber('');
+
     }
   };
 
