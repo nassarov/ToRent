@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StatusBar, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, StatusBar, TouchableOpacity, TouchableWithoutFeedback, Keyboard ,ActivityIndicator} from "react-native";
 import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Ionicons, EvilIcons , FontAwesome6} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -19,6 +19,7 @@ export default function SignUpForToRent() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isValidPhone, setIsValidPhone] = useState(true);
   const [phoneInUse, setPhoneInUse] = useState(false);
+  const [loading, setLoading] = useState(false); // New state for loading indicator
 
   // Function to handle real-time validation of the phone number
   const validatePhoneNumber = (text) => {
@@ -36,9 +37,11 @@ export default function SignUpForToRent() {
   };
   
   const checkPhoneNumberInUse = async (fullPhoneNumber) => {
+    setLoading(true); // Set loading to true while checking
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("phoneNumber", "==", fullPhoneNumber));
     const querySnapshot = await getDocs(q);
+    setLoading(false); // Set loading to false after checking
     if (!querySnapshot.empty) {
       setPhoneInUse(true);
     } else {
@@ -100,10 +103,15 @@ export default function SignUpForToRent() {
           <Text style={{ color: 'red', fontSize: 14, marginTop: 4 }} >
             Invalid phone number
           </Text>
-        )}</View>
+        )}
+        </View>
         <View className='my-12'>
         <TouchableOpacity className='bg-[#7F5AF0]  ' 
-          onPress={validatePhoneNumber&&onSubmitMethod}
+         onPress={() => {
+          if (validatePhoneNumber && !loading) {
+            onSubmitMethod();
+          }
+        }}
           style={{height:wp(18), width:wp(70), borderRadius: 10, padding: 12, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row' }}
         >
           <Ionicons name="person-sharp" size={24} color="white" />
