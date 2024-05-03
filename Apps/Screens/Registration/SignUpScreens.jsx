@@ -20,7 +20,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, app } from "../../../firebaseConfig";
-import { getFirestore, doc, setDoc } from "firebase/firestore"; 
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 export default function SignUpScreen({ route }) {
   StatusBar.setBarStyle("dark-content", true);
@@ -90,189 +91,194 @@ export default function SignUpScreen({ route }) {
   };
 
   return (
-    <Formik
-      initialValues={{
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "",
-        phoneNumber: phoneNumber, 
-        userid: userid,
-      }}
-      onSubmit={(values) => {
-        console.log(values);
-        handelSignUp(values);
-      }}
-      validate={(values) => {
-        const errors = {};
-        if (!values.name) {
-          errors.name = "Required";
-        }
-        if (!email) {
-          errors.email = "Required";
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
-          errors.email = "Invalid email address";
-        }
-        if (!password) {
-          errors.password = "Required";
-        }
-        if (!values.confirmPassword) {
-          errors.confirmPassword = "Required";
-        } else if (values.confirmPassword !== password) {
-          errors.confirmPassword = "Passwords must match";
-        }
-        if (values.role !== "1" && values.role !== "0") {
-          errors.role = "Required: Choose one";
-        }
-        return errors;
-      }}
-    >
-      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-        <View style={styles.container}>
-          <StatusBar backgroundColor={"#F6F6F6"} translucent={true} />
-          {/* Input Fields */}
-          <View>
-            <Text className="text-lg text-center">
-              Phone Number: {values.phoneNumber}
-            </Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Formik
+        initialValues={{
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          role: "",
+          phoneNumber: phoneNumber,
+          userid: userid,
+        }}
+        onSubmit={(values) => {
+          console.log(values);
+          handelSignUp(values);
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.name) {
+            errors.name = "Required";
+          }
+          if (!email) {
+            errors.email = "Required";
+          } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+            errors.email = "Invalid email address";
+          }
+          if (!password) {
+            errors.password = "Required";
+          }
+          if (!values.confirmPassword) {
+            errors.confirmPassword = "Required";
+          } else if (values.confirmPassword !== password) {
+            errors.confirmPassword = "Passwords must match";
+          }
+          if (values.role !== "1" && values.role !== "0") {
+            errors.role = "Required: Choose one";
+          }
+          return errors;
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+          <View style={styles.container}>
+            <StatusBar backgroundColor={"#F6F6F6"} translucent={true} />
+            {/* Input Fields */}
+            <View>
+              <Text className="text-lg text-center">
+                Phone Number: {values.phoneNumber}
+              </Text>
 
-            {/* Name */}
-            <View style={{ height: heightPercentageToDP(12) }}>
-              <TextInput
-                placeholder="Name"
-                style={styles.input}
-                onChangeText={handleChange("name")}
-                onBlur={handleBlur("name")}
-                value={values.name}
-              />
-              {errors.name && (
-                <Text style={styles.errorText}>{errors.name}</Text>
-              )}
-            </View>
-
-            {/* Email */}
-            <View style={{ height: heightPercentageToDP(12) }}>
-              <TextInput
-                placeholder="Email"
-                style={styles.input}
-                onChangeText={(text) => setEmail(text)}
-                onBlur={handleBlur("email")}
-                value={email}
-              />
-              {errors.email && (
-                <Text style={styles.errorText}>{errors.email}</Text>
-              )}
-            </View>
-
-            {/* Password with Eye Icon */}
-            <View style={{ height: heightPercentageToDP(12) }}>
-              <View style={styles.passwordContainer}>
+              {/* Name */}
+              <View style={{ height: heightPercentageToDP(12) }}>
                 <TextInput
-                  placeholder="Password"
+                  placeholder="Name"
                   style={styles.input}
-                  onChangeText={(text) => setPassword(text)}
-                  onBlur={handleBlur("password")}
-                  value={password}
-                  secureTextEntry={!showPassword}
+                  onChangeText={handleChange("name")}
+                  onBlur={handleBlur("name")}
+                  value={values.name}
                 />
-                <TouchableOpacity
-                  style={styles.iconContainer}
-                  onPress={togglePasswordVisibility}
-                >
-                  <Icon
-                    name={showPassword ? "eye-off" : "eye"}
-                    size={25}
-                    color="#7F5AF0"
-                  />
-                </TouchableOpacity>
-              </View>
-              {errors.password && (
-                <Text style={styles.errorText}>{errors.password}</Text>
-              )}
-            </View>
-            
-            {/* Confirm Password with Eye Icon */}
-            <View style={{ height: heightPercentageToDP(12) }}>
-              <View style={styles.passwordContainer}>
-                <TextInput
-                  placeholder="Confirm Password"
-                  style={styles.input}
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  value={values.confirmPassword}
-                  secureTextEntry={!showConfirmPassword}
-                />
-                <TouchableOpacity
-                  style={styles.iconContainer}
-                  onPress={toggleConfirmPasswordVisibility}
-                >
-                  <Icon
-                    name={showConfirmPassword ? "eye-off" : "eye"}
-                    size={25}
-                    color="#7F5AF0"
-                  />
-                </TouchableOpacity>
-              </View>
-              {errors.confirmPassword && (
-                <Text style={styles.errorText}>{errors.confirmPassword}</Text>
-              )}
-            </View>
-
-            {/* Dropdown Menu */}
-            <View style={{ height: heightPercentageToDP(12) }}>
-              <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: "#7F5AF0" }]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={DropDowndata}
-                search={false}
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={
-                  !isFocus ? "Why you are using the app" : "Select one Role"
-                }
-                searchPlaceholder="Search..."
-                value={values.role}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={(item) => {
-                  handleChange("role")(item.value);
-                  setIsFocus(false);
-                }}
-                renderLeftIcon={() => (
-                  <AntDesign
-                    style={styles.icon}
-                    color={isFocus ? "blue" : "black"}
-                    name="Safety"
-                    size={20}
-                  />
+                {errors.name && (
+                  <Text style={styles.errorText}>{errors.name}</Text>
                 )}
-              />
-              {errors.role && (
-                <Text style={styles.errorText}>{errors.role}</Text>
-              )}
-            </View>
+              </View>
 
-            {/* Sign Up Button */}
-            <View className="items-center text-center justify-center">
-              <TouchableOpacity
-                style={[styles.signupButton, isSigningUp && { opacity: 0.5 }]}
-                onPress={() => handleSubmit()}
-                disabled={isSigningUp}
-              >
-                <Text style={styles.signupButtonText}>
-                  {isSigningUp ? "Signing Up..." : "Sign Up"}
-                </Text>
-              </TouchableOpacity>
+              {/* Email */}
+              <View style={{ height: heightPercentageToDP(12) }}>
+                <TextInput
+                  placeholder="Email"
+                  style={styles.input}
+                  onChangeText={(text) => setEmail(text)}
+                  onBlur={handleBlur("email")}
+                  value={email}
+                />
+                {errors.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
+              </View>
+
+              {/* Password with Eye Icon */}
+              <View style={{ height: heightPercentageToDP(12) }}>
+                <View style={styles.passwordContainer}>
+                  <TextInput
+                    placeholder="Password"
+                    style={styles.input}
+                    onChangeText={(text) => setPassword(text)}
+                    onBlur={handleBlur("password")}
+                    value={password}
+                    secureTextEntry={!showPassword}
+                  />
+                  <TouchableOpacity
+                    style={styles.iconContainer}
+                    onPress={togglePasswordVisibility}
+                  >
+                    <Icon
+                      name={showPassword ? "eye-off" : "eye"}
+                      size={25}
+                      color="#7F5AF0"
+                    />
+                  </TouchableOpacity>
+                </View>
+                {errors.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
+              </View>
+
+              {/* Confirm Password with Eye Icon */}
+              <View style={{ height: heightPercentageToDP(12) }}>
+                <View style={styles.passwordContainer}>
+                  <TextInput
+                    placeholder="Confirm Password"
+                    style={styles.input}
+                    onChangeText={handleChange("confirmPassword")}
+                    onBlur={handleBlur("confirmPassword")}
+                    value={values.confirmPassword}
+                    secureTextEntry={!showConfirmPassword}
+                  />
+                  <TouchableOpacity
+                    style={styles.iconContainer}
+                    onPress={toggleConfirmPasswordVisibility}
+                  >
+                    <Icon
+                      name={showConfirmPassword ? "eye-off" : "eye"}
+                      size={25}
+                      color="#7F5AF0"
+                    />
+                  </TouchableOpacity>
+                </View>
+                {errors.confirmPassword && (
+                  <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+                )}
+              </View>
+
+              {/* Dropdown Menu */}
+              <View style={{ height: heightPercentageToDP(12) }}>
+                <Dropdown
+                  style={[
+                    styles.dropdown,
+                    isFocus && { borderColor: "#7F5AF0" },
+                  ]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={DropDowndata}
+                  search={false}
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={
+                    !isFocus ? "Why you are using the app" : "Select one Role"
+                  }
+                  searchPlaceholder="Search..."
+                  value={values.role}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={(item) => {
+                    handleChange("role")(item.value);
+                    setIsFocus(false);
+                  }}
+                  renderLeftIcon={() => (
+                    <AntDesign
+                      style={styles.icon}
+                      color={isFocus ? "blue" : "black"}
+                      name="Safety"
+                      size={20}
+                    />
+                  )}
+                />
+                {errors.role && (
+                  <Text style={styles.errorText}>{errors.role}</Text>
+                )}
+              </View>
+
+              {/* Sign Up Button */}
+              <View className="items-center text-center justify-center">
+                <TouchableOpacity
+                  style={[styles.signupButton, isSigningUp && { opacity: 0.5 }]}
+                  onPress={() => handleSubmit()}
+                  disabled={isSigningUp}
+                >
+                  <Text style={styles.signupButtonText}>
+                    {isSigningUp ? "Signing Up..." : "Sign Up"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      )}
-    </Formik>
+        )}
+      </Formik>
+    </TouchableWithoutFeedback>
   );
 }
 
