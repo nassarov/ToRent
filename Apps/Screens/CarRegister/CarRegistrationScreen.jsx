@@ -27,7 +27,7 @@ import {
 
 export default function CarRegistrationScreen() {
   const navigation = useNavigation();
-  //   const [colors, setColors] = useState();
+    const [colors, setColors] = useState();
   // hide bottom tab bar
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -76,16 +76,16 @@ export default function CarRegistrationScreen() {
     setSelectColor(null);
     setSelectSeats(null);
   };
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, []);
-  //   const fetchData = async () => {
-  //     setColors([]);
-  //     const querySnapshot = await getDocs(collection(db, "carColors"));
-  //     querySnapshot.forEach((doc) => {
-  //       setColors((colors) => [...colors, doc.data()]);
-  //     });
-  //   };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    setColors([]);
+    const querySnapshot = await getDocs(collection(db, "carColors"));
+    querySnapshot.forEach((doc) => {
+      setColors((colors) => [...colors, doc.data()]);
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -131,7 +131,7 @@ export default function CarRegistrationScreen() {
               placeholder="Price Range"
             />
             <DropdownComponent
-              data={dataColor}
+              data={colors}
               value={selectColor}
               setValue={setSelectColor}
               placeholder="Color"
