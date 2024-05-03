@@ -14,16 +14,16 @@ const CustomTabButton = ({children , onPress})=>{
   return (
     <TouchableOpacity
       style ={{
-        top:-30,
+        top:-15,
         justifyContent: "center",
         alignItems: "center",
-        ...styles.shadow
+        ...styles.shadow,
       }}
       onPress={onPress}
     >
       <View style={{
-        width: 40,
-        height:40,
+        width: 50,
+        height:50,
         borderRadius:20,
         backgroundColor:"#7F5AF0",
       }}>
@@ -40,7 +40,7 @@ const TabNavigation = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarShowLabel: true,
+        tabBarShowLabel: false,
         tabBarStyle: {
           position: "absolute",
           bottom: 0,
@@ -91,9 +91,7 @@ const TabNavigation = () => {
           headerShown:true,
            header:() => <CustomHeader2 text={'Add Your Car'}/>,
             tabBarIcon: ({ focused }) =>
-             (<MaterialIcons focused={focused} name="add"  size={24} color="white"  style={{
-            width: 30,
-            height:30, }} />   ),
+             (<MaterialIcons focused={focused} name="add" size={28} color="white" />   ),
          
           tabBarButton:(props)=> (
             <CustomTabButton {...props}/>

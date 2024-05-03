@@ -49,8 +49,8 @@ export default function CarRegistrationScreen() {
         <ScrollView>
             <View className='mb-44'>
                 {/* location */}
-                <View className='mb-[-13px] border-b-[1px] border-t-[1px] border-violet-600 pb-2 pt-2'>
-            <Text style={styles.texts}>Location</Text>
+                <View className=''>
+            <View style={styles.texts} className='flex-row items-baseline mr-5'><Text className='text-[15px] font-bold'>Location  </Text><View style={styles.line}/></View>
             <DropdownComponent
                 data={dataAdd}
                 value={selectedAddress}
@@ -58,8 +58,8 @@ export default function CarRegistrationScreen() {
                 placeholder="Address"
             /></View>
             {/* Car Details */}
-            <View className='mb-[-13px] border-violet-600 pb-2 pt-2'>
-            <Text style={styles.text}>Car Details</Text>
+            <View className=''>
+            <View style={styles.text} className='flex-row items-baseline'><Text className='text-[15px] font-bold'>Car Details  </Text><View style={styles.line}/></View>
             <DropdownComponent
                 data={dataType}
                 value={selectType}
@@ -160,8 +160,6 @@ const styles = StyleSheet.create({
         marginLeft:18,
     },
     texts: {
-        fontWeight: "500",
-        fontSize: 16,
         marginBottom:2,
         marginLeft:18,
     },
@@ -227,5 +225,11 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 16,
         fontWeight: "bold",
+      },
+      line: {
+        flex: 1,
+        height: 1, // Adjust line height as needed
+        backgroundColor: '#7F5AF0',
+        alignItems:'baseline' // Adjust line color as needed
       },
 });

@@ -130,7 +130,7 @@ export default function HomeScreen() {
 
 
   return (
-    <ScrollView className="mt-12 flex-1" keyboardShouldPersistTaps='handled' >
+    <ScrollView className="mt-[38px] pt-3 flex-1 mb-[50px]" keyboardShouldPersistTaps='handled' >
       <View className="flex-row mb-2 ">
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
         <Text className="text-xl"> Your Favorite Car</Text>
@@ -143,7 +143,7 @@ export default function HomeScreen() {
       </View>
       <Carousel/>
       {companyData.map((company, index) => (
-        <View key={index} className=" py-2">
+        <View key={index} className=" py-2 mb-2">
           <View className="flex-row justify-between px-1 items-center">
             <Text className="font-bold">{company.name}</Text>
             <TouchableOpacity>
