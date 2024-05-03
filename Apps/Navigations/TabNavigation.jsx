@@ -10,11 +10,11 @@ import CustomHeader2 from "../Components/CustomHeader2";
 
 const Tab = createBottomTabNavigator();
 
-const CustomTabButton = ({children , onPress})=>{
+const CustomTabButton = ({ children, onPress }) => {
   return (
     <TouchableOpacity
-      style ={{
-        top:-15,
+      style={{
+        top: -15,
         justifyContent: "center",
         alignItems: "center",
         ...styles.shadow,
@@ -23,9 +23,9 @@ const CustomTabButton = ({children , onPress})=>{
     >
       <View style={{
         width: 50,
-        height:50,
-        borderRadius:20,
-        backgroundColor:"#7F5AF0",
+        height: 50,
+        borderRadius: 20,
+        backgroundColor: "#7F5AF0",
       }}>
         {children}
       </View>
@@ -33,10 +33,11 @@ const CustomTabButton = ({children , onPress})=>{
   );
 }
 
-
-const TabNavigation = () => {
+const TabNavigation = ({ route }) => {
+  
+  const { userRole } = route.params;
+  console.log("HomeTabNAv",userRole);
   const insets = useSafeAreaInsets();  // Use safe area insets for better compatibility with iOS devices
-
   return (
     <Tab.Navigator
       screenOptions={{
@@ -84,21 +85,21 @@ const TabNavigation = () => {
           ),
         }}
       />
-      <Tab.Screen
-        name="Post"
-        component={CarRegistrationScreen}
-        options={{
-          headerShown:true,
-           header:() => <CustomHeader2 text={'Add Your Car'}/>,
+      {userRole === '1' && (
+        <Tab.Screen
+          name="Post"
+          component={CarRegistrationScreen}
+          options={{
+            headerShown: true,
+            header: () => <CustomHeader2 text={'Add Your Car'} />,
             tabBarIcon: ({ focused }) =>
-             (<MaterialIcons focused={focused} name="add" size={28} color="white" />   ),
-         
-          tabBarButton:(props)=> (
-            <CustomTabButton {...props}/>
-          ),
-          
-        }}
-      />
+              (<MaterialIcons focused={focused} name="add" size={28} color="white" />),
+            tabBarButton: (props) => (
+              <CustomTabButton {...props} />
+            ),
+          }}
+        />
+      )}
       <Tab.Screen
         name="Notification"
         component={HomeScreen}
@@ -131,18 +132,17 @@ const TabNavigation = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
-    shadow: {
-      shadowColor: "#7F5DF0",
-      shadowOffset: {
-        width: 0,
-        height: 10,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.5,
-      elevation: 5,
+  shadow: {
+    shadowColor: "#7F5DF0",
+    shadowOffset: {
+      width: 0,
+      height: 10,
     },
-  });
-  
-  export default TabNavigation;
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+    elevation: 5,
+  },
+});
+
+export default TabNavigation;

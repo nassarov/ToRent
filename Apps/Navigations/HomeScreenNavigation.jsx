@@ -8,7 +8,10 @@ import CustomHeader2 from "../Components/CustomHeader2";
 import TabNavigation from "./TabNavigation";
 
 const Stack = createStackNavigator();
-export default function HomeScreenNavigation() {
+export default function HomeScreenNavigation({route}) {
+  
+  const { userRole } = route.params;
+  console.log("HomeNAv",userRole);
   return (
     <Stack.Navigator initialRouteName="homescreen">
       <Stack.Screen
@@ -19,7 +22,9 @@ export default function HomeScreenNavigation() {
       <Stack.Screen
         name="homescreen"
         component={TabNavigation}
+        initialParams={{userRole:userRole}}
         options={{ headerShown: false }}
+        
       />
       <Stack.Screen
         name="filter"

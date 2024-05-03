@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getFirestore, getDoc } from "firebase/firestore";
 
 export default function LoginScreen() {
   StatusBar.setBarStyle('dark-content', true);
@@ -14,6 +15,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [isCheckingCredentials, setIsCheckingCredentials] = useState(false); // State to track if credentials are being checked
   const navigation = useNavigation();
+  const db = getFirestore();
 
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
@@ -27,9 +29,14 @@ export default function LoginScreen() {
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      // User is signed in, navigate to Home screen
-      navigation.navigate("Home");
-      console.log("User is signed in:", user.email);
+      // Fetch user role from Firestore
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+      const userData = userDocSnapshot.data();
+      const userRole = userData.role; // Assuming role is stored in the user document
+      // User is signed in, navigate to Home screen and pass user role
+      navigation.navigate("homescreennav", { userRole });
+      console.log("User is signed in:", user.email, userRole);
     } catch (error) {
       // Handle errors here, such as displaying a notification or error message
       console.error("Error signing in:", error.message);
@@ -38,6 +45,7 @@ export default function LoginScreen() {
       setIsCheckingCredentials(false); // Reset isCheckingCredentials to false after checking credentials
     }
   };
+
 
   return (
     <Formik
