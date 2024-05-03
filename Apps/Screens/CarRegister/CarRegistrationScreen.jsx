@@ -14,6 +14,7 @@ import {
 } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
 import { useLayoutEffect } from "react";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { app, auth } from "../../../firebaseConfig";
 import {
   doc,
@@ -27,7 +28,14 @@ import {
 
 export default function CarRegistrationScreen() {
   const navigation = useNavigation();
-    const [colors, setColors] = useState();
+    const [colors, setColors] = useState([]);
+    const [types, setTypes] = useState([]);
+    const [ brands , setBrands]=useState([]);
+    const [models , setModles] = useState([]);
+    const [ gears , setGear] = useState([]);
+    const [fuel , setFuel] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(new Date()); // State for selected date
+
   // hide bottom tab bar
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -41,28 +49,20 @@ export default function CarRegistrationScreen() {
   const [selectType, setSelectType] = useState(null);
   const [selectPrice, setSelectPrice] = useState(null);
   const [selectColor, setSelectColor] = useState(null);
-  const [selectSeats, setSelectSeats] = useState(null);
+  const [selectModel, setSelectModel] = useState(null);
+  const [selectFuel, setSelectFuel] = useState(null);
+  const [selectGear, setSelectGear] = useState(null);
 
   const dataAdd = [
     { label: "Beirut", value: "Beirut" },
     { label: "Tripoli", value: "Tripoli" },
   ];
-  const dataBrand = [
-    { label: "Toyota", value: "Toyota" },
-    { label: "Honda", value: "Honda" },
-  ];
-  const dataType = [
-    { label: "SUV", value: "SUV" },
-    { label: "Sedan", value: "Sedan" },
-  ];
+  
   const dataPrice = [
     { label: "$10,000 - $20,000", value: "10-20" },
     { label: "$20,000 - $30,000", value: "20-30" },
   ];
-  const dataColor = [
-    { label: "Red", value: "Red" },
-    { label: "Blue", value: "Blue" },
-  ];
+
   const dataSeats = [
     { label: "2 Seats", value: "2" },
     { label: "5 Seats", value: "5" },
@@ -74,18 +74,70 @@ export default function CarRegistrationScreen() {
     setSelectType(null);
     setSelectPrice(null);
     setSelectColor(null);
-    setSelectSeats(null);
+    setSelectModel(null);
+    setSelectFuel(null);
+    setSelectGear(null);
   };
   useEffect(() => {
-    fetchData();
+    fetchColor();
+    fetchType();
+    fetchBrand();
+    fetchModels();
+    fetchGears();
+    fetchFuel();
   }, []);
-  const fetchData = async () => {
+
+  // Data of DropDown(COLORS)
+  const fetchColor= async () => {
     setColors([]);
     const querySnapshot = await getDocs(collection(db, "carColors"));
     querySnapshot.forEach((doc) => {
       setColors((colors) => [...colors, doc.data()]);
     });
   };
+// Data of DropDown(TYPES)
+const fetchType= async () => {
+   setTypes([]);
+     const querySnapshot = await getDocs(collection(db, "carTypes"));
+    querySnapshot.forEach((doc) => {
+       setTypes((types) => [...types, doc.data()]);
+    });
+  };
+
+  //// Data of DropDown(BRANDS)
+  const fetchBrand= async () => {
+    setBrands([]);
+      const querySnapshot = await getDocs(collection(db, "carBrands"));
+     querySnapshot.forEach((doc) => {
+        setBrands((brands) => [...brands, doc.data()]);
+     });
+   };
+  // Data of DropDown(Models)
+  const fetchModels= async () => {
+    setModles([]);
+      const querySnapshot = await getDocs(collection(db, "carModels"));
+     querySnapshot.forEach((doc) => {
+        setModles((models) => [...models, doc.data()]);
+     });
+   };
+
+ // Data of DropDown(GEAR)
+ const fetchGears= async () => {
+    setGear([]);
+      const querySnapshot = await getDocs(collection(db, "carGears"));
+     querySnapshot.forEach((doc) => {
+        setGear((gears) => [...gears, doc.data()]);
+     });
+   };
+ // Data of DropDown(Fuel)
+ const fetchFuel= async () => {
+    setFuel([]);
+      const querySnapshot = await getDocs(collection(db, "fuelTypes"));
+     querySnapshot.forEach((doc) => {
+        setFuel((fuel) => [...fuel, doc.data()]);
+     });
+   };
+
 
   return (
     <View style={styles.container}>
@@ -112,14 +164,14 @@ export default function CarRegistrationScreen() {
               <View style={styles.line} />
             </View>
             <DropdownComponent
-              data={dataType}
+              data={types}
               value={selectType}
               setValue={setSelectType}
               placeholder="Type"
             />
 
             <DropdownComponent
-              data={dataBrand}
+              data={brands}
               value={selectBrand}
               setValue={setSelectBrand}
               placeholder="Brand"
@@ -137,23 +189,37 @@ export default function CarRegistrationScreen() {
               placeholder="Color"
             />
             <DropdownComponent
-              data={dataSeats}
-              value={selectSeats}
-              setValue={setSelectSeats}
-              placeholder="Number of Seats"
+              data={models}
+              value={selectModel}
+              setValue={setSelectModel}
+              placeholder="Models"
             />
             <DropdownComponent
-              data={dataSeats}
-              value={selectSeats}
-              setValue={setSelectSeats}
-              placeholder="Number of Seats"
+              data={gears}
+              value={selectGear}
+              setValue={setSelectGear}
+              placeholder="Gear Type"
             />
             <DropdownComponent
-              data={dataSeats}
-              value={selectSeats}
-              setValue={setSelectSeats}
-              placeholder="Number of Seats"
+              data={fuel}
+              value={selectFuel}
+              setValue={setSelectFuel}
+              placeholder="Fuel Type"
             />
+            {/* DateTimePicker for Year */}
+            <View style={styles.dropdownContainer}>
+              <Text style={styles.labelStyle}>Year*</Text>
+              <DateTimePicker
+                style={{ width: "100%" }}
+                value={selectedDate}
+                mode="date"
+                display="spinner"
+                onChange={(event, selectedDate) => {
+                  setSelectedDate(selectedDate);
+                }}
+                dateFormat="yyyy"
+              />
+            </View>
           </View>
         </View>
       </ScrollView>
