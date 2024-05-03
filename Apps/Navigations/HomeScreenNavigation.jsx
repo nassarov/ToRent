@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Filter from "../Components/HomeComponents/Filter";
 import CustomHeader2 from "../Components/CustomHeader2";
 import TabNavigation from "./TabNavigation";
+import PickImagesScreen from "../Screens/CarRegister/PickImagesScreen";
 
 const Stack = createStackNavigator();
 export default function HomeScreenNavigation({route}) {
@@ -31,6 +32,10 @@ export default function HomeScreenNavigation({route}) {
         component={Filter}
         options={{ header:() => <CustomHeader2/>}}
      
+      />
+      <Stack.Screen 
+      name="PickImagesScreen"
+      component={PickImagesScreen}
       />
     </Stack.Navigator>
   );
