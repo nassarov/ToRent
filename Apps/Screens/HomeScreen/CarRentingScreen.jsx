@@ -110,7 +110,7 @@ export default function CarRentingScreen() {
   };
   return (
     <ScrollView>
-      <CustomHeader2 text={"CARCAR"} />
+      <CustomHeader2 text={"Car Details"} />
       <PictureSwitching images={images} />
       {/* Grid */}
       <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
