@@ -14,27 +14,25 @@ import {
 } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
 import { useLayoutEffect } from "react";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { app, auth } from "../../../firebaseConfig";
+import { app } from "../../../firebaseConfig";
 import {
-  doc,
   getFirestore,
-  updateDoc,
   collection,
   getDocs,
-  query,
-  orderBy,
 } from "firebase/firestore";
+import { Picker } from "@react-native-picker/picker";
+import Icon from 'react-native-vector-icons/Ionicons'; // Import Icon from react-native-vector-icons
 
 export default function CarRegistrationScreen() {
   const navigation = useNavigation();
-    const [colors, setColors] = useState([]);
-    const [types, setTypes] = useState([]);
-    const [ brands , setBrands]=useState([]);
-    const [models , setModles] = useState([]);
-    const [ gears , setGear] = useState([]);
-    const [fuel , setFuel] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(new Date()); // State for selected date
+  const [colors, setColors] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+  const [gears, setGears] = useState([]);
+  const [fuel, setFuel] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(""); // State for selected year
+  const [isPickerVisible, setIsPickerVisible] = useState(false); // State to toggle picker visibility
 
   // hide bottom tab bar
   useLayoutEffect(() => {
@@ -57,15 +55,10 @@ export default function CarRegistrationScreen() {
     { label: "Beirut", value: "Beirut" },
     { label: "Tripoli", value: "Tripoli" },
   ];
-  
+
   const dataPrice = [
     { label: "$10,000 - $20,000", value: "10-20" },
     { label: "$20,000 - $30,000", value: "20-30" },
-  ];
-
-  const dataSeats = [
-    { label: "2 Seats", value: "2" },
-    { label: "5 Seats", value: "5" },
   ];
 
   const clearAllSelections = () => {
@@ -88,56 +81,55 @@ export default function CarRegistrationScreen() {
   }, []);
 
   // Data of DropDown(COLORS)
-  const fetchColor= async () => {
+  const fetchColor = async () => {
     setColors([]);
     const querySnapshot = await getDocs(collection(db, "carColors"));
     querySnapshot.forEach((doc) => {
       setColors((colors) => [...colors, doc.data()]);
     });
   };
-// Data of DropDown(TYPES)
-const fetchType= async () => {
-   setTypes([]);
-     const querySnapshot = await getDocs(collection(db, "carTypes"));
+  // Data of DropDown(TYPES)
+  const fetchType = async () => {
+    setTypes([]);
+    const querySnapshot = await getDocs(collection(db, "carTypes"));
     querySnapshot.forEach((doc) => {
-       setTypes((types) => [...types, doc.data()]);
+      setTypes((types) => [...types, doc.data()]);
     });
   };
 
   //// Data of DropDown(BRANDS)
-  const fetchBrand= async () => {
+  const fetchBrand = async () => {
     setBrands([]);
-      const querySnapshot = await getDocs(collection(db, "carBrands"));
-     querySnapshot.forEach((doc) => {
-        setBrands((brands) => [...brands, doc.data()]);
-     });
-   };
+    const querySnapshot = await getDocs(collection(db, "carBrands"));
+    querySnapshot.forEach((doc) => {
+      setBrands((brands) => [...brands, doc.data()]);
+    });
+  };
   // Data of DropDown(Models)
-  const fetchModels= async () => {
-    setModles([]);
-      const querySnapshot = await getDocs(collection(db, "carModels"));
-     querySnapshot.forEach((doc) => {
-        setModles((models) => [...models, doc.data()]);
-     });
-   };
+  const fetchModels = async () => {
+    setModels([]);
+    const querySnapshot = await getDocs(collection(db, "carModels"));
+    querySnapshot.forEach((doc) => {
+      setModels((models) => [...models, doc.data()]);
+    });
+  };
 
- // Data of DropDown(GEAR)
- const fetchGears= async () => {
-    setGear([]);
-      const querySnapshot = await getDocs(collection(db, "carGears"));
-     querySnapshot.forEach((doc) => {
-        setGear((gears) => [...gears, doc.data()]);
-     });
-   };
- // Data of DropDown(Fuel)
- const fetchFuel= async () => {
+  // Data of DropDown(GEAR)
+  const fetchGears = async () => {
+    setGears([]);
+    const querySnapshot = await getDocs(collection(db, "carGears"));
+    querySnapshot.forEach((doc) => {
+      setGears((gears) => [...gears, doc.data()]);
+    });
+  };
+  // Data of DropDown(Fuel)
+  const fetchFuel = async () => {
     setFuel([]);
-      const querySnapshot = await getDocs(collection(db, "fuelTypes"));
-     querySnapshot.forEach((doc) => {
-        setFuel((fuel) => [...fuel, doc.data()]);
-     });
-   };
-
+    const querySnapshot = await getDocs(collection(db, "fuelTypes"));
+    querySnapshot.forEach((doc) => {
+      setFuel((fuel) => [...fuel, doc.data()]);
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -200,26 +192,35 @@ const fetchType= async () => {
               setValue={setSelectGear}
               placeholder="Gear Type"
             />
+            {/* Text input for Year */}
             <DropdownComponent
               data={fuel}
               value={selectFuel}
               setValue={setSelectFuel}
               placeholder="Fuel Type"
             />
-            {/* DateTimePicker for Year */}
-            <View style={styles.dropdownContainer}>
+            <View style={styles.yearInputContainer}>
               <Text style={styles.labelStyle}>Year*</Text>
-              <DateTimePicker
-                style={{ width: "100%" }}
-                value={selectedDate}
-                mode="date"
-                display="spinner"
-                onChange={(event, selectedDate) => {
-                  setSelectedDate(selectedDate);
-                }}
-                dateFormat="yyyy"
-              />
-            </View>
+              <TouchableOpacity
+                style={styles.yearInput}
+                onPress={() => setIsPickerVisible(!isPickerVisible)}
+              >
+                <Text>{selectedYear ? selectedYear : "Select Year"}</Text>
+                <Icon name="caret-down-outline" size={24} color="black" />
+              </TouchableOpacity>
+              {/* Picker for Year */}
+              {isPickerVisible && (
+                <Picker
+                  selectedValue={selectedYear}
+                  style={[styles.picker, { width: widthPercentageToDP("90%") - 36 }]}
+                  onValueChange={(itemValue, itemIndex) => setSelectedYear(itemValue)}
+                >
+                  {Array.from({ length: 100 }, (_, i) => (new Date().getFullYear() - i).toString()).map((year, index) => (
+                    <Picker.Item label={year} value={year} key={index} />
+                  ))}
+                </Picker>
+              )}
+            </View> 
           </View>
         </View>
       </ScrollView>
@@ -229,7 +230,7 @@ const fetchType= async () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.ApplyButton}
-          onPress={() => navigation.push('PickImagesScreen')}
+          onPress={() => navigation.push("PickImagesScreen")}
         >
           <Text style={styles.ApplyButtonText}>Apply</Text>
         </TouchableOpacity>
@@ -351,5 +352,33 @@ const styles = StyleSheet.create({
     height: 1, // Adjust line height as needed
     backgroundColor: "#7F5AF0",
     alignItems: "baseline", // Adjust line color as needed
+  },
+  yearInput: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    height: 50,
+    marginVertical: 2,
+    marginHorizontal: 18,
+    backgroundColor: "#F6F6F6",
+    borderColor: "#7F5AF0",
+    width: widthPercentageToDP("90%"),
+  },
+  picker: {
+    position: "absolute",
+    bottom: 52,
+    left: 17,
+    top:60,
+    backgroundColor: "#FFFFFF", // Remove border
+    width:  widthPercentageToDP("90%"),
+    borderRadius: 0,
+  
+  },
+  yearInputContainer: {
+    marginBottom: 20,
+    position: 'relative',
   },
 });
