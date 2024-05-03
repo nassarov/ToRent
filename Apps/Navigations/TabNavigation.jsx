@@ -3,10 +3,10 @@ import { View, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign, FontAwesome5, Entypo, Fontisto, MaterialIcons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 import HomeScreen from "../Screens/HomeScreen/HomeScreen";
 import CarRentingScreen from '../Screens/HomeScreen/CarRentingScreen';
 import CarRegistrationScreen from "../Screens/CarRegister/CarRegistrationScreen";
+import CustomHeader2 from "../Components/CustomHeader2";
 
 const Tab = createBottomTabNavigator();
 
@@ -85,20 +85,20 @@ const TabNavigation = () => {
         }}
       />
       <Tab.Screen
-      
         name="Post"
         component={CarRegistrationScreen}
         options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (<MaterialIcons focused={focused} name="add"  size={24} color="white"  style={{
+          headerShown:true,
+           header:() => <CustomHeader2 text={'Add Your Car'}/>,
+            tabBarIcon: ({ focused }) =>
+             (<MaterialIcons focused={focused} name="add"  size={24} color="white"  style={{
             width: 30,
-            height:30,
-            
-          }} />
-        ),
+            height:30, }} />   ),
+         
           tabBarButton:(props)=> (
             <CustomTabButton {...props}/>
-          )
+          ),
+          
         }}
       />
       <Tab.Screen

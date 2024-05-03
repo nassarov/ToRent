@@ -24,11 +24,8 @@ export default function HomeScreenNavigation() {
       <Stack.Screen
         name="filter"
         component={Filter}
-        options={{ header:() => <CustomHeader2/> ,
-        headerStyle: {
-       
-      }
-      }}
+        options={{ header:() => <CustomHeader2/>}}
+     
       />
     </Stack.Navigator>
   );

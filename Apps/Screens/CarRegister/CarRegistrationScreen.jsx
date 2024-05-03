@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button, ScrollView } from 'react-native';
 import { Dropdown } from "react-native-element-dropdown";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
+import { useLayoutEffect } from 'react';
+import { app, auth } from "../../../firebaseConfig";
+import { doc, getFirestore, updateDoc, collection, getDocs,query, orderBy, } from "firebase/firestore";
 
 export default function CarRegistrationScreen() {
 
     const navigation = useNavigation();
+    // hide bottom tab bar
+    useLayoutEffect(() => {
+        navigation.setOptions({
+          tabBarStyle: { display: 'none' },
+        });
+      }, [navigation]);
 
+    const db = getFirestore(app); // Make sure you have initialized your app
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [selectBrand, setSelectBrand] = useState(null);
     const [selectType, setSelectType] = useState(null);
@@ -32,16 +42,23 @@ export default function CarRegistrationScreen() {
     };
 
     return (
+        
         <View style={styles.container}>
+            
             <Text style={styles.text}>Please fill Required Information</Text>
-
-            <Text style={styles.text}>Location</Text>
+        <ScrollView>
+            <View className='mb-44'>
+                {/* location */}
+                <View className='mb-[-13px] border-b-[1px] border-t-[1px] border-violet-600 pb-2 pt-2'>
+            <Text style={styles.texts}>Location</Text>
             <DropdownComponent
                 data={dataAdd}
                 value={selectedAddress}
                 setValue={setSelectedAddress}
                 placeholder="Address"
-            />
+            /></View>
+            {/* Car Details */}
+            <View className='mb-[-13px] border-violet-600 pb-2 pt-2'>
             <Text style={styles.text}>Car Details</Text>
             <DropdownComponent
                 data={dataType}
@@ -74,7 +91,20 @@ export default function CarRegistrationScreen() {
                 setValue={setSelectSeats}
                 placeholder="Number of Seats"
             />
-             <View style={styles.bottomContainer} className='bg-slate-300  '>
+             <DropdownComponent
+                data={dataSeats}
+                value={selectSeats}
+                setValue={setSelectSeats}
+                placeholder="Number of Seats"
+            />
+             <DropdownComponent
+                data={dataSeats}
+                value={selectSeats}
+                setValue={setSelectSeats}
+                placeholder="Number of Seats"
+            /></View>
+            </View></ScrollView>
+             <View style={styles.bottomContainer} className='bg-slate-300 '>
              <TouchableOpacity onPress={clearAllSelections}>
                     <Text style={styles.clearAllText}>Clear All</Text>
                 </TouchableOpacity>
@@ -82,6 +112,7 @@ export default function CarRegistrationScreen() {
               <Text style={styles.ApplyButtonText}>Apply</Text>
             </TouchableOpacity>
             </View>
+            
         </View>
     );
 }
@@ -91,7 +122,7 @@ const DropdownComponent = ({ data, value, setValue, placeholder }) => {
     return (
         <View style={{ marginBottom: 20}}>
             {isFocused || value ? (
-                <Text style={styles.labelStyle}>{placeholder}</Text>
+                <Text style={styles.labelStyle}>{placeholder}*</Text>
             ) : <Text></Text>}
             <Dropdown
                 style={styles.dropdown}
@@ -120,12 +151,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent:"flex-start",
-        paddingTop: 2,
+        paddingTop:5,
     },
     text: {
-        fontWeight: "bold",
+        fontWeight: "500",
         fontSize: 16,
         margin: 20,
+        marginLeft:18,
+    },
+    texts: {
+        fontWeight: "500",
+        fontSize: 16,
+        marginBottom:2,
         marginLeft:18,
     },
     dropdownContainer: {

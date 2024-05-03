@@ -50,7 +50,7 @@ export default function SignUpForToRent() {
       checkPhoneNumberInUse(`+961${text}`);
     } else {
       setIsValidPhone(false);
-      setPhoneNumber("");
+      setPhoneNumber(text);
     }
   };
   useEffect(() => {
