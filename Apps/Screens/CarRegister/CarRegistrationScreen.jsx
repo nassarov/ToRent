@@ -163,7 +163,7 @@ export default function CarRegistrationScreen() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.ApplyButton}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.push('PickImagesScreen')}
         >
           <Text style={styles.ApplyButtonText}>Apply</Text>
         </TouchableOpacity>
