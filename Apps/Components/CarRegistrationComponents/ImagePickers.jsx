@@ -23,16 +23,24 @@ export default function ImagePickers({ image, setImage, whichImage }) {
   };
   return (
     <View>
-      <Text>{whichImage}</Text>
+      <Text className="text-violet-600 text-lg">{whichImage}</Text>
 
       <TouchableOpacity
-        style={{
-          borderWidth: 2,
-          borderColor: "#7F5AF0",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 10,
-        }}
+        style={[
+          {
+            borderWidth: 2,
+            borderColor: "#7F5AF0",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 10,
+          },
+          image
+            ? ""
+            : {
+                width: widthPercentageToDP(90),
+                height: heightPercentageToDP(25),
+              },
+        ]}
         onPress={() => {
           pickImage();
         }}
