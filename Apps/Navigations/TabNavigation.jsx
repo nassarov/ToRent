@@ -7,6 +7,7 @@ import HomeScreen from "../Screens/HomeScreen/HomeScreen";
 import CarRentingScreen from '../Screens/HomeScreen/CarRentingScreen';
 import CarRegistrationScreen from "../Screens/CarRegister/CarRegistrationScreen";
 import CustomHeader2 from "../Components/CustomHeader2";
+import AddPost from "../Screens/CarRegister/AddPost";
 
 const Tab = createBottomTabNavigator();
 
@@ -88,7 +89,8 @@ const TabNavigation = ({ route }) => {
       {userRole === '1' && (
         <Tab.Screen
           name="Post"
-          component={CarRegistrationScreen}
+          //component={CarRegistrationScreen}
+          component={AddPost}
           options={{
             headerShown: true,
             header: () => <CustomHeader2 text={'Add Your Car'} />,
