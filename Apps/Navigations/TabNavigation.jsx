@@ -61,6 +61,7 @@ const TabNavigation = ({ route }) => {
       <Tab.Screen
         name="Home"
         component={HomeScreen}
+        initialParams={{userRole:userRole}}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -75,6 +76,7 @@ const TabNavigation = ({ route }) => {
       <Tab.Screen
         name="Car"
         component={CarRentingScreen}
+        initialParams={{userRole:userRole}}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -91,6 +93,7 @@ const TabNavigation = ({ route }) => {
           name="Post"
           // component={CarRegistrationScreen}
           component={AddPost}
+          initialParams={{userRole:userRole}}
           options={{
             headerShown: true,
             header: () => <CustomHeader2 text={'Add Your Car'} />,
@@ -105,6 +108,7 @@ const TabNavigation = ({ route }) => {
       <Tab.Screen
         name="Notification"
         component={HomeScreen}
+        initialParams={{userRole:userRole}}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -119,6 +123,7 @@ const TabNavigation = ({ route }) => {
       <Tab.Screen
         name="Profile"
         component={CarRentingScreen}
+        initialParams={{userRole:userRole}}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (

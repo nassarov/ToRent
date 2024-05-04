@@ -35,6 +35,7 @@ export default function HomeScreenNavigation({route}) {
       <Stack.Screen 
       name="PickImagesScreen"
       component={PickImagesScreen}
+      initialParams={{userRole:userRole}}
       />
     </Stack.Navigator>
   );

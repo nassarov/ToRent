@@ -7,10 +7,8 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons/";
 
-export default function CarRentingDetails({ startDate, endDate }) {
+export default function CarRentingDetails({ startDate, endDate, onStartDateChange, onEndDateChange }) {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
-  const [selectedstartDateEndDate, setSelectedEndDate] = useState("");
-  const [selectedStartDate, setSelectedStartDate] = useState("");
 
   const minDate = new Date(); // Today
   const maxDate = new Date(2025, 6, 3);
@@ -21,39 +19,30 @@ export default function CarRentingDetails({ startDate, endDate }) {
 
   const onDateChange = (date, type) => {
     if (type === "END_DATE") {
-      setSelectedEndDate(date);
+      onEndDateChange(date); // Update via parent's handler
     } else {
-      setSelectedStartDate(date);
-      setSelectedEndDate(null);
+      onStartDateChange(date); // Update via parent's handler
     }
   };
 
-  formatedStartDate = startDate
-    ? startDate.getFullYear() +
-      "/" +
-      startDate.getMonth() +
-      "/" +
-      startDate.getDate()
-    : "";
-  formatedEndDate = endDate
-    ? endDate.getFullYear() +
-      "/" +
-      (endDate.getMonth() + 1) +
-      "/" +
-      endDate.getDate()
-    : "";
+  const calculateDaysDifference = (start, end) => {
+    if (!start || !end) return 0;
+    return Math.round((end - start) / (1000 * 60 * 60 * 24));
+  };
+
+  const daysDifference = calculateDaysDifference(startDate, endDate);
+  const formatedStartDate = startDate ? `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getFullYear()}` : "";
+  const formatedEndDate = endDate ? `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getFullYear()}` : "";
 
   const handleApply = () => {
-    // Handle applying selected dates
-    // For example, you can set the selected dates to the state of the parent component
-    // or perform any other action you need
-    // Here, I'm just closing the modal
+    onStartDateChange(startDate);
+    onEndDateChange(endDate);
     setIsCalendarVisible(false);
   };
 
   const handleClear = () => {
-    setSelectedStartDate(null);
-    setSelectedEndDate(null);
+    onStartDateChange(minDate);
+    onEndDateChange(minDate);
   };
 
   return (
@@ -77,10 +66,12 @@ export default function CarRentingDetails({ startDate, endDate }) {
         </View>
       </View>
       <View className="p-2">
+        {/* Price */}
         <View className="flex-row justify-between border-b-[1px] border-white mb-2">
           <Text className="text-white">Price</Text>
           <Text className="text-white">22$/day</Text>
         </View>
+        {/* Total time */}
         <View className="flex-row justify-between border-b-[1px] border-white mb-2">
           <Text className="text-white">Total time</Text>
           <Text className="text-white">
@@ -90,7 +81,7 @@ export default function CarRentingDetails({ startDate, endDate }) {
           </Text>
         </View>
         <View className="flex-row items-center justify-between">
-          <View >
+          <View> 
             <Text className="text-xl font-bold text-white">
               Total Price: {formatedStartDate&&formatedEndDate?daysDifference * 22:"0"}$
             </Text>
@@ -116,24 +107,28 @@ export default function CarRentingDetails({ startDate, endDate }) {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <View style={{ width: "100%", height: heightPercentageToDP(46), backgroundColor: '#FFFFFF', borderRadius: 10 }}>
             <Text className='text-lg font-bold text-center'>Calendar</Text>
+            
             {/* CalendarPicker component */}
-            <View
-        className="border-2 border-violet-600 rounded-lg p-2 m-1 "
-        style={{ height: heightPercentageToDP(37) }}
-      >
+            <View className="border-2 border-violet-600 rounded-lg p-2 m-1 "
+        style={{ height:heightPercentageToDP(37)}}>
+        
+           
         <CalendarPicker
           startFromMonday={true}
           allowRangeSelection={true}
           minDate={minDate}
           maxDate={maxDate}
-          todayBackgroundColor="#f2e6ff"
+          todayBackgroundColor="gray"
+          todayTextStyle='#7300e6'
           selectedDayColor="#7300e6"
+          disabledDates={[minDate]}
+          selectedDisabledDatesTextStyle="7300e6"
           selectedDayTextColor="#FFFFFF"
           onDateChange={onDateChange}
           dayLabelsWrapper={{
-            borderTopWidth: 2,
-            borderBottomWidth: 2,
-            borderColor: "#7F5AF0",
+          borderTopWidth: 2,
+          borderBottomWidth: 2,
+          borderColor: "#7F5AF0",
           }}
           nextComponent={
             <View style={{ justifyContent: "center", alignItems: "center" }}>

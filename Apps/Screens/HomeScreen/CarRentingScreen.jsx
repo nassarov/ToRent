@@ -1,5 +1,5 @@
 import { View, Text, Image, Dimensions } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   ScrollView,
@@ -24,14 +24,24 @@ import DetailsGrid from "../../Components/HomeComponents/DetailsGrid";
 import CarRentingDetails from "../../Components/CarRegistrationComponents/CarRentingDetails";
 
 export default function CarRentingScreen({route}) {
- const { userRole } = route.params;
-  const [selectedEndDate, setSelectedEndDate] = useState("");
+  const { userRole } = route.params;
   const [selectedStartDate, setSelectedStartDate] = useState("");
-
+  const [selectedEndDate, setSelectedEndDate] = useState("");
   const minDate = new Date(); // Today
   const maxDate = new Date(2025, 6, 3);
-  const startDate = selectedStartDate ? new Date(selectedStartDate) : "";
-  const endDate = selectedEndDate ? new Date(selectedEndDate) : "";
+
+    // Handlers for date change
+    const handleStartDateChange = (date) => {
+      setSelectedStartDate(date ? date.toString() : "");
+    };
+  
+    const handleEndDateChange = (date) => {
+      setSelectedEndDate(date ? date.toString() : "");
+    };
+    useEffect(() => {
+      setSelectedStartDate(minDate);
+      setSelectedEndDate(minDate);
+    }, []);
 
   const images = [
     {
@@ -101,14 +111,7 @@ export default function CarRentingScreen({route}) {
     },
   ];
 
-  const onDateChange = (date, type) => {
-    if (type === "END_DATE") {
-      setSelectedEndDate(date);
-    } else {
-      setSelectedStartDate(date);
-      setSelectedEndDate(null);
-    }
-  };
+  
   return (
     <View className='flex-1'>
     <ScrollView className='pb-4 mb-4'>
@@ -156,7 +159,11 @@ export default function CarRentingScreen({route}) {
       </Text>
       
       <View>
-       <CarRentingDetails startDate={startDate} endDate={endDate}/>
+       <CarRentingDetails  
+        startDate={new Date(selectedStartDate)}
+        endDate={new Date(selectedEndDate)}
+        onStartDateChange={handleStartDateChange}
+        onEndDateChange={handleEndDateChange}/>
       </View>
       
 
