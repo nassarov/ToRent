@@ -8,9 +8,21 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import SearchBarCar from "../../Components/HomeComponents/SearchBar";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome6 } from '@expo/vector-icons';
+import { getAuth, signOut } from 'firebase/auth';
 
 
 export default function HomeScreen() {
+
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigation.replace('Registration');
+    } catch (error) {
+      console.error('Failed to sign out:', error);
+    }
+  };
 
   const navigation = useNavigation();
   const images = [
@@ -134,6 +146,7 @@ export default function HomeScreen() {
       <View className="flex-row mb-2 ">
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
         <Text className="text-xl"> Your Favorite Car</Text>
+        <TouchableOpacity onPress={handleLogout}><Text>Logout</Text></TouchableOpacity>
       </View>
       
       <View className='flex-row justify-between px-1 items-center'>

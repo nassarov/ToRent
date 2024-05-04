@@ -25,13 +25,11 @@ export default function HomeScreenNavigation({route}) {
         component={TabNavigation}
         initialParams={{userRole:userRole}}
         options={{ headerShown: false }}
-        
       />
       <Stack.Screen
         name="filter"
         component={Filter}
         options={{ header:() => <CustomHeader2/>}}
-     
       />
       <Stack.Screen 
       name="PickImagesScreen"

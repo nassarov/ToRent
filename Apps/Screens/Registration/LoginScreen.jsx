@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getFirestore, getDoc } from "firebase/firestore";
+import { app } from '../../../firebaseConfig';
 
 export default function LoginScreen() {
   StatusBar.setBarStyle('dark-content', true);
@@ -15,7 +16,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [isCheckingCredentials, setIsCheckingCredentials] = useState(false); // State to track if credentials are being checked
   const navigation = useNavigation();
-  const db = getFirestore();
+  const db = getFirestore(app);
 
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {

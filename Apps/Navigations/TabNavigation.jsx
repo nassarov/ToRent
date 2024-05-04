@@ -89,7 +89,7 @@ const TabNavigation = ({ route }) => {
       {userRole === '1' && (
         <Tab.Screen
           name="Post"
-          //component={CarRegistrationScreen}
+          // component={CarRegistrationScreen}
           component={AddPost}
           options={{
             headerShown: true,

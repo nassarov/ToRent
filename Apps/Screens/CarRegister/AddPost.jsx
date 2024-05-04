@@ -112,7 +112,7 @@ export default function AddPost() {
              <TouchableOpacity onPress={clearAllSelections}>
                     <Text style={styles.clearAllText}>Clear All</Text>
                 </TouchableOpacity>
-            <TouchableOpacity style={styles.ApplyButton} onPress={()=>navigation.goBack()}>
+            <TouchableOpacity style={styles.ApplyButton} onPress={() => navigation.push("PickImagesScreen")}>
               <Text style={styles.ApplyButtonText}>Apply</Text>
             </TouchableOpacity>
             </View>
@@ -136,19 +136,18 @@ export default function AddPost() {
                 value={value}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
+                search={true}
+                searchPlaceholder='Search'
                 onChange={(item) => {
                     setValue(item.value);
                     setIsFocused(false);
                 }}
-                
+
                 containerStyle={styles.dropdownContainer}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 maxHeight={300}
-
-                
-            />
-
+            />  
         </View>
     );
 };
