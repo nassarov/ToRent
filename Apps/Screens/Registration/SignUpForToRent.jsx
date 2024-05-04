@@ -37,6 +37,7 @@ export default function SignUpForToRent() {
   const [phoneInUse, setPhoneInUse] = useState(false);
   const [loading, setLoading] = useState(false); // New state for loading indicator
   const [isCheckingCredentials, setIsCheckingCredentials] = useState(false); // State to track if credentials are being checked
+  const[userRole,setUserRole]=useState('');
 
   // Function to handle real-time validation of the phone number
   const validatePhoneNumber = (text) => {
@@ -55,7 +56,13 @@ export default function SignUpForToRent() {
   };
   useEffect(() => {
     validatePhoneNumber("");
+     setUserRole('guest');
   }, []);
+
+  const continueAsGuest =()=>{
+    setUserRole('guest'),
+    navigation.navigate("homescreennav", { userRole });
+  }
 
   const checkPhoneNumberInUse = async (fullPhoneNumber) => {
     setLoading(true); // Set loading to true while checking
@@ -186,7 +193,7 @@ export default function SignUpForToRent() {
 
             <TouchableOpacity
               className="bg-[#7F5AF0] "
-              onPress={() => navigation.navigate("Home")}
+              onPress={continueAsGuest}
               style={{
                 height: wp(18),
                 width: wp(70),

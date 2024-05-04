@@ -21,9 +21,10 @@ import {
 import CalendarPicker from "react-native-calendar-picker";
 import PictureSwitching from "../../Components/HomeComponents/PictureSwitching";
 import DetailsGrid from "../../Components/HomeComponents/DetailsGrid";
-import CarRentingDetails from "../../Components/HomeComponents/CarRentingDetails";
-export default function CarRentingScreen() {
- 
+import CarRentingDetails from "../../Components/CarRegistrationComponents/CarRentingDetails";
+
+export default function CarRentingScreen({route}) {
+ const { userRole } = route.params;
   const [selectedEndDate, setSelectedEndDate] = useState("");
   const [selectedStartDate, setSelectedStartDate] = useState("");
 
@@ -109,7 +110,8 @@ export default function CarRentingScreen() {
     }
   };
   return (
-    <ScrollView>
+    <View className='flex-1'>
+    <ScrollView className='pb-4 mb-4'>
       <CustomHeader2 text={"Car Details"} />
       <PictureSwitching images={images} />
       {/* Grid */}
@@ -126,8 +128,7 @@ export default function CarRentingScreen() {
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut
           aliquip ex ea commodo consequat. Duis aute irure dolor in
           reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum
+          pariatur.
         </Text>
       </View>
       {/* Address  */}
@@ -150,14 +151,16 @@ export default function CarRentingScreen() {
         </Text>
       </View>
       {/* Calendar */}
-      <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
+      <Text className="ml-2 font-bold text-lg mb-[2px] mt-2">
         Car Pick-up and Drop-off Dates
       </Text>
       
       <View>
        <CarRentingDetails startDate={startDate} endDate={endDate}/>
       </View>
-    
+      
+
     </ScrollView>
+    </View>
   );
 }

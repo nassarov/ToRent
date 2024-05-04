@@ -19,6 +19,7 @@ export default function HomeScreenNavigation({route}) {
         name="carrenting"
         component={CarRentingScreen}
         options={{ headerShown: false }}
+        initialParams={{userRole:userRole}}
       />
       <Stack.Screen
         name="homescreen"

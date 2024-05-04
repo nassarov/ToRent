@@ -9,7 +9,7 @@ import {
 
 export default function CarRentingDetails({ startDate, endDate }) {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
-  const [selectedEndDate, setSelectedEndDate] = useState("");
+  const [selectedstartDateEndDate, setSelectedEndDate] = useState("");
   const [selectedStartDate, setSelectedStartDate] = useState("");
 
   const minDate = new Date(); // Today
@@ -95,14 +95,15 @@ export default function CarRentingDetails({ startDate, endDate }) {
               Total Price: {formatedStartDate&&formatedEndDate?daysDifference * 22:"0"}$
             </Text>
           </View>
-          <View className="items-end mb-4">
+          {/* Done */}
+          {/* <View className="items-end mb-4">
             <TouchableOpacity
               className="bg-violet-600 mr-5 p-4 rounded-xl "
               style={{ width: widthPercentageToDP(30) }}
             >
-              <Text className="text-white text-center font-bold">Rent</Text>
+              <Text className="text-white text-center font-bold">Done</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </View>
        {/* Modal for displaying the calendar */}
