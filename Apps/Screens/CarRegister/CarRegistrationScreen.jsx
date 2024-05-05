@@ -255,7 +255,7 @@ useLayoutEffect(() => {
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : null} keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}>
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView className='mb-24'>
           <View style={styles.carListContainer}>
             <FlatList
               horizontal
@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    marginTop: 50,
+    
   },
   carListContainer: {
     height: 100,
