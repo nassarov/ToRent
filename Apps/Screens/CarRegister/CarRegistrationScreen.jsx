@@ -77,13 +77,13 @@ const [colorSearchInput, setColorSearchInput] = useState('');
 
 const clearAllSelections = () => {
   setSelectedAddress(null);
-  setSelectBrand(null);
-  setSelectType(null);
-  setSelectPrice(null);
-  setSelectColor(null);
-  setSelectModel(null);
-  setSelectFuel(null);
-  setSelectGear(null);
+  setSelectedBrand(null);
+  setSelectedTypes(null);
+  setSelectedPrice(null);
+  setSelectedColor(null);
+  setSelectedModel(null);
+  setSelectedFuel(null);
+  setSelectedGear(null);
 };
 const navigation = useNavigation();
 // hide bottom tab bar
@@ -240,7 +240,6 @@ useLayoutEffect(() => {
     Keyboard.dismiss();
   };
 
-  
 
   const OptionItem = ({ item, onPress, isSelected }) => (
     <TouchableOpacity onPress={() => onPress(item)} style={styles.optionContainer}>
@@ -530,17 +529,16 @@ useLayoutEffect(() => {
             />
           </View>
         </ScrollView>
-        
-  <View style={styles.bottomContainer} className='bg-slate-300 '>
-  <TouchableOpacity onPress={clearAllSelections}>
-         <Text style={styles.clearAllText}>Clear All</Text>
-     </TouchableOpacity>
- <TouchableOpacity style={styles.ApplyButton} onPress={()=>navigation.goBack()}>
-   <Text style={styles.ApplyButtonText}>Apply</Text>
- </TouchableOpacity>
- </View>
-
+    
       </View>
+      <View style={styles.bottomContainer} className='bg-slate-300 '>
+             <TouchableOpacity onPress={clearAllSelections}>
+                    <Text style={styles.clearAllText}>Clear All</Text>
+                </TouchableOpacity>
+            <TouchableOpacity style={styles.ApplyButton} onPress={() => navigation.push("PickImagesScreen")}>
+              <Text style={styles.ApplyButtonText}>Apply</Text>
+            </TouchableOpacity>
+            </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
