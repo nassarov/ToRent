@@ -1,25 +1,12 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  StatusBar,
-  Alert,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, Text, StyleSheet,TextInput, TouchableOpacity, Platform, StatusBar, Alert, KeyboardAvoidingView,} from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Formik } from "formik";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import {
-  heightPercentageToDP,
-  widthPercentageToDP,
-} from "react-native-responsive-screen";
+import { heightPercentageToDP,  widthPercentageToDP,} from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword ,AuthError} from "firebase/auth";
 import { auth, app } from "../../../firebaseConfig";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { ScrollView } from "react-native-gesture-handler";
@@ -54,42 +41,41 @@ export default function SignUpScreen({ route }) {
   ];
 
   // Function to handle signup
-  const handelSignUp = async (values) => {
-    setIsSigningUp(true); // Set isSigningUp to true when signing up
-    const auth = getAuth();
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+const handelSignUp = async (values) => {
+  setIsSigningUp(true); // Set isSigningUp to true when signing up
+  const auth = getAuth();
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth,  email, password);
+    const user = userCredential.user;
+    // Firestore: Add additional user data
+    const db = getFirestore(app);
+    const userRef = doc(db, "users", user.uid);
+    setUserid(user.uid);
+    await setDoc(userRef, {
+      name: values.name,
+      email: email,
+      phoneNumber: values.phoneNumber,
+      role: values.role,
+    });
 
-      // Firestore: Add additional user data
-      const db = getFirestore(app);
-      const userRef = doc(db, "users", user.uid);
-      setUserid(user.uid);
-      await setDoc(userRef, {
-        name: values.name,
-        email: email,
-        phoneNumber: values.phoneNumber,
-        role: values.role,
-      });
-
-      console.log(userCredential);
-      if (values.role === "1") {
-        navigation.push("address");
-      } else {
-        Alert.alert("Success", "You have successfully signed up!");
-        navigation.push("login");
-      }
-    } catch (error) {
-      console.log("Error in signup:", error.message);
-      // Handle errors here
-    } finally {
-      setIsSigningUp(false); // Reset isSigningUp to false after signup process finishes
+    console.log(userCredential);
+    if (values.role === "1") {
+      navigation.replace("address");
+    } else {
+      Alert.alert("Success", "You have successfully signed up!");
+      navigation.replace("login");
     }
-  };
+  } catch (error) {
+    console.log("Error in signup:", error.message);
+    if ( error.code === "auth/email-already-in-use") {
+      Alert.alert("Alert", "The email address is already in use.");
+    } else if(error.code === "auth/weak-password") {
+      Alert.alert("Alert", "Password should be at least 6 characters"); // Display other Firebase error messages as an alert
+    }
+  } finally {
+    setIsSigningUp(false); // Reset isSigningUp to false after signup process finishes
+  }
+};
 
   return (
     <KeyboardAvoidingView>

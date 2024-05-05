@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Text, TouchableOpacity, ScrollView, Alert,ActivityIndicator  } from "react-native";
+import { View, StyleSheet, TextInput, Text, TouchableOpacity, ScrollView, Alert,ActivityIndicator,BackHandler  } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import { Formik } from "formik";
@@ -39,7 +39,35 @@ export default function AddressScreen() {
     if (!lebaneseCities) {
       fetchLebaneseCities();
     }
-  }, [lebaneseCities]);
+    const backAction = () => {
+      Alert.alert(
+        "You will not be able to have addresses!",
+        "Are you sure you want to leave this screen?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel",
+          },
+          {
+            text: "Yes",
+            onPress: () => {
+              // Here, you can navigate away from the screen or take any other action
+              navigation.goBack(); // This example goes back, but you can navigate to another screen or perform another action
+            },
+          },
+        ]
+      );
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  }, 
+  [lebaneseCities,navigation]);
 
   const handleAddValue = (values, resetForm) => {
     setValuesList([...valuesList, { city: values.City, googleMapLink: values.GoogleMapLink }]);
