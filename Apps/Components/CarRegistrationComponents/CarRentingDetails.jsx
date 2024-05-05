@@ -9,6 +9,8 @@ import {
 
 export default function CarRentingDetails({ startDate, endDate, onStartDateChange, onEndDateChange }) {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
+  const [rangeColor,setRangeColor]=useState('white');
+  const [rangeColorText,setRangeColorText]=useState('white');
 
   const minDate = new Date(); // Today
   const maxDate = new Date(2025, 6, 3);
@@ -43,6 +45,7 @@ export default function CarRentingDetails({ startDate, endDate, onStartDateChang
   const handleClear = () => {
     onStartDateChange(minDate);
     onEndDateChange(minDate);
+
   };
 
   return (
@@ -86,15 +89,16 @@ export default function CarRentingDetails({ startDate, endDate, onStartDateChang
               Total Price: {formatedStartDate&&formatedEndDate?daysDifference * 22:"0"}$
             </Text>
           </View>
-          {/* Done */}
-          {/* <View className="items-end mb-4">
+          {/* Clear */}
+          <View className="items-end ">
             <TouchableOpacity
-              className="bg-violet-600 mr-5 p-4 rounded-xl "
-              style={{ width: widthPercentageToDP(30) }}
+              className="bg-violet-600 mr-1 text-center items-center justify-center rounded-xl"
+              style={{ width: widthPercentageToDP(20) , height:widthPercentageToDP(10)}}
+              onPress={handleClear}
             >
-              <Text className="text-white text-center font-bold">Done</Text>
+              <Text className="text-white text-center font-bold">Clear</Text>
             </TouchableOpacity>
-          </View> */}
+          </View>
         </View>
       </View>
        {/* Modal for displaying the calendar */}
@@ -121,6 +125,7 @@ export default function CarRentingDetails({ startDate, endDate, onStartDateChang
           todayBackgroundColor="gray"
           todayTextStyle='#7300e6'
           selectedDayColor="#7300e6"
+          selectedRangeStyle={{ backgroundColor: '#7F5AF0' }} // Style for dates between start and end dates
           disabledDates={[minDate]}
           selectedDisabledDatesTextStyle="7300e6"
           selectedDayTextColor="#FFFFFF"
@@ -160,10 +165,7 @@ export default function CarRentingDetails({ startDate, endDate, onStartDateChang
        <TouchableOpacity onPress={handleApply} style={{ position: 'absolute', bottom: 20, right: 20 }}>
           <Text style={{ color: 'blue' }}>Apply</Text>
         </TouchableOpacity>
-       {/* Button to clear selected dates */}
-       <TouchableOpacity onPress={handleClear} style={{ position: 'absolute', bottom: 20, left: 20 }}>
-          <Text style={{ color: 'blue' }}>Clear</Text>
-        </TouchableOpacity>
+       
         </View>
         </View>
       </Modal>

@@ -1,23 +1,9 @@
 import { View, Text, Image, Dimensions } from "react-native";
-import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
-import {
-  heightPercentageToDP,
-  widthPercentageToDP,
-} from "react-native-responsive-screen";
+import React, { useEffect, useRef, useState } from "react";
+import { FlatList,ScrollView,  TouchableOpacity,} from "react-native-gesture-handler";   
+import { heightPercentageToDP,  widthPercentageToDP,} from "react-native-responsive-screen"; 
 import CustomHeader2 from "../../Components/CustomHeader2";
-import {
-  MaterialCommunityIcons,
-  Entypo,
-  FontAwesome5,
-  FontAwesome,
-  Ionicons,
-  FontAwesome6,
-} from "@expo/vector-icons/";
+import { MaterialCommunityIcons,Entypo, FontAwesome5, FontAwesome,Ionicons,FontAwesome6,} from "@expo/vector-icons/";  
 import CalendarPicker from "react-native-calendar-picker";
 import PictureSwitching from "../../Components/HomeComponents/PictureSwitching";
 import DetailsGrid from "../../Components/HomeComponents/DetailsGrid";
@@ -29,7 +15,23 @@ export default function CarRentingScreen({route}) {
   const [selectedEndDate, setSelectedEndDate] = useState("");
   const minDate = new Date(); // Today
   const maxDate = new Date(2025, 6, 3);
+  const [buttonVisible, setButtonVisible] = useState(true);
+  const scrollViewRef = useRef(null);
 
+   // Function to handle scroll event
+   const handleScroll = (event) => {
+    const { y } = event.nativeEvent.contentOffset;
+    if (y > 350) {
+      setButtonVisible(false);
+    } else {
+      setButtonVisible(true);
+    }
+  };
+   // Function to scroll to the bottom
+   const scrollToBottom = () => {
+    scrollViewRef.current.scrollToEnd({ animated: true, duration: 2000 });
+  };
+  
     // Handlers for date change
     const handleStartDateChange = (date) => {
       setSelectedStartDate(date ? date.toString() : "");
@@ -110,11 +112,10 @@ export default function CarRentingScreen({route}) {
       icon: <MaterialCommunityIcons name="fuel" size={24} color="#7F5AF0" />,
     },
   ];
-
   
   return (
     <View className='flex-1'>
-    <ScrollView className='pb-4 mb-4'>
+    <ScrollView className='pb-4'         ref={scrollViewRef} onScroll={handleScroll} scrollEventThrottle={16}>
       <CustomHeader2 text={"Car Details"} />
       <PictureSwitching images={images} />
       {/* Grid */}
@@ -165,9 +166,44 @@ export default function CarRentingScreen({route}) {
         onStartDateChange={handleStartDateChange}
         onEndDateChange={handleEndDateChange}/>
       </View>
-      
-
+       {/* TouchableOpacity fixed at center bottom */}
+    <View style={{
+      position: 'relative',
+     
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 20, // Adjust as needed
+    }}>
+    
+      <TouchableOpacity 
+        onPress={() => {/* Your onPress function */}}
+        style={{
+          backgroundColor: 'blue',
+          padding: 10,
+          borderRadius: 10,
+        }}
+      >
+        {/* Button content */}
+        <Text style={{ color: 'white' }}>Your Button</Text>
+      </TouchableOpacity>
+    </View>
     </ScrollView>
+    {buttonVisible && (
+        <TouchableOpacity
+          onPress={scrollToBottom}
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            right: 20,
+            backgroundColor: 'blue',
+            borderRadius: 30,
+            padding: 15,
+            zIndex: 999, // Ensure it's above the ScrollView content
+          }}
+        >
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Your Button</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
