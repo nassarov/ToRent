@@ -102,7 +102,7 @@ const TabNavigation = ({ route }) => {
         <Tab.Screen
           name="Post"
           // component={CarRegistrationScreen}
-          component={AddPost}
+          component={CarRegistrationScreen}
           options={{
             headerShown: true,
             header: () => <CustomHeader2 text={"Add Your Car"} />,
