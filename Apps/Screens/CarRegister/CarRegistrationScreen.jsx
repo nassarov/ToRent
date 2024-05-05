@@ -1,281 +1,637 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Button,
-  ScrollView,
-} from "react-native";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Modal, FlatList, StyleSheet, Dimensions, Image, Alert, TextInput, Keyboard, TouchableWithoutFeedback, ScrollView, KeyboardAvoidingView , Platform } from 'react-native';
+import bmw from '../../../assets/carslogo/BMW.jpg';
+import mercedes from '../../../assets/carslogo/Mercedes.jpg'; 
+import nissan from '../../../assets/carslogo/Nissan.jpg';
+import toyota from '../../../assets/carslogo/Toyota.png'; 
 import { Dropdown } from "react-native-element-dropdown";
-import {
-  heightPercentageToDP,
-  widthPercentageToDP,
-} from "react-native-responsive-screen";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
-import { useLayoutEffect } from "react";
-import { app } from "../../../firebaseConfig";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-} from "firebase/firestore";
-import { Picker } from "@react-native-picker/picker";
-import Icon from 'react-native-vector-icons/Ionicons'; // Import Icon from react-native-vector-icons
+import { useLayoutEffect } from 'react';
+import { app, auth } from "../../../firebaseConfig";
+import { doc, getFirestore, updateDoc, collection, getDocs,query, orderBy, } from "firebase/firestore";  
 
-export default function CarRegistrationScreen() {
-  const navigation = useNavigation();
-  const [colors, setColors] = useState([]);
-  const [types, setTypes] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [models, setModels] = useState([]);
-  const [gears, setGears] = useState([]);
-  const [fuel, setFuel] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(""); // State for selected year
-  const [isPickerVisible, setIsPickerVisible] = useState(false); // State to toggle picker visibility
+const { height } = Dimensions.get('window');
 
-  // hide bottom tab bar
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      tabBarStyle: { display: "none" },
-    });
-  }, [navigation]);
+const carBrands = [
+  { id: '1', name: 'BMW', image: bmw, models: ['X1', 'X3', 'X5'], types: ['SUV', 'Sedan', 'Hatchback'] },
+  { id: '2', name: 'Mercedes', image: mercedes, models: ['A-Class', 'C-Class', 'E-Class'], types: ['Sedan', 'Coupe', 'Convertible'] },
+  { id: '3', name: 'Nissan', image: nissan, models: ['Altima', 'Maxima', 'Sentra'], types: ['Sedan', 'SUV', 'Coupe'] },
+  { id: '4', name: 'Toyota', image: toyota, models: ['Camry', 'Corolla', 'Rav4'], types: ['Sedan', 'SUV', 'Hybrid'] },
+];
+const colorOptions = [
+  { id: '1', name: 'Red' },
+  { id: '2', name: 'Blue' },
+  { id: '3', name: 'Green' },
+  { id: '4', name: 'Yellow' },
+];
 
-  const db = getFirestore(app); // Make sure you have initialized your app
+const gearTypeOptions = [
+  { id: '1', name: 'Automatic' },
+  { id: '2', name: 'Manual' },
+];
+
+const fuelTypeOptions = [
+  { id: '1', name: 'Gasoline' },
+  { id: '2', name: 'Diesel' },
+  { id: '3', name: 'Electric' },
+];
+const addressOptions = [
+  { id: '1', street: '123 Main St', city: 'New York', state: 'NY', postalCode: '10001' },
+  { id: '2', street: '456 Elm St', city: 'Los Angeles', state: 'CA', postalCode: '90001' },
+  { id: '3', street: '789 Oak St', city: 'Chicago', state: 'IL', postalCode: '60601' },
+];
+
+
+const yearOptions = Array.from({ length: 50 }, (_, index) => `${new Date().getFullYear() - index}`);
+
+export default function CarRegistrationScreen  ()  {
+  const [brandModalVisible, setBrandModalVisible] = useState(false);
+  const [modelModalVisible, setModelModalVisible] = useState(false);
+  const [typeModalVisible, setTypeModalVisible] = useState(false);
+  const [colorModalVisible, setColorModalVisible] = useState(false);
+  const [gearTypeModalVisible, setGearTypeModalVisible] = useState(false);
+  const [fuelTypeModalVisible, setFuelTypeModalVisible] = useState(false);
+  const [yearModalVisible, setYearModalVisible] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedGearType, setSelectedGearType] = useState(null);
+  const [selectedFuelType, setSelectedFuelType] = useState(null);
+  const [selectedYear, setSelectedYear] = useState('');
+  const [carseat , setCarseat]= useState('');
+  const [MinDays, setMinDay] = useState('');
+  const [MaxDays, setMaxDay] = useState('');
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [selectBrand, setSelectBrand] = useState(null);
-  const [selectType, setSelectType] = useState(null);
-  const [selectPrice, setSelectPrice] = useState(null);
-  const [selectColor, setSelectColor] = useState(null);
-  const [selectModel, setSelectModel] = useState(null);
-  const [selectFuel, setSelectFuel] = useState(null);
-  const [selectGear, setSelectGear] = useState(null);
+  const [addressModalVisible, setAddressModalVisible] = useState(false);
+  const [filteredBrands, setFilteredBrands] = useState(carBrands);
+  const [searchInput, setSearchInput] = useState('');
+  const [filteredTypes, setFilteredTypes] = useState([]); 
+const [typeSearchInput, setTypeSearchInput] = useState(''); 
+const [filteredModels, setFilteredModels] = useState([]);
+const [modelSearchInput, setModelSearchInput] = useState('');
+const [filteredColors, setFilteredColors] = useState([]);
+const [colorSearchInput, setColorSearchInput] = useState('');
 
-  const dataAdd = [
-    { label: "Beirut", value: "Beirut" },
-    { label: "Tripoli", value: "Tripoli" },
-  ];
 
-  const dataPrice = [
-    { label: "$10,000 - $20,000", value: "10-20" },
-    { label: "$20,000 - $30,000", value: "20-30" },
-  ];
-
-  const clearAllSelections = () => {
-    setSelectedAddress(null);
-    setSelectBrand(null);
-    setSelectType(null);
-    setSelectPrice(null);
-    setSelectColor(null);
-    setSelectModel(null);
-    setSelectFuel(null);
-    setSelectGear(null);
-  };
-  useEffect(() => {
-    fetchColor();
-    fetchType();
-    fetchBrand();
-    fetchModels();
-    fetchGears();
-    fetchFuel();
-  }, []);
-
-  // Data of DropDown(COLORS)
-  const fetchColor = async () => {
-    setColors([]);
-    const querySnapshot = await getDocs(collection(db, "carColors"));
-    querySnapshot.forEach((doc) => {
-      setColors((colors) => [...colors, doc.data()]);
+const clearAllSelections = () => {
+  setSelectedAddress(null);
+  setSelectBrand(null);
+  setSelectType(null);
+  setSelectPrice(null);
+  setSelectColor(null);
+  setSelectModel(null);
+  setSelectFuel(null);
+  setSelectGear(null);
+};
+const navigation = useNavigation();
+// hide bottom tab bar
+useLayoutEffect(() => {
+    navigation.setOptions({
+      tabBarStyle: { display: 'none' },
     });
-  };
-  // Data of DropDown(TYPES)
-  const fetchType = async () => {
-    setTypes([]);
-    const querySnapshot = await getDocs(collection(db, "carTypes"));
-    querySnapshot.forEach((doc) => {
-      setTypes((types) => [...types, doc.data()]);
-    });
+  }, [navigation]); 
+  const db = getFirestore(app); 
+
+
+
+  const toggleBrandModal = () => {
+    setBrandModalVisible(!brandModalVisible);
+    setFilteredBrands(carBrands); 
   };
 
-  //// Data of DropDown(BRANDS)
-  const fetchBrand = async () => {
-    setBrands([]);
-    const querySnapshot = await getDocs(collection(db, "carBrands"));
-    querySnapshot.forEach((doc) => {
-      setBrands((brands) => [...brands, doc.data()]);
-    });
-  };
-  // Data of DropDown(Models)
-  const fetchModels = async () => {
-    setModels([]);
-    const querySnapshot = await getDocs(collection(db, "carModels"));
-    querySnapshot.forEach((doc) => {
-      setModels((models) => [...models, doc.data()]);
-    });
+  const toggleModelModal = () => {
+    if (selectedBrand) {
+      setModelModalVisible(!modelModalVisible);
+      setFilteredModels(selectedBrand.models); 
+    } else {
+      Alert.alert('Select Brand', 'Please select a Brand first');
+    }
   };
 
-  // Data of DropDown(GEAR)
-  const fetchGears = async () => {
-    setGears([]);
-    const querySnapshot = await getDocs(collection(db, "carGears"));
-    querySnapshot.forEach((doc) => {
-      setGears((gears) => [...gears, doc.data()]);
-    });
+  const toggleTypeModal = () => {
+    if (selectedModel) {
+      setTypeModalVisible(!typeModalVisible);
+      setFilteredTypes(selectedBrand.types); 
+    } else {
+      Alert.alert('Select Model', 'Please select a Model first');
+    }
   };
-  // Data of DropDown(Fuel)
-  const fetchFuel = async () => {
-    setFuel([]);
-    const querySnapshot = await getDocs(collection(db, "fuelTypes"));
-    querySnapshot.forEach((doc) => {
-      setFuel((fuel) => [...fuel, doc.data()]);
-    });
+  const toggleColorModal = () => {
+    setColorModalVisible(!colorModalVisible);
+    setFilteredColors(colorOptions); 
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Please fill Required Information</Text>
-      <ScrollView>
-        <View className="mb-44">
-          {/* location */}
-          <View className="">
-            <View style={styles.texts} className="flex-row items-baseline mr-5">
-              <Text className="text-[15px] font-bold">Location </Text>
-              <View style={styles.line} />
-            </View>
-            <DropdownComponent
-              data={dataAdd}
-              value={selectedAddress}
-              setValue={setSelectedAddress}
-              placeholder="Address"
-            />
-          </View>
-          {/* Car Details */}
-          <View className="">
-            <View style={styles.text} className="flex-row items-baseline">
-              <Text className="text-[15px] font-bold">Car Details </Text>
-              <View style={styles.line} />
-            </View>
-            <DropdownComponent
-              data={types}
-              value={selectType}
-              setValue={setSelectType}
-              placeholder="Type"
-            />
+  const toggleGearTypeModal = () => {
+    setGearTypeModalVisible(!gearTypeModalVisible);
+  };
 
-            <DropdownComponent
-              data={brands}
-              value={selectBrand}
-              setValue={setSelectBrand}
-              placeholder="Brand"
-            />
-            <DropdownComponent
-              data={dataPrice}
-              value={selectPrice}
-              setValue={setSelectPrice}
-              placeholder="Price Range"
-            />
-            <DropdownComponent
-              data={colors}
-              value={selectColor}
-              setValue={setSelectColor}
-              placeholder="Color"
-            />
-            <DropdownComponent
-              data={models}
-              value={selectModel}
-              setValue={setSelectModel}
-              placeholder="Models"
-            />
-            <DropdownComponent
-              data={gears}
-              value={selectGear}
-              setValue={setSelectGear}
-              placeholder="Gear Type"
-            />
-            {/* Text input for Year */}
-            <DropdownComponent
-              data={fuel}
-              value={selectFuel}
-              setValue={setSelectFuel}
-              placeholder="Fuel Type"
-            />
-            <View style={styles.yearInputContainer}>
-              <Text style={styles.labelStyle}>Year*</Text>
-              <TouchableOpacity
-                style={styles.yearInput}
-                onPress={() => setIsPickerVisible(!isPickerVisible)}
-              >
-                <Text>{selectedYear ? selectedYear : "Select Year"}</Text>
-                <Icon name="caret-down-outline" size={24} color="black" />
-              </TouchableOpacity>
-              {/* Picker for Year */}
-              {isPickerVisible && (
-                <Picker
-                  selectedValue={selectedYear}
-                  style={[styles.picker, { width: widthPercentageToDP("90%") - 36 }]}
-                  onValueChange={(itemValue, itemIndex) => setSelectedYear(itemValue)}
-                >
-                  {Array.from({ length: 100 }, (_, i) => (new Date().getFullYear() - i).toString()).map((year, index) => (
-                    <Picker.Item label={year} value={year} key={index} />
-                  ))}
-                </Picker>
-              )}
-            </View> 
-          </View>
-        </View>
-      </ScrollView>
-      <View style={styles.bottomContainer} className="bg-slate-300 ">
-        <TouchableOpacity onPress={clearAllSelections}>
-          <Text style={styles.clearAllText}>Clear All</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.ApplyButton}
-          onPress={() => navigation.push("PickImagesScreen")}
-        >
-          <Text style={styles.ApplyButtonText}>Apply</Text>
-        </TouchableOpacity>
+  const toggleFuelTypeModal = () => {
+    setFuelTypeModalVisible(!fuelTypeModalVisible);
+  };
+
+  const toggleYearModal = () => {
+    setYearModalVisible(!yearModalVisible);
+  };
+  const toggleAddressModal = () => {
+    setAddressModalVisible(!addressModalVisible);
+  };
+
+  const handleColorSearch = (text) => {
+    const filteredColors = colorOptions.filter((color) =>
+      color.name.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredColors(filteredColors);
+  };
+  
+  const handleTypeSearch = (text) => {
+    const filteredTypes = selectedBrand.types.filter((type) =>
+      type.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredTypes(filteredTypes);
+  };
+  const handleModelSearch = (text) => {
+    const filteredModels = selectedBrand.models.filter((model) =>
+      model.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredModels(filteredModels);
+  };
+  const handleAddressSelect = (address) => {
+    setSelectedAddress(address);
+    toggleAddressModal();
+  };
+  const handleBrandSearch = (text) => {
+    const filteredBrands = carBrands.filter((brand) =>
+      brand.name.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredBrands(filteredBrands);
+  };
+  const handleBrandSelect = (brand) => {
+    setSelectedBrand(brand);
+    setSelectedModel(null);
+    setSelectedType(null);
+  };
+
+  const handleModelSelect = (model) => {
+    if (!selectedBrand) {
+  
+      Alert.alert('Select Brand', 'Please select a brand first');
+    } else {
+      setSelectedModel(model);
+      setSelectedType(null); 
+      toggleModelModal();
+    }
+  };
+
+  const handleTypeSelect = (type) => {
+    if (!selectedBrand) {
+
+      Alert.alert('Select Brand', 'Please select a brand first');
+    } else {
+      setSelectedType(type);
+      toggleTypeModal();
+    }
+  };
+
+  const handleColorSelect = (color) => {
+    setSelectedColor(color);
+    toggleColorModal();
+  };
+
+  const handleGearTypeSelect = (gearType) => {
+    setSelectedGearType(gearType);
+    toggleGearTypeModal();
+  };
+
+  const handleFuelTypeSelect = (fuelType) => {
+    setSelectedFuelType(fuelType);
+    toggleFuelTypeModal();
+  };
+
+  const handleYearSelect = (year) => {
+    setSelectedYear(year);
+    toggleYearModal();
+  };
+
+  const handleMinDayChange = (text) => {
+
+    const regex = /^[1-9][0-9]*$/;
+    if (regex.test(text) || text === '') {
+      setMinDay(text);
+    }
+  };
+  const handleMaxDayChange = (text) => {
+
+    const regex = /^[1-9][0-9]*$/;
+    if (regex.test(text) || text === '') {
+      setMaxDay(text);
+    }
+  };
+
+  const handlecarseatChange = (text) => {
+ 
+    const regex = /^[1-9][0-9]*$/;
+    if (regex.test(text) || text === '') {
+      setCarseat(text);
+    }
+  };
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
+  
+
+  const OptionItem = ({ item, onPress, isSelected }) => (
+    <TouchableOpacity onPress={() => onPress(item)} style={styles.optionContainer}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {item.name !== "Brand" && <RadioButton selected={isSelected} />}
+        <Text style={styles.optionText}>{item.name}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
-}
 
-const DropdownComponent = ({ data, value, setValue, placeholder }) => {
-  const [isFocused, setIsFocused] = useState(false);
   return (
-    <View style={{ marginBottom: 20 }}>
-      {isFocused || value ? (
-        <Text style={styles.labelStyle}>{placeholder}*</Text>
-      ) : (
-        <Text></Text>
-      )}
-      <Dropdown
-        style={styles.dropdown}
-        data={data}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocused && !value ? placeholder : ""}
-        value={value}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        onChange={(item) => {
-          setValue(item.value);
-          setIsFocused(false);
+    
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : null} keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}>
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.carListContainer}>
+            <FlatList
+              horizontal
+              data={carBrands}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[
+                    styles.brandItem,
+                    selectedBrand && selectedBrand.id === item.id && { borderColor: "#7F5AF0", borderWidth: 1 } // Adjust borderWidth as needed
+                  ]}
+                  onPress={() => handleBrandSelect(item)}
+                >
+                  <Image source={item.image} style={styles.image} />
+                </TouchableOpacity>
+              )}
+              keyExtractor={item => item.id}
+              contentContainerStyle={styles.flatListContent}
+            />
+          </View>
+          <Text style={styles.dropdownTitle}>Address</Text>
+<TouchableOpacity onPress={toggleAddressModal} style={styles.dropdownButton} >
+  <Text>{selectedAddress ? selectedAddress.street : 'Select an address'}</Text>
+</TouchableOpacity>
+<Modal visible={brandModalVisible} transparent={true} animationType="slide" onRequestClose={toggleBrandModal}>
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      <TextInput
+        style={styles.input}
+        placeholder="Search Brands"
+        value={searchInput}
+        onChangeText={(text) => {
+          setSearchInput(text);
+          handleBrandSearch(text);
         }}
-        containerStyle={styles.dropdownContainer}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        maxHeight={300}
+      />
+      <FlatList
+        data={filteredBrands}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleBrandSelect(item)} style={styles.optionContainer}>
+            <Image source={item.image} style={styles.optionImage} />
+            <Text style={styles.optionText}>{item.name}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.id}
+      />
+      <TouchableOpacity onPress={toggleBrandModal}>
+        <Text style={styles.doneButton}>Done</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
+          <Text style={styles.dropdownTitle}>Brands</Text>
+          <TouchableOpacity onPress={toggleBrandModal} style={styles.dropdownButton} >
+            <Text>{selectedBrand ? selectedBrand.name : 'Select a brand'}</Text>
+          </TouchableOpacity>
+
+          <Modal visible={brandModalVisible} transparent={true} animationType="slide" onRequestClose={toggleBrandModal}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <FlatList
+                  data={carBrands}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => handleBrandSelect(item)} style={styles.optionContainer}>
+                      <Image source={item.image} style={styles.optionImage} />
+                      <Text style={styles.optionText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={(item) => item.id}
+                />
+                <TouchableOpacity onPress={toggleBrandModal}>
+                  <Text style={styles.doneButton}>Done</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+          { (
+            <>
+              <Text style={styles.dropdownTitle}>Models</Text>
+              <TouchableOpacity onPress={toggleModelModal} style={styles.dropdownButton} >
+                <Text>{selectedModel ? selectedModel : 'Select a model'}</Text>
+              </TouchableOpacity>
+            </>
+          )}
+
+<Modal visible={modelModalVisible} transparent={true} animationType="slide" onRequestClose={toggleModelModal}>
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      <TextInput
+        style={styles.input}
+        placeholder="Search Models"
+        value={modelSearchInput}
+        onChangeText={(text) => {
+          setModelSearchInput(text);
+          handleModelSearch(text);
+        }}
+      />
+      <FlatList
+        data={filteredModels}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleModelSelect(item)} style={styles.optionContainer}>
+            <Text style={styles.optionText}>{item}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item, index) => index.toString()}
       />
     </View>
+  </View>
+</Modal>
+
+          {(
+            <>
+              <Text style={styles.dropdownTitle}>Types</Text>
+              <TouchableOpacity onPress={toggleTypeModal} style={styles.dropdownButton} >
+                <Text>{selectedType ? selectedType : 'Select a type'}</Text>
+              </TouchableOpacity>
+            </>
+          )}
+<Modal visible={typeModalVisible} transparent={true} animationType="slide" onRequestClose={toggleTypeModal}>
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      <TextInput
+        style={styles.input}
+        placeholder="Search Types"
+        value={typeSearchInput}
+        onChangeText={(text) => {
+          setTypeSearchInput(text);
+          handleTypeSearch(text);
+        }}
+      />
+      <FlatList
+        data={filteredTypes}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleTypeSelect(item)} style={styles.optionContainer}>
+            <Text style={styles.optionText}>{item}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
+  </View>
+</Modal>
+
+          <Text style={styles.dropdownTitle}>Color</Text>
+          <TouchableOpacity onPress={toggleColorModal} style={styles.dropdownButton} >
+            <Text>{selectedColor ? selectedColor.name : 'Select a color'}</Text>
+          </TouchableOpacity>
+
+          <Modal visible={colorModalVisible} transparent={true} animationType="slide" onRequestClose={toggleColorModal}>
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      <TextInput
+        style={styles.input}
+        placeholder="Search Colors"
+        value={colorSearchInput}
+        onChangeText={(text) => {
+          setColorSearchInput(text);
+          handleColorSearch(text);
+        }}
+      />
+      <FlatList
+        data={filteredColors}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleColorSelect(item)} style={styles.optionContainer}>
+            <View style={[styles.colorOption, { backgroundColor: item.name.toLowerCase() }]}></View>
+            <Text style={styles.optionText}>{item.name}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
+  </View>
+</Modal>
+
+          <Text style={styles.dropdownTitle}>Gear Type</Text>
+          <TouchableOpacity onPress={toggleGearTypeModal} style={styles.dropdownButton} >
+            <Text>{selectedGearType ? selectedGearType.name : 'Select a gear type'}</Text>
+          </TouchableOpacity>
+
+          <Modal visible={gearTypeModalVisible} transparent={true} animationType="slide" onRequestClose={toggleGearTypeModal}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <FlatList
+                  data={gearTypeOptions}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => handleGearTypeSelect(item)} style={styles.optionContainer}>
+                      <Text style={styles.optionText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={(item) => item.id}
+                />
+              
+              </View>
+            </View>
+          </Modal>
+
+          <Text style={styles.dropdownTitle}>Fuel Type</Text>
+          <TouchableOpacity onPress={toggleFuelTypeModal} style={styles.dropdownButton} >
+            <Text>{selectedFuelType ? selectedFuelType.name : 'Select a fuel type'}</Text>
+          </TouchableOpacity>
+
+          <Modal visible={fuelTypeModalVisible} transparent={true} animationType="slide" onRequestClose={toggleFuelTypeModal}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <FlatList
+                  data={fuelTypeOptions}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => handleFuelTypeSelect(item)} style={styles.optionContainer}>
+                      <Text style={styles.optionText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={(item) => item.id}
+                />
+              
+              </View>
+            </View>
+          </Modal>
+
+          <Text style={styles.dropdownTitle}>Year</Text>
+          <TouchableOpacity onPress={toggleYearModal} style={styles.dropdownButton} >
+            <Text>{selectedYear ? selectedYear : 'Select a year'}</Text>
+          </TouchableOpacity>
+
+          <Modal visible={yearModalVisible} transparent={true} animationType="slide" onRequestClose={toggleYearModal}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <FlatList
+                  data={yearOptions}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => handleYearSelect(item)} style={styles.optionContainer}>
+                      <Text style={styles.optionText}>{item}</Text>
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={(item) => item}
+                />
+             
+              </View>
+            </View>
+          </Modal>
+          <View>
+            <Text style={styles.dropdownTitle}>Car Seats</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Enter number of the seats"
+              value={carseat}
+              onChangeText={handlecarseatChange}
+            />
+          </View>
+
+
+          <View>
+            <Text style={styles.dropdownTitle}>Minimum Days</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Enter Minimum days to rent"
+              value={MinDays}
+              onChangeText={handleMinDayChange}
+            />
+          </View>
+
+          <View>
+            <Text style={styles.dropdownTitle}>Maximum Days</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Enter Maximum days to rent"
+              value={MaxDays}
+              onChangeText={handleMaxDayChange}
+            />
+          </View>
+        </ScrollView>
+        
+  <View style={styles.bottomContainer} className='bg-slate-300 '>
+  <TouchableOpacity onPress={clearAllSelections}>
+         <Text style={styles.clearAllText}>Clear All</Text>
+     </TouchableOpacity>
+ <TouchableOpacity style={styles.ApplyButton} onPress={()=>navigation.goBack()}>
+   <Text style={styles.ApplyButtonText}>Apply</Text>
+ </TouchableOpacity>
+ </View>
+
+      </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    paddingTop: 5,
+    padding: 20,
+    marginTop: 50,
   },
+  carListContainer: {
+    height: 100,
+    marginBottom: 20,
+  },
+  flatListContent: {
+    alignItems: 'center',
+    paddingRight: 20,
+  },
+  brandItem: {
+    marginBottom: 10,
+  },
+  image: {
+    width: 60,
+    height: 60,
+    margin: 10,
+    
+  },
+  dropdownTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  dropdownButton: {
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 20,
+    borderColor:"#7F5AF0",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    height: 300
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '100%',
+    maxHeight: "80%",
+  },
+  optionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 20,
+  },
+  optionImage: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  optionText: {
+    fontSize: 18,
+  },
+  doneButton: {
+    fontSize: 18,
+    color: 'blue',
+    textAlign: 'center',
+    paddingVertical: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#7F5AF0',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+  },
+  colorOption: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+   
   text: {
     fontWeight: "500",
     fontSize: 16,
@@ -375,10 +731,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF", // Remove border
     width:  widthPercentageToDP("90%"),
     borderRadius: 0,
-  
   },
   yearInputContainer: {
     marginBottom: 20,
     position: 'relative',
+  },
+ modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',// Align content to the bottom
+},
+  modalOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  optionContainer: {
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eaeaea',
+  },
+  optionText: {
+    fontSize: 18,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '100%',
+    maxHeight: height / 2, // Set the max height to half of the screen height
   },
 });

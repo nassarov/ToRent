@@ -100,10 +100,9 @@ const TabNavigation = ({ route }) => {
       />
       {userData.role === "1" && (
         <Tab.Screen
-          name="PostTab"
+          name="Post"
           // component={CarRegistrationScreen}
-          component={AddPost}
-          initialParams={{ userData: userData }}
+          component={CarRegistrationScreen}
           options={{
             headerShown: true,
             header: () => <CustomHeader2 text={"Add Your Car"} />,

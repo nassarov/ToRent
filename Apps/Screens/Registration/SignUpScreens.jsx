@@ -72,6 +72,9 @@ const handelSignUp = async (values) => {
     } else if(error.code === "auth/weak-password") {
       Alert.alert("Alert", "Password should be at least 6 characters"); // Display other Firebase error messages as an alert
     }
+    else if(error.code === "auth/invalid-email") {
+      Alert.alert("Alert", "Enter A Valid Email"); // Display other Firebase error messages as an alert
+    }
   } finally {
     setIsSigningUp(false); // Reset isSigningUp to false after signup process finishes
   }
