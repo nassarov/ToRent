@@ -39,7 +39,7 @@ export default function SignUpForToRent() {
   const [isCheckingCredentials, setIsCheckingCredentials] = useState(false); // State to track if credentials are being checked
   const [userRole, setUserRole] = useState("");
   const [underInput, setUnderInput] = useState("");
-  const [textColor, setTextColor] = useState("");
+  const [textColor, setTextColor] = useState("black");
   const [userData, setUserData] = useState("");
 
   // Function to handle real-time validation of the phone number
@@ -49,7 +49,7 @@ export default function SignUpForToRent() {
     const isValidPrefix = allowedPrefixes.includes(text.slice(0, 2));
     if (text.length < 3) {
       setUnderInput("Please Enter Your Phone Number");
-      setTextColor("blueviolet");
+      setTextColor("#7F5AF0");
       setPhoneNumber("");
       setIsValidPhone(false);
     } else if (!containsNonDigit && text.length == 8 && isValidPrefix) {
