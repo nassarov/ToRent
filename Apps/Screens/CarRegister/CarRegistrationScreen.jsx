@@ -258,11 +258,13 @@ useLayoutEffect(() => {
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : null} keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}>
       <View style={styles.container}>
-        <ScrollView className='mb-24'>
+        <ScrollView className='mb-24' showsVerticalScrollIndicator={false}>
+            
           <View style={styles.carListContainer}>
             <FlatList
               horizontal
               data={carBrands}
+              showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={[
