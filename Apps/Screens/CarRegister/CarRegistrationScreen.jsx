@@ -1,51 +1,122 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, FlatList, StyleSheet, Dimensions, Image, Alert, TextInput, Keyboard, TouchableWithoutFeedback, ScrollView, KeyboardAvoidingView , Platform } from 'react-native';
-import bmw from '../../../assets/carslogo/BMW.jpg';
-import mercedes from '../../../assets/carslogo/Mercedes.jpg'; 
-import nissan from '../../../assets/carslogo/Nissan.jpg';
-import toyota from '../../../assets/carslogo/Toyota.png'; 
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+  StyleSheet,
+  Dimensions,
+  Image,
+  Alert,
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import bmw from "../../../assets/carslogo/BMW.jpg";
+import mercedes from "../../../assets/carslogo/Mercedes.jpg";
+import nissan from "../../../assets/carslogo/Nissan.jpg";
+import toyota from "../../../assets/carslogo/Toyota.png";
 import { Dropdown } from "react-native-element-dropdown";
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import {
+  heightPercentageToDP,
+  widthPercentageToDP,
+} from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect } from "react";
 import { app, auth } from "../../../firebaseConfig";
-import { doc, getFirestore, updateDoc, collection, getDocs,query, orderBy, } from "firebase/firestore";  
+import {
+  doc,
+  getFirestore,
+  updateDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
 
-const { height } = Dimensions.get('window');
+const { height } = Dimensions.get("window");
 
-const carBrands = [
-  { id: '1', name: 'BMW', image: bmw, models: ['X1', 'X3', 'X5'], types: ['SUV', 'Sedan', 'Hatchback'] },
-  { id: '2', name: 'Mercedes', image: mercedes, models: ['A-Class', 'C-Class', 'E-Class'], types: ['Sedan', 'Coupe', 'Convertible'] },
-  { id: '3', name: 'Nissan', image: nissan, models: ['Altima', 'Maxima', 'Sentra'], types: ['Sedan', 'SUV', 'Coupe'] },
-  { id: '4', name: 'Toyota', image: toyota, models: ['Camry', 'Corolla', 'Rav4'], types: ['Sedan', 'SUV', 'Hybrid'] },
-];
-const colorOptions = [
-  { id: '1', name: 'Red' },
-  { id: '2', name: 'Blue' },
-  { id: '3', name: 'Green' },
-  { id: '4', name: 'Yellow' },
-];
+// const carBrands = [
+//   {
+//     id: "1",
+//     name: "BMW",
+//     image: bmw,
+//     models: ["X1", "X3", "X5"],
+//     types: ["SUV", "Sedan", "Hatchback"],
+//   },
+//   {
+//     id: "2",
+//     name: "Mercedes",
+//     image: mercedes,
+//     models: ["A-Class", "C-Class", "E-Class"],
+//     types: ["Sedan", "Coupe", "Convertible"],
+//   },
+//   {
+//     id: "3",
+//     name: "Nissan",
+//     image: nissan,
+//     models: [{name:"Altima",types:[{value:'sedan'}]}, "Maxima", "Sentra"],
+//     types: ["Sedan", "SUV", "Coupe"],
+//   },
+//   {
+//     id: "4",
+//     name: "Toyota",
+//     image: toyota,
+//     models: ["Camry", "Corolla", "Rav4"],
+//     types: ["Sedan", "SUV", "Hybrid"],
+//   },
+// ];
+// const colorOptions = [
+//   { id: "1", name: "Red" },
+//   { id: "2", name: "Blue" },
+//   { id: "3", name: "Green" },
+//   { id: "4", name: "Yellow" },
+// ];
 
 const gearTypeOptions = [
-  { id: '1', name: 'Automatic' },
-  { id: '2', name: 'Manual' },
+  { id: "1", name: "Automatic" },
+  { id: "2", name: "Manual" },
 ];
 
 const fuelTypeOptions = [
-  { id: '1', name: 'Gasoline' },
-  { id: '2', name: 'Diesel' },
-  { id: '3', name: 'Electric' },
+  { id: "1", name: "Gasoline" },
+  { id: "2", name: "Diesel" },
+  { id: "3", name: "Electric" },
 ];
 const addressOptions = [
-  { id: '1', street: '123 Main St', city: 'New York', state: 'NY', postalCode: '10001' },
-  { id: '2', street: '456 Elm St', city: 'Los Angeles', state: 'CA', postalCode: '90001' },
-  { id: '3', street: '789 Oak St', city: 'Chicago', state: 'IL', postalCode: '60601' },
+  {
+    id: "1",
+    street: "123 Main St",
+    city: "New York",
+    state: "NY",
+    postalCode: "10001",
+  },
+  {
+    id: "2",
+    street: "456 Elm St",
+    city: "Los Angeles",
+    state: "CA",
+    postalCode: "90001",
+  },
+  {
+    id: "3",
+    street: "789 Oak St",
+    city: "Chicago",
+    state: "IL",
+    postalCode: "60601",
+  },
 ];
 
+const yearOptions = Array.from(
+  { length: 50 },
+  (_, index) => `${new Date().getFullYear() - index}`
+);
 
-const yearOptions = Array.from({ length: 50 }, (_, index) => `${new Date().getFullYear() - index}`);
-
-export default function CarRegistrationScreen  ()  {
+export default function CarRegistrationScreen() {
   const [brandModalVisible, setBrandModalVisible] = useState(false);
   const [modelModalVisible, setModelModalVisible] = useState(false);
   const [typeModalVisible, setTypeModalVisible] = useState(false);
@@ -59,71 +130,97 @@ export default function CarRegistrationScreen  ()  {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedGearType, setSelectedGearType] = useState(null);
   const [selectedFuelType, setSelectedFuelType] = useState(null);
-  const [selectedYear, setSelectedYear] = useState('');
-  const [carseat , setCarseat]= useState('');
-  const [MinDays, setMinDay] = useState('');
-  const [MaxDays, setMaxDay] = useState('');
+  const [selectedYear, setSelectedYear] = useState("");
+  const [carseat, setCarseat] = useState("");
+  const [MinDays, setMinDay] = useState("");
+  const [MaxDays, setMaxDay] = useState("");
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [addressModalVisible, setAddressModalVisible] = useState(false);
   const [filteredBrands, setFilteredBrands] = useState(carBrands);
-  const [searchInput, setSearchInput] = useState('');
-  const [filteredTypes, setFilteredTypes] = useState([]); 
-const [typeSearchInput, setTypeSearchInput] = useState(''); 
-const [filteredModels, setFilteredModels] = useState([]);
-const [modelSearchInput, setModelSearchInput] = useState('');
-const [filteredColors, setFilteredColors] = useState([]);
-const [colorSearchInput, setColorSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredTypes, setFilteredTypes] = useState([]);
+  const [typeSearchInput, setTypeSearchInput] = useState("");
+  const [filteredModels, setFilteredModels] = useState([]);
+  const [modelSearchInput, setModelSearchInput] = useState("");
+  const [filteredColors, setFilteredColors] = useState([]);
+  const [colorSearchInput, setColorSearchInput] = useState("");
+  const [colorOptions, setColorOptions] = useState([]);
+  const [carBrands, setCarBrands] = useState([]);
+  useEffect(() => {
+    fetchColor();
+    fetchBrands();
+  }, []);
 
-
-const clearAllSelections = () => {
-  setSelectedAddress(null);
-  setSelectedBrand(null);
-  setSelectedType(null);
-  setSelectedColor(null);
-  setSelectedModel(null);
-  setSelectedFuelType(null);
-  setSelectedGearType(null);
-  setSelectedYear(null);
-  setCarseat(null);
-  setMinDay(null);
-  setMaxDay(null);
-};
-const navigation = useNavigation();
-// hide bottom tab bar
-useLayoutEffect(() => {
-    navigation.setOptions({
-      tabBarStyle: { display: 'none' },
+  const fetchColor = async () => {
+    setColorOptions([]);
+    const querySnapshot = await getDocs(collection(db, "carColors"));
+    querySnapshot.forEach((doc) => {
+      setColorOptions((colors) => [...colors, doc.data()]);
     });
-  }, [navigation]); 
-  const db = getFirestore(app); 
+  };
+  const fetchBrands = async () => {
+    try {
+      // Retrieve documents from the "carBrands" collection
+      const querySnapshot = await getDocs(collection(db, "carBrands"));
 
+      // Iterate over each document in the query snapshot
+      querySnapshot.forEach((doc) => {
+        // Push the document data to the carBrands array
+        carBrands.push(doc.data());
+      });
+    } catch (error) {
+      console.error("Error retrieving car brands data from Firestore: ", error);
+    }
+  };
 
+  const clearAllSelections = () => {
+    setSelectedAddress(null);
+    setSelectedBrand(null);
+    setSelectedType(null);
+    setSelectedColor(null);
+    setSelectedModel(null);
+    setSelectedFuelType(null);
+    setSelectedGearType(null);
+    setSelectedYear(null);
+    setCarseat(null);
+    setMinDay(null);
+    setMaxDay(null);
+  };
+  const navigation = useNavigation();
+  // hide bottom tab bar
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      tabBarStyle: { display: "none" },
+    });
+  }, [navigation]);
+  const db = getFirestore(app);
 
   const toggleBrandModal = () => {
     setBrandModalVisible(!brandModalVisible);
-    setFilteredBrands(carBrands); 
+    setFilteredBrands(carBrands);
   };
 
   const toggleModelModal = () => {
     if (selectedBrand) {
       setModelModalVisible(!modelModalVisible);
-      setFilteredModels(selectedBrand.models); 
+      setFilteredModels(selectedBrand.models);
+      console.log(selectedBrand.models);
     } else {
-      Alert.alert('Select Brand', 'Please select a Brand first');
+      Alert.alert("Select Brand", "Please select a Brand first");
     }
   };
 
   const toggleTypeModal = () => {
     if (selectedModel) {
       setTypeModalVisible(!typeModalVisible);
-      setFilteredTypes(selectedBrand.types); 
+      setFilteredTypes(selectedBrand.types);
     } else {
-      Alert.alert('Select Model', 'Please select a Model first');
+      Alert.alert("Select Model", "Please select a Model first");
     }
   };
   const toggleColorModal = () => {
     setColorModalVisible(!colorModalVisible);
-    setFilteredColors(colorOptions); 
+    setFilteredColors(colorOptions);
   };
 
   const toggleGearTypeModal = () => {
@@ -147,7 +244,7 @@ useLayoutEffect(() => {
     );
     setFilteredColors(filteredColors);
   };
-  
+
   const handleTypeSearch = (text) => {
     const filteredTypes = selectedBrand.types.filter((type) =>
       type.toLowerCase().includes(text.toLowerCase())
@@ -178,19 +275,17 @@ useLayoutEffect(() => {
 
   const handleModelSelect = (model) => {
     if (!selectedBrand) {
-  
-      Alert.alert('Select Brand', 'Please select a brand first');
+      Alert.alert("Select Brand", "Please select a brand first");
     } else {
       setSelectedModel(model);
-      setSelectedType(null); 
+      setSelectedType(null);
       toggleModelModal();
     }
   };
 
   const handleTypeSelect = (type) => {
     if (!selectedBrand) {
-
-      Alert.alert('Select Brand', 'Please select a brand first');
+      Alert.alert("Select Brand", "Please select a brand first");
     } else {
       setSelectedType(type);
       toggleTypeModal();
@@ -218,24 +313,21 @@ useLayoutEffect(() => {
   };
 
   const handleMinDayChange = (text) => {
-
     const regex = /^[1-9][0-9]*$/;
-    if (regex.test(text) || text === '') {
+    if (regex.test(text) || text === "") {
       setMinDay(text);
     }
   };
   const handleMaxDayChange = (text) => {
-
     const regex = /^[1-9][0-9]*$/;
-    if (regex.test(text) || text === '') {
+    if (regex.test(text) || text === "") {
       setMaxDay(text);
     }
   };
 
   const handlecarseatChange = (text) => {
- 
     const regex = /^[1-9][0-9]*$/;
-    if (regex.test(text) || text === '') {
+    if (regex.test(text) || text === "") {
       setCarseat(text);
     }
   };
@@ -243,10 +335,12 @@ useLayoutEffect(() => {
     Keyboard.dismiss();
   };
 
-
   const OptionItem = ({ item, onPress, isSelected }) => (
-    <TouchableOpacity onPress={() => onPress(item)} style={styles.optionContainer}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <TouchableOpacity
+      onPress={() => onPress(item)}
+      style={styles.optionContainer}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
         {item.name !== "Brand" && <RadioButton selected={isSelected} />}
         <Text style={styles.optionText}>{item.name}</Text>
       </View>
@@ -254,311 +348,441 @@ useLayoutEffect(() => {
   );
 
   return (
-    
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
-       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : null} keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}>
-      <View style={styles.container}>
-        <ScrollView className='mb-24'>
-          <View style={styles.carListContainer}>
-            <FlatList
-              horizontal
-              data={carBrands}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={[
-                    styles.brandItem,
-                    selectedBrand && selectedBrand.id === item.id && { borderColor: "#7F5AF0", borderWidth: 1 } // Adjust borderWidth as needed
-                  ]}
-                  onPress={() => handleBrandSelect(item)}
-                >
-                  <Image source={item.image} style={styles.image} />
-                </TouchableOpacity>
-              )}
-              keyExtractor={item => item.id}
-              contentContainerStyle={styles.flatListContent}
-            />
-          </View>
-          <Text style={styles.dropdownTitle}>Address</Text>
-<TouchableOpacity onPress={toggleAddressModal} style={styles.dropdownButton} >
-  <Text>{selectedAddress ? selectedAddress.street : 'Select an address'}</Text>
-</TouchableOpacity>
-<Modal visible={brandModalVisible} transparent={true} animationType="slide" onRequestClose={toggleBrandModal}>
-  <View style={styles.modalContainer}>
-    <View style={styles.modalContent}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search Brands"
-        value={searchInput}
-        onChangeText={(text) => {
-          setSearchInput(text);
-          handleBrandSearch(text);
-        }}
-      />
-      <FlatList
-        data={filteredBrands}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleBrandSelect(item)} style={styles.optionContainer}>
-            <Image source={item.image} style={styles.optionImage} />
-            <Text style={styles.optionText}>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item) => item.id}
-      />
-      <TouchableOpacity onPress={toggleBrandModal}>
-        <Text style={styles.doneButton}>Done</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</Modal>
-          <Text style={styles.dropdownTitle}>Brands</Text>
-          <TouchableOpacity onPress={toggleBrandModal} style={styles.dropdownButton} >
-            <Text>{selectedBrand ? selectedBrand.name : 'Select a brand'}</Text>
-          </TouchableOpacity>
-
-          <Modal visible={brandModalVisible} transparent={true} animationType="slide" onRequestClose={toggleBrandModal}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <FlatList
-                  data={carBrands}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleBrandSelect(item)} style={styles.optionContainer}>
-                      <Image source={item.image} style={styles.optionImage} />
-                      <Text style={styles.optionText}>{item.name}</Text>
-                    </TouchableOpacity>
-                  )}
-                  keyExtractor={(item) => item.id}
-                />
-                <TouchableOpacity onPress={toggleBrandModal}>
-                  <Text style={styles.doneButton}>Done</Text>
-                </TouchableOpacity>
-              </View>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : null}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
+      >
+        <View style={styles.container}>
+          <ScrollView className="mb-24">
+            <View style={styles.carListContainer}>
+              <FlatList
+                horizontal
+                data={carBrands}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={[
+                      styles.brandItem,
+                      selectedBrand &&
+                        selectedBrand.label === item.label && {
+                          borderColor: "#7F5AF0",
+                          borderWidth: 1,
+                        }, // Adjust borderWidth as needed
+                    ]}
+                    onPress={() => handleBrandSelect(item)}
+                  >
+                    {carBrands && (
+                      <Image
+                        source={{ uri: item.image }}
+                        style={styles.image}
+                      />
+                    )}
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.value}
+                contentContainerStyle={styles.flatListContent}
+              />
             </View>
-          </Modal>
-
-          { (
-            <>
-              <Text style={styles.dropdownTitle}>Models</Text>
-              <TouchableOpacity onPress={toggleModelModal} style={styles.dropdownButton} >
-                <Text>{selectedModel ? selectedModel : 'Select a model'}</Text>
-              </TouchableOpacity>
-            </>
-          )}
-
-<Modal visible={modelModalVisible} transparent={true} animationType="slide" onRequestClose={toggleModelModal}>
-  <View style={styles.modalContainer}>
-    <View style={styles.modalContent}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search Models"
-        value={modelSearchInput}
-        onChangeText={(text) => {
-          setModelSearchInput(text);
-          handleModelSearch(text);
-        }}
-      />
-      <FlatList
-        data={filteredModels}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleModelSelect(item)} style={styles.optionContainer}>
-            <Text style={styles.optionText}>{item}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-    </View>
-  </View>
-</Modal>
-
-          {(
-            <>
-              <Text style={styles.dropdownTitle}>Types</Text>
-              <TouchableOpacity onPress={toggleTypeModal} style={styles.dropdownButton} >
-                <Text>{selectedType ? selectedType : 'Select a type'}</Text>
-              </TouchableOpacity>
-            </>
-          )}
-<Modal visible={typeModalVisible} transparent={true} animationType="slide" onRequestClose={toggleTypeModal}>
-  <View style={styles.modalContainer}>
-    <View style={styles.modalContent}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search Types"
-        value={typeSearchInput}
-        onChangeText={(text) => {
-          setTypeSearchInput(text);
-          handleTypeSearch(text);
-        }}
-      />
-      <FlatList
-        data={filteredTypes}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleTypeSelect(item)} style={styles.optionContainer}>
-            <Text style={styles.optionText}>{item}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-    </View>
-  </View>
-</Modal>
-
-          <Text style={styles.dropdownTitle}>Color</Text>
-          <TouchableOpacity onPress={toggleColorModal} style={styles.dropdownButton} >
-            <Text>{selectedColor ? selectedColor.name : 'Select a color'}</Text>
-          </TouchableOpacity>
-
-          <Modal visible={colorModalVisible} transparent={true} animationType="slide" onRequestClose={toggleColorModal}>
-  <View style={styles.modalContainer}>
-    <View style={styles.modalContent}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search Colors"
-        value={colorSearchInput}
-        onChangeText={(text) => {
-          setColorSearchInput(text);
-          handleColorSearch(text);
-        }}
-      />
-      <FlatList
-        data={filteredColors}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleColorSelect(item)} style={styles.optionContainer}>
-            <View style={[styles.colorOption, { backgroundColor: item.name.toLowerCase() }]}></View>
-            <Text style={styles.optionText}>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item) => item.id}
-      />
-    </View>
-  </View>
-</Modal>
-
-          <Text style={styles.dropdownTitle}>Gear Type</Text>
-          <TouchableOpacity onPress={toggleGearTypeModal} style={styles.dropdownButton} >
-            <Text>{selectedGearType ? selectedGearType.name : 'Select a gear type'}</Text>
-          </TouchableOpacity>
-
-          <Modal visible={gearTypeModalVisible} transparent={true} animationType="slide" onRequestClose={toggleGearTypeModal}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <FlatList
-                  data={gearTypeOptions}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleGearTypeSelect(item)} style={styles.optionContainer}>
-                      <Text style={styles.optionText}>{item.name}</Text>
-                    </TouchableOpacity>
-                  )}
-                  keyExtractor={(item) => item.id}
-                />
-              
-              </View>
-            </View>
-          </Modal>
-
-          <Text style={styles.dropdownTitle}>Fuel Type</Text>
-          <TouchableOpacity onPress={toggleFuelTypeModal} style={styles.dropdownButton} >
-            <Text>{selectedFuelType ? selectedFuelType.name : 'Select a fuel type'}</Text>
-          </TouchableOpacity>
-
-          <Modal visible={fuelTypeModalVisible} transparent={true} animationType="slide" onRequestClose={toggleFuelTypeModal}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <FlatList
-                  data={fuelTypeOptions}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleFuelTypeSelect(item)} style={styles.optionContainer}>
-                      <Text style={styles.optionText}>{item.name}</Text>
-                    </TouchableOpacity>
-                  )}
-                  keyExtractor={(item) => item.id}
-                />
-              
-              </View>
-            </View>
-          </Modal>
-
-          <Text style={styles.dropdownTitle}>Year</Text>
-          <TouchableOpacity onPress={toggleYearModal} style={styles.dropdownButton} >
-            <Text>{selectedYear ? selectedYear : 'Select a year'}</Text>
-          </TouchableOpacity>
-
-          <Modal visible={yearModalVisible} transparent={true} animationType="slide" onRequestClose={toggleYearModal}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <FlatList
-                  data={yearOptions}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleYearSelect(item)} style={styles.optionContainer}>
-                      <Text style={styles.optionText}>{item}</Text>
-                    </TouchableOpacity>
-                  )}
-                  keyExtractor={(item) => item}
-                />
-             
-              </View>
-            </View>
-          </Modal>
-          <View>
-            <Text style={styles.dropdownTitle}>Car Seats</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Enter number of the seats"
-              value={carseat}
-              onChangeText={handlecarseatChange}
-            />
-          </View>
-
-
-          <View>
-            <Text style={styles.dropdownTitle}>Minimum Days</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Enter Minimum days to rent"
-              value={MinDays}
-              onChangeText={handleMinDayChange}
-            />
-          </View>
-
-          <View>
-            <Text style={styles.dropdownTitle}>Maximum Days</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Enter Maximum days to rent"
-              value={MaxDays}
-              onChangeText={handleMaxDayChange}
-            />
-          </View>
-        </ScrollView>
-    
-      </View>
-      <View style={styles.bottomContainer} className='bg-slate-300 '>
-             <TouchableOpacity onPress={clearAllSelections}>
-                    <Text style={styles.clearAllText}>Clear All</Text>
-                </TouchableOpacity>
-            <TouchableOpacity style={styles.ApplyButton} onPress={() => navigation.push("PickImagesScreen")}>
-              <Text style={styles.ApplyButtonText}>Apply</Text>
+            <Text style={styles.dropdownTitle}>Address</Text>
+            <TouchableOpacity
+              onPress={toggleAddressModal}
+              style={styles.dropdownButton}
+            >
+              <Text>
+                {selectedAddress ? selectedAddress.street : "Select an address"}
+              </Text>
             </TouchableOpacity>
+            <Modal
+              visible={brandModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={toggleBrandModal}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Search Brands"
+                    value={searchInput}
+                    onChangeText={(text) => {
+                      setSearchInput(text);
+                      handleBrandSearch(text);
+                    }}
+                  />
+                  <FlatList
+                    data={filteredBrands}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => handleBrandSelect(item)}
+                        style={styles.optionContainer}
+                      >
+                        <Image
+                          source={{ uri: item.image }}
+                          style={styles.optionImage}
+                        />
+                        <Text style={styles.optionText}>{item.label}</Text>
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={(item) => item.label}
+                  />
+                  <TouchableOpacity onPress={toggleBrandModal}>
+                    <Text style={styles.doneButton}>Done</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+            <Text style={styles.dropdownTitle}>Brands</Text>
+            <TouchableOpacity
+              onPress={toggleBrandModal}
+              style={styles.dropdownButton}
+            >
+              <Text>
+                {selectedBrand ? selectedBrand.label : "Select a brand"}
+              </Text>
+            </TouchableOpacity>
+
+            <Modal
+              visible={brandModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={toggleBrandModal}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <FlatList
+                    data={carBrands}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => handleBrandSelect(item)}
+                        style={styles.optionContainer}
+                      >
+                        <Image
+                          source={{ uri: item.image }}
+                          style={styles.optionImage}
+                        />
+                        <Text style={styles.optionText}>{item.label}</Text>
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={(item) => item.value}
+                  />
+                  <TouchableOpacity onPress={toggleBrandModal}>
+                    <Text style={styles.doneButton}>Done</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+
+            {
+              <>
+                <Text style={styles.dropdownTitle}>Models</Text>
+                <TouchableOpacity
+                  onPress={toggleModelModal}
+                  style={styles.dropdownButton}
+                >
+                  <Text>
+                    {selectedModel ? selectedModel : "Select a model"}
+                  </Text>
+                </TouchableOpacity>
+              </>
+            }
+
+            <Modal
+              visible={modelModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={toggleModelModal}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Search Models"
+                    value={modelSearchInput}
+                    onChangeText={(text) => {
+                      setModelSearchInput(text);
+                      handleModelSearch(text);
+                    }}
+                  />
+                  <FlatList
+                    data={filteredModels}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => handleModelSelect(item)}
+                        style={styles.optionContainer}
+                      >
+                        <Text style={styles.optionText}>{item}</Text>
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={(item, index) => item}
+                  />
+                </View>
+              </View>
+            </Modal>
+
+            {
+              <>
+                <Text style={styles.dropdownTitle}>Types</Text>
+                <TouchableOpacity
+                  onPress={toggleTypeModal}
+                  style={styles.dropdownButton}
+                >
+                  <Text>{selectedType ? selectedType : "Select a type"}</Text>
+                </TouchableOpacity>
+              </>
+            }
+            <Modal
+              visible={typeModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={toggleTypeModal}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Search Types"
+                    value={typeSearchInput}
+                    onChangeText={(text) => {
+                      setTypeSearchInput(text);
+                      handleTypeSearch(text);
+                    }}
+                  />
+                  <FlatList
+                    data={filteredTypes}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => handleTypeSelect(item)}
+                        style={styles.optionContainer}
+                      >
+                        <Text style={styles.optionText}>{item}</Text>
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={(item, index) => item}
+                  />
+                </View>
+              </View>
+            </Modal>
+            {/* color section */}
+            {colorOptions && (
+              <>
+                <Text style={styles.dropdownTitle}>Color</Text>
+                <TouchableOpacity
+                  onPress={toggleColorModal}
+                  style={styles.dropdownButton}
+                >
+                  <Text>
+                    {selectedColor ? selectedColor.label : "Select a color"}
+                  </Text>
+                </TouchableOpacity>
+                <Modal
+                  visible={colorModalVisible}
+                  transparent={true}
+                  animationType="slide"
+                  onRequestClose={toggleColorModal}
+                >
+                  <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="Search Colors"
+                        value={colorSearchInput}
+                        onChangeText={(text) => {
+                          setColorSearchInput(text);
+                          handleColorSearch(text);
+                        }}
+                      />
+                      <FlatList
+                        data={filteredColors}
+                        renderItem={({ item }) => (
+                          <TouchableOpacity
+                            onPress={() => handleColorSelect(item)}
+                            style={[
+                              styles.optionContainer,
+                              { flexDirection: "row", alignItems: "center" },
+                            ]}
+                          >
+                            <View
+                              style={[
+                                styles.colorOption,
+                                { backgroundColor: item.label.toLowerCase() },
+                              ]}
+                            ></View>
+                            <Text style={styles.optionText}>{item.label}</Text>
+                          </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => item.value}
+                      />
+                    </View>
+                  </View>
+                </Modal>
+              </>
+            )}
+
+            <Text style={styles.dropdownTitle}>Gear Type</Text>
+            <TouchableOpacity
+              onPress={toggleGearTypeModal}
+              style={styles.dropdownButton}
+            >
+              <Text>
+                {selectedGearType
+                  ? selectedGearType.name
+                  : "Select a gear type"}
+              </Text>
+            </TouchableOpacity>
+
+            <Modal
+              visible={gearTypeModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={toggleGearTypeModal}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <FlatList
+                    data={gearTypeOptions}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => handleGearTypeSelect(item)}
+                        style={styles.optionContainer}
+                      >
+                        <Text style={styles.optionText}>{item.name}</Text>
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={(item) => item.id}
+                  />
+                </View>
+              </View>
+            </Modal>
+
+            <Text style={styles.dropdownTitle}>Fuel Type</Text>
+            <TouchableOpacity
+              onPress={toggleFuelTypeModal}
+              style={styles.dropdownButton}
+            >
+              <Text>
+                {selectedFuelType
+                  ? selectedFuelType.name
+                  : "Select a fuel type"}
+              </Text>
+            </TouchableOpacity>
+
+            <Modal
+              visible={fuelTypeModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={toggleFuelTypeModal}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <FlatList
+                    data={fuelTypeOptions}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => handleFuelTypeSelect(item)}
+                        style={styles.optionContainer}
+                      >
+                        <Text style={styles.optionText}>{item.name}</Text>
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={(item) => item.id}
+                  />
+                </View>
+              </View>
+            </Modal>
+
+            <Text style={styles.dropdownTitle}>Year</Text>
+            <TouchableOpacity
+              onPress={toggleYearModal}
+              style={styles.dropdownButton}
+            >
+              <Text>{selectedYear ? selectedYear : "Select a year"}</Text>
+            </TouchableOpacity>
+
+            <Modal
+              visible={yearModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={toggleYearModal}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <FlatList
+                    data={yearOptions}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => handleYearSelect(item)}
+                        style={styles.optionContainer}
+                      >
+                        <Text style={styles.optionText}>{item}</Text>
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={(item) => item}
+                  />
+                </View>
+              </View>
+            </Modal>
+            <View>
+              <Text style={styles.dropdownTitle}>Car Seats</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="Enter number of the seats"
+                value={carseat}
+                onChangeText={handlecarseatChange}
+              />
             </View>
+
+            <View>
+              <Text style={styles.dropdownTitle}>Minimum Days</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="Enter Minimum days to rent"
+                value={MinDays}
+                onChangeText={handleMinDayChange}
+              />
+            </View>
+
+            <View>
+              <Text style={styles.dropdownTitle}>Maximum Days</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="Enter Maximum days to rent"
+                value={MaxDays}
+                onChangeText={handleMaxDayChange}
+              />
+            </View>
+          </ScrollView>
+        </View>
+        <View style={styles.bottomContainer} className="bg-slate-300 ">
+          <TouchableOpacity onPress={clearAllSelections}>
+            <Text style={styles.clearAllText}>Clear All</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.ApplyButton}
+            onPress={() => navigation.push("PickImagesScreen")}
+          >
+            <Text style={styles.ApplyButtonText}>Apply</Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    
   },
   carListContainer: {
     height: 100,
     marginBottom: 20,
   },
   flatListContent: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingRight: 20,
   },
   brandItem: {
@@ -568,40 +792,39 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     margin: 10,
-    
   },
   dropdownTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   dropdownButton: {
     borderWidth: 1,
     padding: 10,
     borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
     marginBottom: 20,
-    borderColor:"#7F5AF0",
+    borderColor: "#7F5AF0",
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    height: 300
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    height: 300,
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
-    width: '100%',
+    width: "100%",
     maxHeight: "80%",
   },
   optionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: 20,
   },
   optionImage: {
@@ -614,13 +837,13 @@ const styles = StyleSheet.create({
   },
   doneButton: {
     fontSize: 18,
-    color: 'blue',
-    textAlign: 'center',
+    color: "blue",
+    textAlign: "center",
     paddingVertical: 10,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#7F5AF0',
+    borderColor: "#7F5AF0",
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
@@ -630,9 +853,9 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 10,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: "black",
   },
-   
+
   text: {
     fontWeight: "500",
     fontSize: 16,
@@ -728,38 +951,38 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 52,
     left: 17,
-    top:60,
+    top: 60,
     backgroundColor: "#FFFFFF", // Remove border
-    width:  widthPercentageToDP("90%"),
+    width: widthPercentageToDP("90%"),
     borderRadius: 0,
   },
   yearInputContainer: {
     marginBottom: 20,
-    position: 'relative',
+    position: "relative",
   },
- modalContainer: {
+  modalContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',// Align content to the bottom
-},
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Align content to the bottom
+  },
   modalOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   optionContainer: {
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#eaeaea',
+    borderBottomColor: "#eaeaea",
   },
   optionText: {
     fontSize: 18,
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
-    width: '100%',
+    width: "100%",
     maxHeight: height / 2, // Set the max height to half of the screen height
   },
 });

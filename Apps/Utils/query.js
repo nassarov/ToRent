@@ -82,68 +82,330 @@ const lebaneseCities = [
 ];
 
 const carBrands = [
-  { label: "Toyota", value: "Toyota" },
-  { label: "Ford", value: "Ford" },
-  { label: "Honda", value: "Honda" },
-  { label: "Chevrolet", value: "Chevrolet" },
-  { label: "Volkswagen (VW)", value: "Volkswagen (VW)" },
-  { label: "Nissan", value: "Nissan" },
-  { label: "BMW", value: "BMW" },
-  { label: "Mercedes-Benz", value: "Mercedes-Benz" },
-  { label: "Audi", value: "Audi" },
-  { label: "Hyundai", value: "Hyundai" },
-  { label: "Kia", value: "Kia" },
-  { label: "Subaru", value: "Subaru" },
-  { label: "Tesla", value: "Tesla" },
-  { label: "Lexus", value: "Lexus" },
-  { label: "Porsche", value: "Porsche" },
-  { label: "Ferrari", value: "Ferrari" },
-  { label: "Lamborghini", value: "Lamborghini" },
-  { label: "Aston Martin", value: "Aston Martin" },
-  { label: "McLaren", value: "McLaren" },
-  { label: "Jaguar", value: "Jaguar" }
+  {
+    label: "Toyota",
+    value: "Toyota",
+    image: 'https://www.carlogos.org/car-logos/toyota-logo-2020-europe-download.png',
+    models: [
+      "Camry",
+      "Corolla",
+      "Rav4",
+      "Prius"
+    ],
+    types: [
+      "Sedan",
+      "SUV",
+      "Coupe",
+      "Convertible",
+      "Hatchback",
+      "Wagon"
+    ]
+  },
+  {
+    label: "Ford",
+    value: "Ford",
+    image: "https://www.carlogos.org/car-logos/ford-logo-2017-download.png",
+    models: [
+      "Mustang",
+      "F-150",
+      "Explorer",
+      "Escape"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Truck"
+    ]
+  },
+  {
+    label: "Honda",
+    value: "Honda",
+    image: "https://www.carlogos.org/car-logos/honda-logo-2000-full-download.png",
+    models: [
+      "Civic",
+      "Accord",
+      "CR-V",
+      "Pilot"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Coupe"
+    ]
+  },
+  {
+    label: "Chevrolet",
+    value: "Chevrolet",
+    image: "https://www.carlogos.org/logo/Chevrolet-logo-2013-2560x1440.png",
+    models: [
+      "Silverado",
+      "Malibu",
+      "Equinox",
+      "Camaro"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Truck",
+      "Coupe"
+    ]
+  },
+  {
+    label: "Volkswagen (VW)",
+    value: "Volkswagen (VW)",
+    image: "https://www.carlogos.org/logo/Volkswagen-logo-2019-1500x1500.png",
+    models: [
+      "Golf",
+      "Passat",
+      "Tiguan",
+      "Atlas"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Coupe",
+      "Hatchback"
+    ]
+  },
+  {
+    label: "Nissan",
+    value: "Nissan",
+    image: "https://www.carlogos.org/car-logos/nissan-logo-2020-black.png",
+    models: [
+      "Altima",
+      "Maxima",
+      "Rogue",
+      "Pathfinder"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Coupe",
+      "Truck"
+    ]
+  },
+  {
+    label: "BMW",
+    value: "BMW",
+    image: "https://www.carlogos.org/car-brands/bmw-logo.html#2020",
+    models: [
+      "3 Series",
+      "5 Series",
+      "X3",
+      "X5"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Coupe"
+    ]
+  },
+  {
+    label: "Mercedes-Benz",
+    value: "Mercedes-Benz",
+    image: "https://www.carlogos.org/logo/Mercedes-Benz-logo-2011-1920x1080.png",
+    models: [
+      "C-Class",
+      "E-Class",
+      "GLC",
+      "GLE"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Coupe"
+    ]
+  },
+  {
+    label: "Audi",
+    value: "Audi",
+    image: "https://www.carlogos.org/car-logos/audi-logo-2016-download.png",
+    models: [
+      "A4",
+      "A6",
+      "Q5",
+      "Q7"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Coupe"
+    ]
+  },
+  {
+    label: "Hyundai",
+    value: "Hyundai",
+    image: "https://www.carlogos.org/car-logos/hyundai-logo-2011-download.png",
+    models: [
+      "Elantra",
+      "Tucson",
+      "Santa Fe",
+      "Sonata"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Coupe"
+    ]
+  },
+  {
+    label: "Kia",
+    value: "Kia",
+    image: "https://www.carlogos.org/logo/Kia-logo-2560x1440.png",
+    models: [
+      "Optima",
+      "Sorento",
+      "Sportage",
+      "Forte"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Hatchback"
+    ]
+  },
+  {
+    label: "Subaru",
+    value: "Subaru",
+    image: "https://www.carlogos.org/car-logos/subaru-logo-2019-download.png",
+    models: [
+      "Impreza",
+      "Outback",
+      "Forester",
+      "Crosstrek"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Wagon"
+    ]
+  },
+  {
+    label: "Tesla",
+    value: "Tesla",
+    image: "https://www.carlogos.org/car-logos/tesla-logo-2007-full-download.png",
+    models: [
+      "Model S",
+      "Model 3",
+      "Model X",
+      "Model Y"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Hatchback"
+    ]
+  },
+  {
+    label: "Lexus",
+    value: "Lexus",
+    image: "https://www.carlogos.org/logo/Lexus-logo-1988-1920x1080.png",
+    models: [
+      "ES",
+      "RX",
+      "NX",
+      "IS"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Coupe"
+    ]
+  },
+  {
+    label: "Porsche",
+    value: "Porsche",
+    image: "https://www.carlogos.org/car-logos/porsche-logo-2014-full-download.png",
+    models: [
+      "911",
+      "Cayenne",
+      "Macan",
+      "Panamera"
+    ],
+    types: [
+      "Coupe",
+      "SUV (Sport Utility Vehicle)"
+    ]
+  },
+  {
+    label: "Ferrari",
+    value: "Ferrari",
+    image: "https://www.carlogos.org/car-logos/ferrari-logo-2002-download.png",
+    models: [
+      "488 GTB",
+      "Portofino",
+      "812 Superfast",
+      "Roma"
+    ],
+    types: [
+      "Coupe",
+      "Convertible"
+    ]
+  },
+  {
+    label: "Lamborghini",
+    value: "Lamborghini",
+    image: "https://www.brandcrowd.com/blog/wp-content/uploads/2023/05/Lamborghini-logo-1-1024x819.jpg",
+    models: [
+      "Huracan",
+      "Aventador",
+      "Urus",
+      "Sian"
+    ],
+    types: [
+      "Coupe",
+      "SUV (Sport Utility Vehicle)"
+    ]
+  },
+  {
+    label: "Aston Martin",
+    value: "Aston Martin",
+    image: "https://www.carlogos.org/logo/Aston-Martin-logo-2003-6000x3000.png",
+    models: [
+      "DB11",
+      "Vantage",
+      "DBX",
+      "DBS Superleggera"
+    ],
+    types: [
+      "Coupe",
+      "SUV (Sport Utility Vehicle)"
+    ]
+  },
+  {
+    label: "McLaren",
+    value: "McLaren",
+    image: "https://www.carlogos.org/logo/McLaren-logo-2002-2560x1440.png",
+    models: [
+      "720S",
+      "570S",
+      "GT",
+      "Artura"
+    ],
+    types: [
+      "Coupe",
+      "Convertible"
+    ]
+  },
+  {
+    label: "Jaguar",
+    value: "Jaguar",
+    image: "https://www.carlogos.org/car-logos/jaguar-logo-2021-download.png",
+    models: [
+      "XE",
+      "F-Pace",
+      "XF",
+      "I-Pace"
+    ],
+    types: [
+      "Sedan",
+      "SUV (Sport Utility Vehicle)",
+      "Coupe"
+    ]
+  }
 ];
 
-const carTypes = [
-  { label: "Sedan", value: "Sedan" },
-  { label: "SUV (Sport Utility Vehicle)", value: "SUV" },
-  { label: "Coupe", value: "Coupe" },
-  { label: "Convertible", value: "Convertible" },
-  { label: "Hatchback", value: "Hatchback" },
-  { label: "Wagon", value: "Wagon" },
-  { label: "Minivan", value: "Minivan" },
-  { label: "Pickup Truck", value: "Pickup Truck" },
-  { label: "Crossover", value: "Crossover" },
-  { label: "Sports Car", value: "Sports Car" },
-  { label: "Electric Vehicle (EV)", value: "EV" },
-  { label: "Hybrid Vehicle", value: "Hybrid Vehicle" },
-  { label: "Luxury Car", value: "Luxury Car" },
-  { label: "Performance Car", value: "Performance Car" },
-  { label: "Compact Car", value: "Compact Car" }
-];
 
-const carModels = [
-  { brand: "Toyota", model: "Camry" },
-  { brand: "Ford", model: "Mustang" },
-  { brand: "Honda", model: "Civic" },
-  { brand: "Chevrolet", model: "Silverado" },
-  { brand: "Volkswagen", model: "Golf" },
-  { brand: "Nissan", model: "Altima" },
-  { brand: "BMW", model: "3 Series" },
-  { brand: "Mercedes-Benz", model: "C-Class" },
-  { brand: "Audi", model: "A4" },
-  { brand: "Hyundai", model: "Sonata" },
-  { brand: "Kia", model: "Optima" },
-  { brand: "Subaru", model: "Outback" },
-  { brand: "Tesla", model: "Model 3" },
-  { brand: "Lexus", model: "RX" },
-  { brand: "Porsche", model: "911" },
-  { brand: "Ferrari", model: "488" },
-  { brand: "Lamborghini", model: "Aventador" },
-  { brand: "Aston Martin", model: "DB11" },
-  { brand: "McLaren", model: "720S" },
-  { brand: "Jaguar", model: "F-Pace" }
-];
 
 const fuelTypes = [
   { label: "Gasoline/Petrol", value: "Gasoline" },
@@ -159,15 +421,16 @@ const fuelTypes = [
 ];
 
 
-export {carBrands,carGears,carModels,carTypes,lebaneseCities,carColors,fuelTypes};
+export { carBrands, carGears, lebaneseCities, carColors, fuelTypes };
 
 export const addData = async (data, collections) => {
   const db = getFirestore(app);
   try {
     data.map(async (dat) => {
       const docRef = await addDoc(collection(db, collections), dat);
+
     })
-    console.log("Suc");
+
 
   } catch (error) {
     console.log(error.message)
