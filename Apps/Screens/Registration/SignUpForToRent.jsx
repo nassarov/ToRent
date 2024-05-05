@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
-import {View, Text,  StatusBar, TouchableOpacity,TouchableWithoutFeedback,  Keyboard,  ActivityIndicator,
+import {
+  View,
+  Text,
+  StatusBar,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ActivityIndicator,
 } from "react-native";
-import {heightPercentageToDP, widthPercentageToDP as wp,} from "react-native-responsive-screen";  
+import {
+  heightPercentageToDP,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
 import { Ionicons, EvilIcons, FontAwesome6 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from "react-native-phone-number-input";
@@ -15,7 +25,6 @@ import {
 } from "firebase/firestore";
 import { Alert } from "react-native";
 
-
 const auth = getAuth();
 const db = getFirestore(); // Assuming you've already initialized Firestore
 
@@ -28,9 +37,9 @@ export default function SignUpForToRent() {
   const [phoneInUse, setPhoneInUse] = useState(false);
   const [loading, setLoading] = useState(false); // New state for loading indicator
   const [isCheckingCredentials, setIsCheckingCredentials] = useState(false); // State to track if credentials are being checked
-  const[userRole,setUserRole]=useState('');
-  const[underInput,setUnderInput]=useState('');
-  const[textColor,setTextColor]=useState('');
+  const [userRole, setUserRole] = useState("");
+  const [underInput, setUnderInput] = useState("");
+  const [textColor, setTextColor] = useState("");
   const [userData, setUserData] = useState("");
 
   // Function to handle real-time validation of the phone number
@@ -38,31 +47,30 @@ export default function SignUpForToRent() {
     const containsNonDigit = /\D/.test(text);
     const allowedPrefixes = ["81", "71", "70", "03", "76", "78", "79"];
     const isValidPrefix = allowedPrefixes.includes(text.slice(0, 2));
-    if(text.length < 3){
-      setUnderInput('Please Enter Your Phone Number')
-      setTextColor('blueviolet')
+    if (text.length < 3) {
+      setUnderInput("Please Enter Your Phone Number");
+      setTextColor("blueviolet");
       setPhoneNumber("");
       setIsValidPhone(false);
-    }
-    else if (!containsNonDigit && text.length == 8 && isValidPrefix) {
+    } else if (!containsNonDigit && text.length == 8 && isValidPrefix) {
       setIsValidPhone(true);
       setPhoneNumber(text);
       checkPhoneNumberInUse(`+961${text}`);
-      setUnderInput('')
+      setUnderInput("");
     } else {
       setIsValidPhone(false);
       setPhoneNumber("");
-      setUnderInput('Invalid Phone Number')
-      setTextColor('red')
+      setUnderInput("Invalid Phone Number");
+      setTextColor("red");
     }
   };
   useEffect(() => {
     validatePhoneNumber("");
-    setUserData([{ role: "guest" }]);
+    setUserData([{ role: "2" }]);
   }, []);
 
   const continueAsGuest = () => {
-    setUserData([{ role: "guest" }]);
+    setUserData([{ role: "2" }]);
     navigation.replace("HomeScreenNavigation", { userData });
   };
 
@@ -104,18 +112,19 @@ export default function SignUpForToRent() {
           },
         ]
       );
-      
     } else if (phoneInUse) {
       Alert.alert(
         "Phone Number In Use",
         "The phone number entered is already associated with another account."
       );
       setPhoneNumber("");
-    } else if (!isValidPhone || phoneNumber.length < 8 && phoneNumber.length >0) {
+    } else if (
+      !isValidPhone ||
+      (phoneNumber.length < 8 && phoneNumber.length > 0)
+    ) {
       Alert.alert("Invalid Phone Number", "Please enter a valid phone number.");
       setPhoneNumber("");
     }
-    
   };
 
   return (
@@ -148,7 +157,7 @@ export default function SignUpForToRent() {
               layout="first"
               value={phoneNumber}
               countryPickerProps={{
-              countryCodes: ["LB"],
+                countryCodes: ["LB"],
               }}
               disableArrowIcon={false}
               containerStyle={{ backgroundColor: "white", borderRadius: 10 }}
@@ -160,12 +169,10 @@ export default function SignUpForToRent() {
               }}
               onChangeText={validatePhoneNumber}
             />
-             
+
             <Text style={{ color: textColor, fontSize: 14, marginTop: 4 }}>
               {underInput}
             </Text>
-     
-            
           </View>
           <View className="my-12">
             <TouchableOpacity
