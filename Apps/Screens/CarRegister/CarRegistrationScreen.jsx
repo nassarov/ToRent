@@ -78,12 +78,15 @@ const [colorSearchInput, setColorSearchInput] = useState('');
 const clearAllSelections = () => {
   setSelectedAddress(null);
   setSelectedBrand(null);
-  setSelectedTypes(null);
-  setSelectedPrice(null);
+  setSelectedType(null);
   setSelectedColor(null);
   setSelectedModel(null);
-  setSelectedFuel(null);
-  setSelectedGear(null);
+  setSelectedFuelType(null);
+  setSelectedGearType(null);
+  setSelectedYear(null);
+  setCarseat(null);
+  setMinDay(null);
+  setMaxDay(null);
 };
 const navigation = useNavigation();
 // hide bottom tab bar
