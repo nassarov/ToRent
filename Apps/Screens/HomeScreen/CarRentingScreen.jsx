@@ -29,7 +29,7 @@ export default function CarRentingScreen({route}) {
   };
    // Function to scroll to the bottom
    const scrollToBottom = () => {
-    scrollViewRef.current.scrollToEnd({ animated: true, duration: 2000 });
+    scrollViewRef.current.scrollToEnd({ animated: true, duration: 1000 });
   };
   
     // Handlers for date change
@@ -115,7 +115,7 @@ export default function CarRentingScreen({route}) {
   
   return (
     <View className='flex-1'>
-    <ScrollView className='pb-4'         ref={scrollViewRef} onScroll={handleScroll} scrollEventThrottle={16}>
+    <ScrollView className='pb-4' ref={scrollViewRef} onScroll={handleScroll} scrollEventThrottle={20}>
       <CustomHeader2 text={"Car Details"} />
       <PictureSwitching images={images} />
       {/* Grid */}
@@ -178,13 +178,18 @@ export default function CarRentingScreen({route}) {
       <TouchableOpacity 
         onPress={() => {/* Your onPress function */}}
         style={{
-          backgroundColor: 'blue',
+          backgroundColor: '#7F5AF0',
           padding: 10,
           borderRadius: 10,
+          marginTop:10,
+          width: widthPercentageToDP(40),
+          height: heightPercentageToDP(7),
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         {/* Button content */}
-        <Text style={{ color: 'white' }}>Your Button</Text>
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>Request Rent</Text>
       </TouchableOpacity>
     </View>
     </ScrollView>
@@ -194,14 +199,16 @@ export default function CarRentingScreen({route}) {
           style={{
             position: 'absolute',
             bottom: 20,
-            right: 20,
-            backgroundColor: 'blue',
+            right: 10,
+            backgroundColor: '#7F5AF0',
             borderRadius: 30,
+            borderColor:'#7F5AF0',
+            borderWidth:2,
             padding: 15,
             zIndex: 999, // Ensure it's above the ScrollView content
           }}
         >
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>Your Button</Text>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Schedule A Rent</Text>
         </TouchableOpacity>
       )}
     </View>

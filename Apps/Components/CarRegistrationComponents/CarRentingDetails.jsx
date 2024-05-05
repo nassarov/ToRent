@@ -62,10 +62,10 @@ export default function CarRentingDetails({ startDate, endDate, onStartDateChang
         <View style={{ width: "45%" }}>
           {/* Drop-off date */}
           <Text className="font-bold mb-2 text-white">Drop-off date</Text>
-          <TouchableOpacity className="flex-row rounded-lg bg-violet-600 p-2 items-center">
+          <View className="flex-row rounded-lg bg-violet-600 p-2 items-center">
             <FontAwesome5 name="calendar" size={20} color="white" />
             <Text className="text-white ml-2">{formatedEndDate}</Text>
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
       <View className="p-2">
@@ -109,8 +109,9 @@ export default function CarRentingDetails({ startDate, endDate, onStartDateChang
         onRequestClose={toggleCalendar}
       >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <View style={{ width: "100%", height: heightPercentageToDP(46), backgroundColor: '#FFFFFF', borderRadius: 10 }}>
-            <Text className='text-lg font-bold text-center'>Calendar</Text>
+          <View style={{ width: "100%", height: heightPercentageToDP(50), backgroundColor: '#FFFFFF', borderRadius: 10 }}>
+            <Text className='text-xl font-bold text-center mt-2'>Calendar</Text>
+            <Text className='text-base text-center  '>Choose Pick-Up And Drop-Off Dates</Text>
             
             {/* CalendarPicker component */}
             <View className="border-2 border-violet-600 rounded-lg p-2 m-1 "
@@ -162,8 +163,8 @@ export default function CarRentingDetails({ startDate, endDate, onStartDateChang
         />
        </View>
        {/* Button to apply selected dates */}
-       <TouchableOpacity onPress={handleApply} style={{ position: 'absolute', bottom: 20, right: 20 }}>
-          <Text style={{ color: 'blue' }}>Apply</Text>
+       <TouchableOpacity onPress={handleApply} style={{ position: 'absolute', bottom:12, right: 20 }}>
+          <Text style={{ color: 'blue' ,fontSize:18}}>Apply</Text>
         </TouchableOpacity>
        
         </View>
