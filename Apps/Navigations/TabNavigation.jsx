@@ -14,6 +14,9 @@ import CarRentingScreen from "../Screens/HomeScreen/CarRentingScreen";
 import CarRegistrationScreen from "../Screens/CarRegister/CarRegistrationScreen";
 import CustomHeader2 from "../Components/CustomHeader2";
 import AddPost from "../Screens/CarRegister/AddPost";
+import ProfileScreen from "../Screens/Profile/ProfileScreen";
+import Notification from "../Screens/Notification/Notification";
+import Trips from "../Screens/Trips/Trips";
 
 const Tab = createBottomTabNavigator();
 
@@ -81,8 +84,8 @@ const TabNavigation = ({ route }) => {
         }}
       />
       <Tab.Screen
-        name="CarTab"
-        component={CarRentingScreen}
+        name="TripsTab"
+        component={Trips}
         initialParams={{ userData: userData }}
         options={{
           headerShown: false,
@@ -118,7 +121,7 @@ const TabNavigation = ({ route }) => {
       )}
       <Tab.Screen
         name="NotificationTab"
-        component={HomeScreen}
+        component={Notification}
         initialParams={{ userData: userData }}
         options={{
           headerShown: false,
@@ -133,7 +136,7 @@ const TabNavigation = ({ route }) => {
       />
       <Tab.Screen
         name="ProfileTab"
-        component={CarRentingScreen}
+        component={ProfileScreen}
         initialParams={{ userData: userData }}
         options={{
           headerShown: false,
