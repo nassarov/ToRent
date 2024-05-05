@@ -166,7 +166,6 @@ export default function CarRentingDetails({ startDate, endDate, onStartDateChang
        <TouchableOpacity onPress={handleApply} style={{ position: 'absolute', bottom:12, right: 20 }}>
           <Text style={{ color: 'blue' ,fontSize:18}}>Apply</Text>
         </TouchableOpacity>
-       
         </View>
         </View>
       </Modal>

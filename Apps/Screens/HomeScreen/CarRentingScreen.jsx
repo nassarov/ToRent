@@ -198,14 +198,14 @@ export default function CarRentingScreen({route}) {
           onPress={scrollToBottom}
           style={{
             position: 'absolute',
-            bottom: 20,
-            right: 10,
+            bottom: 100,
+            right: 20,
             backgroundColor: '#7F5AF0',
             borderRadius: 30,
             borderColor:'#7F5AF0',
             borderWidth:2,
             padding: 15,
-            zIndex: 999, // Ensure it's above the ScrollView content
+            zIndex: 999, 
           }}
         >
           <Text style={{ color: 'white', fontWeight: 'bold' }}>Schedule A Rent</Text>
