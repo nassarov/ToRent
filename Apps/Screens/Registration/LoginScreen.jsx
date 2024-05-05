@@ -1,19 +1,35 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import React, { useState } from 'react';
-import { Formik } from 'formik';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  StatusBar,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import React, { useState } from "react";
+import { Formik } from "formik";
+import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  heightPercentageToDP,
+  widthPercentageToDP,
+} from "react-native-responsive-screen";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { doc, getFirestore, getDoc } from "firebase/firestore";
-import { app } from '../../../firebaseConfig';
+import { app } from "../../../firebaseConfig";
 
 export default function LoginScreen() {
-  StatusBar.setBarStyle('dark-content', true);
+  StatusBar.setBarStyle("dark-content", true);
 
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isCheckingCredentials, setIsCheckingCredentials] = useState(false); // State to track if credentials are being checked
   const navigation = useNavigation();
   const db = getFirestore(app);
@@ -28,16 +44,19 @@ export default function LoginScreen() {
     setIsCheckingCredentials(true); // Set isCheckingCredentials to true when checking credentials
     try {
       const auth = getAuth();
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
       // Fetch user role from Firestore
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnapshot = await getDoc(userDocRef);
       const userData = userDocSnapshot.data();
-      const userRole = userData.role; // Assuming role is stored in the user document
+      // Assuming role is stored in the user document
       // User is signed in, navigate to Home screen and pass user role
-      navigation.navigate("homescreennav", { userRole });
-      console.log("User is signed in:", user.email, userRole);
+      navigation.replace("HomeScreenNavigation", { userData });
     } catch (error) {
       // Handle errors here, such as displaying a notification or error message
       console.error("Error signing in:", error.message);
@@ -47,10 +66,9 @@ export default function LoginScreen() {
     }
   };
 
-
   return (
     <Formik
-      initialValues={{ email: '', password: '' }}
+      initialValues={{ email: "", password: "" }}
       onSubmit={(values) => {
         console.log(values);
         handleSubmit(values);
@@ -60,12 +78,12 @@ export default function LoginScreen() {
         const errors = {};
 
         if (!email) {
-          errors.email = 'Required';
+          errors.email = "Required";
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
-          errors.email = 'Invalid email address';
+          errors.email = "Invalid email address";
         }
         if (password.length === 0) {
-          errors.password = 'Required';
+          errors.password = "Required";
         }
 
         return errors;
@@ -74,55 +92,77 @@ export default function LoginScreen() {
       {({ handleChange, handleBlur, values, errors }) => (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={styles.container}>
-            <StatusBar backgroundColor={'#F6F6F6'} translucent={true} />
+            <StatusBar backgroundColor={"#F6F6F6"} translucent={true} />
             {/* Input Fields */}
             <View>
               {/* Email */}
               <View style={{ height: heightPercentageToDP(12) }}>
                 <TextInput
-                  placeholder='Email'
+                  placeholder="Email"
                   style={styles.input}
                   onChangeText={(text) => setEmail(text)}
-                  onBlur={handleBlur('email')}
+                  onBlur={handleBlur("email")}
                   value={email}
                 />
-                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+                {errors.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
               </View>
               {/* Password with Eye Icon */}
               <View style={{ height: heightPercentageToDP(12) }}>
                 <View style={styles.passwordContainer}>
                   <TextInput
-                    placeholder='Password'
+                    placeholder="Password"
                     style={styles.input}
                     onChangeText={(text) => setPassword(text)}
-                    onBlur={handleBlur('password')}
+                    onBlur={handleBlur("password")}
                     value={password}
                     secureTextEntry={!showPassword}
                   />
-                  <TouchableOpacity style={styles.iconContainer} onPress={togglePasswordVisibility}>
-                    <Icon name={!showPassword ? 'eye-off' : 'eye'} size={25} color="#7F5AF0" />
+                  <TouchableOpacity
+                    style={styles.iconContainer}
+                    onPress={togglePasswordVisibility}
+                  >
+                    <Icon
+                      name={!showPassword ? "eye-off" : "eye"}
+                      size={25}
+                      color="#7F5AF0"
+                    />
                   </TouchableOpacity>
                 </View>
-                {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+                {errors.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
               </View>
 
               {/*  Login Button */}
-              <View className='items-center'>
+              <View className="items-center">
                 <TouchableOpacity
-                  style={[styles.loginButton, isCheckingCredentials && { opacity: 0.5 }]} // Disable button opacity when isCheckingCredentials is true
+                  style={[
+                    styles.loginButton,
+                    isCheckingCredentials && { opacity: 0.5 },
+                  ]} // Disable button opacity when isCheckingCredentials is true
                   onPress={handleSubmit}
                   disabled={isCheckingCredentials} // Disable button when isCheckingCredentials is true
                 >
-                  <Text style={styles.loginButtonText}>{isCheckingCredentials ? 'Logging In...' : 'Login'}</Text>
+                  <Text style={styles.loginButtonText}>
+                    {isCheckingCredentials ? "Logging In..." : "Login"}
+                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('forgotpassword')}>
-                  <Text className='text-center text-violet-600'>Forgot Your Password?</Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("ForgotPasswordScreen")}
+                >
+                  <Text className="text-center text-violet-600">
+                    Forgot Your Password?
+                  </Text>
                 </TouchableOpacity>
 
-                <View className='flex-row justify-center mt-10'>
-                  <Text className='text-center'>Don't Have an Account?</Text>
-                  <TouchableOpacity onPress={() => navigation.replace('signupforToRent')}>
-                    <Text className='text-violet-600'> Register</Text>
+                <View className="flex-row justify-center mt-10">
+                  <Text className="text-center">Don't Have an Account?</Text>
+                  <TouchableOpacity
+                    onPress={() => navigation.replace("SignUpForToRent")}
+                  >
+                    <Text className="text-violet-600"> Register</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -137,7 +177,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     paddingTop: 50,
   },
   input: {
@@ -148,15 +188,15 @@ const styles = StyleSheet.create({
     margin: 15,
     padding: 18,
     width: heightPercentageToDP(42),
-    height: widthPercentageToDP(15)
+    height: widthPercentageToDP(15),
   },
   passwordContainer: {
-    position: 'relative',
+    position: "relative",
   },
   iconContainer: {
-    position: 'absolute',
+    position: "absolute",
     right: 25,
-    top: '50%',
+    top: "50%",
     transform: [{ translateY: -10 }],
   },
   loginButton: {
@@ -176,7 +216,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginLeft: 15,
   },

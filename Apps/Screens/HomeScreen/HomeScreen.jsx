@@ -151,7 +151,7 @@ export default function HomeScreen() {
       
       <View className='flex-row justify-between px-1 items-center'>
         <SearchBarCar/>
-        <TouchableOpacity onPress={() => navigation.navigate('filter')} 
+        <TouchableOpacity onPress={() => navigation.navigate('Filter')} 
         className='mr-2 mt-1'><FontAwesome6 name="sliders" size={24} color="black" /></TouchableOpacity>
       </View>
       <Carousel/>

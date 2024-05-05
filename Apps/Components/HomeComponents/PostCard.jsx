@@ -5,7 +5,7 @@ import {
   widthPercentageToDP,
 } from "react-native-responsive-screen";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {useNavigation} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function PostCard({ car }) {
   const navigation = useNavigation();
@@ -18,7 +18,7 @@ export default function PostCard({ car }) {
       }}
       className="bg-violet-300 rounded-lg  gap-y-1 p-2 ml-2 mt-1"
       key={car.id}
-      onPress={()=>navigation.navigate('carrenting')}
+      onPress={() => navigation.navigate("CarRentingScreen")}
     >
       <Image
         source={car.image}

@@ -12,29 +12,27 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [initialRoute, setInitialRoute] = useState('');
-  const [userRole,setUserRole] = useState('');
+  const [userData, setUserData] = useState('');
   const auth = getAuth();
   const db = getFirestore(app);
-  
+
   useEffect(() => {
     const checkFirstTimeUser = async () => {
       const isFirstTime = await AsyncStorage.getItem('alreadyLaunched');
       if (isFirstTime === null) {
         await AsyncStorage.setItem('alreadyLaunched', 'true');
-        setInitialRoute('OnBoard');
+        setInitialRoute('OnBoardScreen');
       } else {
         onAuthStateChanged(auth, async (user) => {
           if (user) {
             const userDocRef = doc(db, "users", user.uid);
             const userDocSnapshot = await getDoc(userDocRef);
             const userData = userDocSnapshot.data();
-            setUserRole(userData.role);
-            setInitialRoute('Home');
-            console.log('home')
-            console.log(user.email,"role",userRole)
+            setUserData(userData);
+            setInitialRoute('HomeScreenStack');
           } else {
             setInitialRoute('Registration');
-            console.log('reg')
+
           }
         });
       }
@@ -42,11 +40,11 @@ export default function App() {
     checkFirstTimeUser();
   }, []);
 
-  return initialRoute&&(
+  return initialRoute && (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen
-          name="OnBoard"
+          name="OnBoardScreen"
           component={OnBoardScreen}
           options={{ headerShown: false }}
         />
@@ -56,10 +54,10 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Home"
+          name="HomeScreenStack"
           component={HomeScreenNavigation}
           options={{ headerShown: false }}
-          initialParams={{userRole}}
+          initialParams={{ userData }}
         />
       </Stack.Navigator>
     </NavigationContainer>

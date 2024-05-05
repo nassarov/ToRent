@@ -78,10 +78,10 @@ export default function SignUpScreen({ route }) {
 
       console.log(userCredential);
       if (values.role === "1") {
-        navigation.push("address");
+        navigation.push("AddressScreen");
       } else {
         Alert.alert("Success", "You have successfully signed up!");
-        navigation.push("login");
+        navigation.push("LoginScreen");
       }
     } catch (error) {
       console.log("Error in signup:", error.message);

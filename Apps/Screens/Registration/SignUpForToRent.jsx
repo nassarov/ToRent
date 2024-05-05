@@ -37,7 +37,7 @@ export default function SignUpForToRent() {
   const [phoneInUse, setPhoneInUse] = useState(false);
   const [loading, setLoading] = useState(false); // New state for loading indicator
   const [isCheckingCredentials, setIsCheckingCredentials] = useState(false); // State to track if credentials are being checked
-  const[userRole,setUserRole]=useState('');
+  const [userData, setUserData] = useState("");
 
   // Function to handle real-time validation of the phone number
   const validatePhoneNumber = (text) => {
@@ -56,13 +56,13 @@ export default function SignUpForToRent() {
   };
   useEffect(() => {
     validatePhoneNumber("");
-     setUserRole('guest');
+    setUserData([{ role: "guest" }]);
   }, []);
 
-  const continueAsGuest =()=>{
-    setUserRole('guest'),
-    navigation.navigate("homescreennav", { userRole });
-  }
+  const continueAsGuest = () => {
+    setUserData([{ role: "guest" }]);
+    navigation.replace("HomeScreenNavigation", { userData });
+  };
 
   const checkPhoneNumberInUse = async (fullPhoneNumber) => {
     setLoading(true); // Set loading to true while checking
@@ -85,7 +85,7 @@ export default function SignUpForToRent() {
   const onSubmitMethod = () => {
     if (isValidPhone && !phoneInUse) {
       const phoneNumberCCode = `+961${phoneNumber}`;
-      navigation.navigate("signup", { value: phoneNumberCCode });
+      navigation.navigate("SignUpScreen", { value: phoneNumberCCode });
     } else if (phoneInUse) {
       Alert.alert(
         "Phone Number In Use",
@@ -216,9 +216,8 @@ export default function SignUpForToRent() {
           <Text className="text-[16px] font-semibold">
             Already Have An Account?
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("login")}>
+          <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
             <Text className="text-violet-600 text-[18px] mt-[-2px] ">
-              {" "}
               Login
             </Text>
           </TouchableOpacity>

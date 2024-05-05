@@ -15,7 +15,7 @@ export default function CustomHeader({ props }) {
           <AntDesign name="close" size={24} color="black"/>
         </TouchableOpacity>
         <Text className="font-bold text-3xl text-center">{props.title}</Text>
-        <TouchableOpacity onPress={()=>navigation.replace('login')}>
+        <TouchableOpacity onPress={()=>navigation.replace('LoginScreen')}>
           
           <Text className="text-violet-600 text-lg">{props.nextPage}</Text>
         </TouchableOpacity>
