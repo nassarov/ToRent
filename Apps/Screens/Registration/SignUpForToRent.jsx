@@ -99,7 +99,7 @@ export default function SignUpForToRent() {
           {
             text: "Yes",
             onPress: () => {
-              navigation.navigate("signup", { value: phoneNumberCCode });
+              navigation.navigate("SignUpScreen", { value: phoneNumberCCode });
             },
           },
         ]

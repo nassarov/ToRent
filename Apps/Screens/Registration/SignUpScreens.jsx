@@ -60,10 +60,10 @@ const handelSignUp = async (values) => {
 
     console.log(userCredential);
     if (values.role === "1") {
-      navigation.replace("address");
+      navigation.replace("AddressScreen");
     } else {
       Alert.alert("Success", "You have successfully signed up!");
-      navigation.push("login");
+      navigation.push("LoginScreen");
     }
   } catch (error) {
     console.log("Error in signup:", error.message);
