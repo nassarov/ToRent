@@ -9,58 +9,58 @@ import VerificationCodeScreen from "../Screens/Registration/VerificationCodeScre
 import CustomHeader2 from "../Components/CustomHeader2";
 import ChangePasswordScreen from "../Screens/Registration/ChangePasswordScreen";
 import AddressScreen from "../Screens/Registration/AddressScreen";
-import HomescreenNavigation from "../Navigations/HomeScreenNavigation"
+import HomescreenNavigation from "../Navigations/HomeScreenNavigation";
 import TabNavigation from "./TabNavigation";
 import CustomHeader3 from "../Components/CustomHeader3";
 const Stack = createStackNavigator();
 
 export default function Registration() {
-  const headers=[{id:1,title:"Sign Up",nextPage:'Login'},{id:2,title:"Login    ",}]
+  const headers = [
+    { id: 1, title: "Sign Up", nextPage: "Login" },
+    { id: 2, title: "Login    " },
+  ];
   return (
-    <Stack.Navigator initialRouteName="signupforToRent"> 
+    <Stack.Navigator initialRouteName="SignUpForToRent">
       <Stack.Screen
-        name='signupforToRent'
+        name="SignUpForToRent"
         component={SignUpForToRent}
         options={{ headerShown: false }}
-        
       />
       <Stack.Screen
-        name='signup'
+        name="SignUpScreen"
         component={SignUpScreens}
-        options={ { header:() => <CustomHeader props={headers[0]} />}}
+        options={{ header: () => <CustomHeader props={headers[0]} /> }}
       />
       <Stack.Screen
-        name='login'
+        name="LoginScreen"
         component={LoginScreen}
-        options={{ header:() => <CustomHeader props={headers[1]} /> }}
+        options={{ header: () => <CustomHeader props={headers[1]} /> }}
       />
       <Stack.Screen
-        name='forgotpassword'
+        name="ForgotPasswordScreen"
         component={ForgotPasswordScreen}
-        options={{ header:() => <CustomHeader2/> }}
+        options={{ header: () => <CustomHeader2 /> }}
       />
       <Stack.Screen
-        name='changepassword'
+        name="ChangePasswordScreen"
         component={ChangePasswordScreen}
-        options={{ header:() => <CustomHeader2/> }}
+        options={{ header: () => <CustomHeader2 /> }}
       />
       <Stack.Screen
-        name='recoveraccount'
+        name="VerificationCodeScreen"
         component={VerificationCodeScreen}
-        options={{ header:() => <CustomHeader2/> }}
+        options={{ header: () => <CustomHeader2 /> }}
       />
-         <Stack.Screen
-        name='address'
+      <Stack.Screen
+        name="AddressScreen"
         component={AddressScreen}
         options={{ header:() => <CustomHeader3 text={'Where Your Cars Are Located'}/> }}
       />
-         <Stack.Screen
-        name='homescreennav'
+      <Stack.Screen
+        name="HomeScreenNavigation"
         component={HomescreenNavigation}
         options={{ headerShown: false }}
       />
-
-      
     </Stack.Navigator>
   );
 }

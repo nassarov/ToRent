@@ -9,33 +9,32 @@ import TabNavigation from "./TabNavigation";
 import PickImagesScreen from "../Screens/CarRegister/PickImagesScreen";
 
 const Stack = createStackNavigator();
-export default function HomeScreenNavigation({route}) {
-  
-  const { userRole } = route.params;
-  console.log("HomeNAv",userRole);
+export default function HomeScreenNavigation({ route }) {
+  const { userData } = route.params;
+  console.log("HomeNAv", userData);
   return (
-    <Stack.Navigator initialRouteName="homescreen">
+    <Stack.Navigator initialRouteName="TabNavigation">
       <Stack.Screen
-        name="carrenting"
+        name="CarRentingScreen"
         component={CarRentingScreen}
         options={{ headerShown: false }}
-        initialParams={{userRole:userRole}}
+        initialParams={{ userData: userData }}
       />
       <Stack.Screen
-        name="homescreen"
+        name="TabNavigation"
         component={TabNavigation}
-        initialParams={{userRole:userRole}}
+        initialParams={{ userData: userData }}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="filter"
+        name="Filter"
         component={Filter}
-        options={{ header:() => <CustomHeader2/>}}
+        options={{ header: () => <CustomHeader2 /> }}
       />
-      <Stack.Screen 
-      name="PickImagesScreen"
-      component={PickImagesScreen}
-      initialParams={{userRole:userRole}}
+      <Stack.Screen
+        name="PickImagesScreen"
+        component={PickImagesScreen}
+        initialParams={{ userData: userData }}
       />
     </Stack.Navigator>
   );

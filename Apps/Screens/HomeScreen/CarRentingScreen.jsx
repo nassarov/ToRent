@@ -24,7 +24,7 @@ import DetailsGrid from "../../Components/HomeComponents/DetailsGrid";
 import CarRentingDetails from "../../Components/CarRegistrationComponents/CarRentingDetails";
 
 export default function CarRentingScreen({route}) {
-  const { userRole } = route.params;
+  const { userData } = route.params;
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [selectedEndDate, setSelectedEndDate] = useState("");
   const minDate = new Date(); // Today

@@ -1,10 +1,16 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign, FontAwesome5, Entypo, Fontisto, MaterialIcons } from "@expo/vector-icons";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  AntDesign,
+  FontAwesome5,
+  Entypo,
+  Fontisto,
+  MaterialIcons,
+} from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HomeScreen from "../Screens/HomeScreen/HomeScreen";
-import CarRentingScreen from '../Screens/HomeScreen/CarRentingScreen';
+import CarRentingScreen from "../Screens/HomeScreen/CarRentingScreen";
 import CarRegistrationScreen from "../Screens/CarRegister/CarRegistrationScreen";
 import CustomHeader2 from "../Components/CustomHeader2";
 import AddPost from "../Screens/CarRegister/AddPost";
@@ -22,23 +28,24 @@ const CustomTabButton = ({ children, onPress }) => {
       }}
       onPress={onPress}
     >
-      <View style={{
-        width: 50,
-        height: 50,
-        borderRadius: 20,
-        backgroundColor: "#7F5AF0",
-      }}>
+      <View
+        style={{
+          width: 50,
+          height: 50,
+          borderRadius: 20,
+          backgroundColor: "#7F5AF0",
+        }}
+      >
         {children}
       </View>
     </TouchableOpacity>
   );
-}
+};
 
 const TabNavigation = ({ route }) => {
-  
-  const { userRole } = route.params;
-  console.log("HomeTabNAv",userRole);
-  const insets = useSafeAreaInsets();  // Use safe area insets for better compatibility with iOS devices
+  const { userData } = route.params;
+  console.log("HomeTabNAv", userData);
+  const insets = useSafeAreaInsets(); // Use safe area insets for better compatibility with iOS devices
   return (
     <Tab.Navigator
       screenOptions={{
@@ -52,16 +59,16 @@ const TabNavigation = ({ route }) => {
           backgroundColor: "#DADADA",
           borderRadius: 15,
           height: 50,
-          paddingBottom: Platform.OS === 'ios' ? 0 : 5, // Adding padding bottom for iOS
+          paddingBottom: Platform.OS === "ios" ? 0 : 5, // Adding padding bottom for iOS
           ...styles.shadow,
         },
         tabBarActiveTintColor: "#7F5AF0",
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="HomeTab"
         component={HomeScreen}
-        initialParams={{userRole:userRole}}
+        initialParams={{ userData: userData }}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -74,9 +81,9 @@ const TabNavigation = ({ route }) => {
         }}
       />
       <Tab.Screen
-        name="Car"
+        name="CarTab"
         component={CarRentingScreen}
-        initialParams={{userRole:userRole}}
+        initialParams={{ userData: userData }}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -88,27 +95,31 @@ const TabNavigation = ({ route }) => {
           ),
         }}
       />
-      {userRole === '1' && (
+      {userData.role === "1" && (
         <Tab.Screen
-          name="Post"
+          name="PostTab"
           // component={CarRegistrationScreen}
           component={AddPost}
-          initialParams={{userRole:userRole}}
+          initialParams={{ userData: userData }}
           options={{
             headerShown: true,
-            header: () => <CustomHeader2 text={'Add Your Car'} />,
-            tabBarIcon: ({ focused }) =>
-              (<MaterialIcons focused={focused} name="add" size={28} color="white" />),
-            tabBarButton: (props) => (
-              <CustomTabButton {...props} />
+            header: () => <CustomHeader2 text={"Add Your Car"} />,
+            tabBarIcon: ({ focused }) => (
+              <MaterialIcons
+                focused={focused}
+                name="add"
+                size={28}
+                color="white"
+              />
             ),
+            tabBarButton: (props) => <CustomTabButton {...props} />,
           }}
         />
       )}
       <Tab.Screen
-        name="Notification"
+        name="NotificationTab"
         component={HomeScreen}
-        initialParams={{userRole:userRole}}
+        initialParams={{ userData: userData }}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -121,9 +132,9 @@ const TabNavigation = ({ route }) => {
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="ProfileTab"
         component={CarRentingScreen}
-        initialParams={{userRole:userRole}}
+        initialParams={{ userData: userData }}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (

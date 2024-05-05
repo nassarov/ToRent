@@ -44,7 +44,9 @@ export default function ForgotPasswordScreen() {
         // Check if the phone number consists of exactly 8 digits
         const phoneNumberCCode = `+961${phoneNumber}`;
         console.log(phoneNumberCCode);
-        navigation.navigate("recoveraccount", { value: phoneNumberCCode });
+        navigation.navigate("VerificationCodeScreen", {
+          value: phoneNumberCCode,
+        });
       } else {
         setIsValidPhone(false);
       }
@@ -59,7 +61,6 @@ export default function ForgotPasswordScreen() {
         className="flex-1 items-center"
         style={{ paddingTop: Constants.statusBarHeight }}
       >
-     
         <View
           style={{
             width: widthPercentageToDP(90),

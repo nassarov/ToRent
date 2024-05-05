@@ -88,7 +88,7 @@ export default function AddressScreen() {
       Alert.alert(
         "Addresses Added",
         "Your addresses have been successfully added!",
-        [{ text: "OK", onPress: () => navigation.replace('login') }]
+        [{ text: "OK", onPress: () => navigation.replace('LoginScreen') }]
       );
     } catch (error) {
       console.error("Error updating document: ", error);

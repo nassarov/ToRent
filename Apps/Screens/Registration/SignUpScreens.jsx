@@ -63,7 +63,7 @@ const handelSignUp = async (values) => {
       navigation.replace("address");
     } else {
       Alert.alert("Success", "You have successfully signed up!");
-      navigation.replace("login");
+      navigation.push("login");
     }
   } catch (error) {
     console.log("Error in signup:", error.message);
