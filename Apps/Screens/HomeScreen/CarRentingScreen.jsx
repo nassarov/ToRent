@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions } from "react-native";
+import { View, Text, Image, Dimensions,Linking  } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList,ScrollView,  TouchableOpacity,} from "react-native-gesture-handler";   
 import { heightPercentageToDP,  widthPercentageToDP,} from "react-native-responsive-screen"; 
@@ -18,6 +18,12 @@ export default function CarRentingScreen({route}) {
   const maxDate = new Date(2025, 6, 3);
   const [buttonVisible, setButtonVisible] = useState(true);
   const scrollViewRef = useRef(null);
+
+  const handlePress = () => {
+    // Open Google Maps with the location of Beirut
+    const url = "https://www.google.com/maps/search/?api=1&query=Beirut";
+    Linking.openURL(url);
+  };
 
    // Function to handle scroll event
    const handleScroll = (event) => {
@@ -143,20 +149,22 @@ export default function CarRentingScreen({route}) {
       <Text className="ml-2 font-bold text-lg mb-[-12px] ">Address</Text>
       <View
         className="m-4 border-2 border-violet-600 rounded-lg p-2"
-        style={{ height: heightPercentageToDP(10) }}
+        style={{ height: heightPercentageToDP(26) }}
       >
-        <View className=" flex-row mb-1">
+        <View className=" flex-row">
           <Text className="font-bold">City:</Text>
           <Text>Beirut</Text>
         </View>
-        <Text className="font-bold ">
-          Google maps Link:
-          <TouchableOpacity>
-            <Text className="text-blue-400">
-              https://maps.app.goo.gl/sdfaewf
-            </Text>
-          </TouchableOpacity>
-        </Text>
+        <Text className="font-bold mb-1">
+          Google maps Link:</Text>
+          <TouchableOpacity style={{width:"100%",height:"90%", borderColor:"#7F5AF0",borderRadius:10,borderWidth:1,margin:-2}}
+          onPress={handlePress}>
+      <Image
+        source={require('../../../assets/Location/Beirut.png')} 
+        style={{ width: "100%", height: "100%", borderRadius:10}} 
+        />
+    </TouchableOpacity>
+        
       </View>
       </View>
       {/* Calendar */}
@@ -203,7 +211,7 @@ export default function CarRentingScreen({route}) {
           onPress={scrollToBottom}
           style={{
             position: 'absolute',
-            bottom: 100,
+            bottom: 30,
             right: 20,
             backgroundColor: '#7F5AF0',
             borderRadius: 30,
