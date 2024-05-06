@@ -386,6 +386,7 @@ export default function CarRegistrationScreen() {
           <ScrollView className="mb-24">
             <View style={styles.carListContainer}>
               <FlatList
+              showsHorizontalScrollIndicator={false}
                 horizontal
                 data={carBrands}
                 renderItem={({ item }) => (
@@ -395,7 +396,8 @@ export default function CarRegistrationScreen() {
                       selectedBrand &&
                         selectedBrand.label === item.label && {
                           borderColor: "#7F5AF0",
-                          borderWidth: 1,
+                          borderWidth: 2,
+                          borderRadius:10,
                         }, // Adjust borderWidth as needed
                     ]}
                     onPress={() => handleBrandSelect(item)}
@@ -808,18 +810,29 @@ const styles = StyleSheet.create({
   carListContainer: {
     height: 100,
     marginBottom: 20,
+    borderRadius: 20, 
+    backgroundColor: '#FFFFFF',
+    margin: 2,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 8, 
   },
   flatListContent: {
     alignItems: "center",
     paddingRight: 20,
   },
   brandItem: {
-    marginBottom: 10,
+    width:80,
+    height:80,
+    margin:5
   },
   image: {
-    width: 60,
-    height: 60,
-    margin: 10,
+    width: '100%', height: '100%', resizeMode: 'contain'
   },
   dropdownTitle: {
     fontSize: 18,
@@ -829,11 +842,14 @@ const styles = StyleSheet.create({
   dropdownButton: {
     borderWidth: 1,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 8,
     width: "100%",
-    alignItems: "center",
+    height:"4.3%",
+    alignItems: "flex-start",
     marginBottom: 20,
-    borderColor: "#7F5AF0",
+    borderColor: "#7F5DF0",
+    backgroundColor:'white',
+    alignContent:'space-between',
   },
   modalContainer: {
     flex: 1,
