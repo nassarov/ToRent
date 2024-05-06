@@ -105,6 +105,7 @@ const TabNavigation = ({ route }) => {
           name="Post"
           // component={CarRegistrationScreen}
           component={CarRegistrationScreen}
+          initialParams={{ userData: userData }}
           options={{
             headerShown: true,
             header: () => <CustomHeader2 text={"Add Your Car"} />,
