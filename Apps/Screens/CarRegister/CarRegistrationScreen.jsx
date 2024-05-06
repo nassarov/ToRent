@@ -139,9 +139,9 @@ export default function CarRegistrationScreen({ route }) {
       selectedGearType &&
       selectedModel
     ) {
-      const carData = [{ color: selectedColor.value, type: selectedType }];
+      const carData = [{brand:selectedBrand, model:selectedModel,type:selectedType , color: selectedColor.value ,gearType:selectedGearType ,fuelType:selectedFuelType,year:selectedYear,carseat:carseat,mindays:MinDays,maxdays:MaxDays}];
 
-      navigation.push("PickImagesScreen", { carData: carData });
+      navigation.push("PickImagesScreen", { carData: carData ,userData});
     } else {
       Alert.alert("Required", "Please fill all the data first");
     }
@@ -205,7 +205,7 @@ export default function CarRegistrationScreen({ route }) {
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
       >
         <View style={styles.container}>
-          <ScrollView className="mb-24">
+          <ScrollView >
             <View style={styles.carListContainer}>
               <FlatList
                 showsHorizontalScrollIndicator={false}
@@ -362,7 +362,7 @@ export default function CarRegistrationScreen({ route }) {
               />
             </View>
 
-            <View>
+            <View className='mb-40'>
               <Text style={styles.dropdownTitle}>Maximum Days</Text>
               <TextInput
                 style={styles.input}
@@ -394,6 +394,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    marginBottom:89,
   },
   carListContainer: {
     height: 100,
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 20,
+    marginTop: 50,
     paddingHorizontal: 15,
     alignItems: "center",
     height: heightPercentageToDP(13),
