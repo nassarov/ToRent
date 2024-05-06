@@ -6,8 +6,8 @@ import { widthPercentageToDP } from "react-native-responsive-screen";
 export default function DetailsGrid({details}) {
   return (
     <View
-      className="m-3 border-t-2 border-l-2 border-violet-600 "
-      style={{ width: widthPercentageToDP(93) }}
+      className="my-4 mr-2 ml-1 border-t-2 border-l-2 border-violet-600 "
+      style={{ width: widthPercentageToDP(92) }}
     >
       <FlatList
         scrollEnabled={false}

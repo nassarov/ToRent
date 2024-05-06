@@ -8,6 +8,7 @@ import CalendarPicker from "react-native-calendar-picker";
 import PictureSwitching from "../../Components/HomeComponents/PictureSwitching";
 import DetailsGrid from "../../Components/HomeComponents/DetailsGrid";
 import CarRentingDetails from "../../Components/CarRegistrationComponents/CarRentingDetails";
+import { StyleSheet } from "react-native";
 
 export default function CarRentingScreen({route}) {
   const { userData } = route.params;
@@ -117,13 +118,16 @@ export default function CarRentingScreen({route}) {
     <View className='flex-1'>
     <ScrollView className='pb-4' ref={scrollViewRef} onScroll={handleScroll} scrollEventThrottle={20}>
       <CustomHeader2 text={"Car Details"} />
-      <PictureSwitching images={images} />
+      <View style={styles.container}><PictureSwitching images={images} /></View>
+      <View style={styles.container}>
       {/* Grid */}
+      <View>
       <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
         Car Details
       </Text>
-     <DetailsGrid details={details}/>
+     <DetailsGrid details={details}/></View>
       {/* Description */}
+      <View >
       <Text className="ml-2 font-bold text-lg mb-[-12px] ">Description</Text>
       <View className="m-4 border-2 border-violet-600 p-4 rounded-lg">
         <Text>
@@ -134,7 +138,7 @@ export default function CarRentingScreen({route}) {
           reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
           pariatur.
         </Text>
-      </View>
+      </View></View>
       {/* Address  */}
       <Text className="ml-2 font-bold text-lg mb-[-12px] ">Address</Text>
       <View
@@ -153,6 +157,7 @@ export default function CarRentingScreen({route}) {
             </Text>
           </TouchableOpacity>
         </Text>
+      </View>
       </View>
       {/* Calendar */}
       <Text className="ml-2 font-bold text-lg mb-[2px] mt-2">
@@ -214,3 +219,20 @@ export default function CarRentingScreen({route}) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 20, // Adjust the value as needed for the desired roundness
+    backgroundColor: '#FFFFFF',
+    padding: 6,
+    margin: 2,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 8, // Android shadow elevation
+  },
+})
