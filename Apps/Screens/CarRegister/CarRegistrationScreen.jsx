@@ -845,7 +845,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: "100%",
     height:"4.3%",
-    alignItems: "flex-start",
+    alignItems: "center",
     marginBottom: 20,
     borderColor: "#7F5DF0",
     backgroundColor:'white',
