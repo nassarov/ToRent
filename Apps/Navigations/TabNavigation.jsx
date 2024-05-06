@@ -53,9 +53,9 @@ const TabNavigation = ({ route }) => {
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
-        tabBarHideOnKeyboard:true,
+        tabBarHideOnKeyboard: true,
         tabBarStyle: {
-          flex:1,
+          flex: 1,
           position: "absolute",
           bottom: 0,
           left: 0,
@@ -118,6 +118,7 @@ const TabNavigation = ({ route }) => {
             ),
             tabBarButton: (props) => <CustomTabButton {...props} />,
           }}
+          initialParams={{ userData: userData }}
         />
       )}
       <Tab.Screen
