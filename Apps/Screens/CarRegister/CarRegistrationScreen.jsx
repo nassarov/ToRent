@@ -77,16 +77,16 @@ const { height } = Dimensions.get("window");
 //   { id: "4", name: "Yellow" },
 // ];
 
-const gearTypeOptions = [
-  { id: "1", name: "Automatic" },
-  { id: "2", name: "Manual" },
-];
+// const gearTypeOptions = [
+//   { id: "1", name: "Automatic" },
+//   { id: "2", name: "Manual" },
+// ];
 
-const fuelTypeOptions = [
-  { id: "1", name: "Gasoline" },
-  { id: "2", name: "Diesel" },
-  { id: "3", name: "Electric" },
-];
+// const fuelTypeOptions = [
+//   { id: "1", name: "Gasoline" },
+//   { id: "2", name: "Diesel" },
+//   { id: "3", name: "Electric" },
+// ];
 const addressOptions = [
   {
     id: "1",
@@ -146,9 +146,13 @@ export default function CarRegistrationScreen() {
   const [colorSearchInput, setColorSearchInput] = useState("");
   const [colorOptions, setColorOptions] = useState([]);
   const [carBrands, setCarBrands] = useState([]);
+  const [gearTypeOptions, setGearTypeOptions] = useState([]);
+  const [fuelTypeOptions, setFuelTypeOptions] = useState([]);
   useEffect(() => {
     fetchColor();
     fetchBrands();
+    fetchGears();
+    fetchFuel();
   }, []);
 
   const fetchColor = async () => {
@@ -159,20 +163,44 @@ export default function CarRegistrationScreen() {
     });
   };
   const fetchBrands = async () => {
-    try {
-      // Retrieve documents from the "carBrands" collection
-      const querySnapshot = await getDocs(collection(db, "carBrands"));
-
-      // Iterate over each document in the query snapshot
-      querySnapshot.forEach((doc) => {
-        // Push the document data to the carBrands array
-        carBrands.push(doc.data());
-      });
-    } catch (error) {
-      console.error("Error retrieving car brands data from Firestore: ", error);
-    }
+    setCarBrands([]);
+    const querySnapshot = await getDocs(collection(db, "carBrands"));
+    querySnapshot.forEach((doc) => {
+      setCarBrands((brand) => [...brand, doc.data()]);
+    });
+  };
+  const fetchGears = async () => {
+    setGearTypeOptions([]);
+    const querySnapshot = await getDocs(collection(db, "carGears"));
+    querySnapshot.forEach((doc) => {
+      setGearTypeOptions((gear) => [...gear, doc.data()]);
+    });
+  };
+  const fetchFuel = async () => {
+    setFuelTypeOptions([]);
+    const querySnapshot = await getDocs(collection(db, "fuelTypes"));
+    querySnapshot.forEach((doc) => {
+      setFuelTypeOptions((fuel) => [...fuel, doc.data()]);
+    });
   };
 
+  const onApply = async () => {
+    if (
+      selectedBrand &&
+      selectedColor &&
+      selectedType &&
+      selectedYear &&
+      selectedFuelType &&
+      selectedGearType &&
+      selectedModel
+    ) {
+      const carData = [{ color: selectedColor.value, type: selectedType }];
+
+      navigation.push("PickImagesScreen", { carData: carData });
+    } else {
+      Alert.alert("Required", "Please fill all the data first");
+    }
+  };
   const clearAllSelections = () => {
     setSelectedAddress(null);
     setSelectedBrand(null);
@@ -626,7 +654,7 @@ export default function CarRegistrationScreen() {
             >
               <Text>
                 {selectedGearType
-                  ? selectedGearType.name
+                  ? selectedGearType.label
                   : "Select a gear type"}
               </Text>
             </TouchableOpacity>
@@ -646,10 +674,10 @@ export default function CarRegistrationScreen() {
                         onPress={() => handleGearTypeSelect(item)}
                         style={styles.optionContainer}
                       >
-                        <Text style={styles.optionText}>{item.name}</Text>
+                        <Text style={styles.optionText}>{item.label}</Text>
                       </TouchableOpacity>
                     )}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.value}
                   />
                 </View>
               </View>
@@ -662,7 +690,7 @@ export default function CarRegistrationScreen() {
             >
               <Text>
                 {selectedFuelType
-                  ? selectedFuelType.name
+                  ? selectedFuelType.label
                   : "Select a fuel type"}
               </Text>
             </TouchableOpacity>
@@ -682,10 +710,10 @@ export default function CarRegistrationScreen() {
                         onPress={() => handleFuelTypeSelect(item)}
                         style={styles.optionContainer}
                       >
-                        <Text style={styles.optionText}>{item.name}</Text>
+                        <Text style={styles.optionText}>{item.label}</Text>
                       </TouchableOpacity>
                     )}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.value}
                   />
                 </View>
               </View>
@@ -762,7 +790,7 @@ export default function CarRegistrationScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.ApplyButton}
-            onPress={() => navigation.push("PickImagesScreen")}
+            onPress={() => onApply()}
           >
             <Text style={styles.ApplyButtonText}>Apply</Text>
           </TouchableOpacity>

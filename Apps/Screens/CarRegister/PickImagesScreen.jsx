@@ -5,14 +5,15 @@ import Constants from "expo-constants";
 import { ScrollView } from "react-native-gesture-handler";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 
-export default function PickImagesScreen() {
+export default function PickImagesScreen({route}) {
   const [frontImage, setFrontImage] = useState(null);
   const [backImage, setBackImage] = useState(null);
   const [interiorImage, setInteriorImage] = useState(null);
   const [leftSideImage, setLeftSideImage] = useState(null);
   const [rightSideImage, setRightSideImage] = useState(null);
   const [addMore, setAddMore] = useState(false);
-
+const {carData}=route.params;
+console.log(carData)
   return (
     <ScrollView
       style={{
