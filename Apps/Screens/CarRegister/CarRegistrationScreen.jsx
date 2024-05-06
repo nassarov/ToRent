@@ -62,12 +62,14 @@ const addressOptions = [
     postalCode: "60601",
   },
 ];
+const yearOptions = [];
+const currentYear = new Date().getFullYear();
+const startYear = 1990; // You can adjust the start year as needed
 
-const yearOptions = Array.from(
-  { length: 50 },
-  (_, index) => `${new Date().getFullYear() - index}`
-);
-
+// Loop to generate years from startYear to currentYear
+for (let year = currentYear; year >= startYear; year--) {
+  yearOptions.push({ label: year.toString(), value: year });
+}
 export default function CarRegistrationScreen({ route }) {
   const { userData } = route.params;
   const [brandModalVisible, setBrandModalVisible] = useState(false);
@@ -139,9 +141,22 @@ export default function CarRegistrationScreen({ route }) {
       selectedGearType &&
       selectedModel
     ) {
-      const carData = [{brand:selectedBrand, model:selectedModel,type:selectedType , color: selectedColor.value ,gearType:selectedGearType ,fuelType:selectedFuelType,year:selectedYear,carseat:carseat,mindays:MinDays,maxdays:MaxDays}];
+      const carData = [
+        {
+          brand: selectedBrand,
+          model: selectedModel,
+          type: selectedType,
+          color: selectedColor.value,
+          gearType: selectedGearType,
+          fuelType: selectedFuelType,
+          year: selectedYear,
+          carseat: carseat,
+          mindays: MinDays,
+          maxdays: MaxDays,
+        },
+      ];
 
-      navigation.push("PickImagesScreen", { carData: carData ,userData});
+      navigation.push("PickImagesScreen", { carData: carData, userData });
     } else {
       Alert.alert("Required", "Please fill all the data first");
     }
@@ -205,7 +220,7 @@ export default function CarRegistrationScreen({ route }) {
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
       >
         <View style={styles.container}>
-          <ScrollView >
+          <ScrollView>
             <View style={styles.carListContainer}>
               <FlatList
                 showsHorizontalScrollIndicator={false}
@@ -236,19 +251,6 @@ export default function CarRegistrationScreen({ route }) {
                 contentContainerStyle={styles.flatListContent}
               />
             </View>
-            <DropdownModal
-              title={"Address"}
-              data={userData.addresses}
-              selectedItem={selectedAddress}
-              setSelectedItem={setSelectedAddress}
-              modalVisible={addressModalVisible}
-              setModalVisible={setAddressModalVisible}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              filteredItems={filteredAddresses}
-              setFilteredItems={setFilteredAddresses}
-              address={true}
-            />
             <DropdownModal
               title={"Brand"}
               data={carBrands}
@@ -362,7 +364,7 @@ export default function CarRegistrationScreen({ route }) {
               />
             </View>
 
-            <View className='mb-40'>
+            <View className="mb-40">
               <Text style={styles.dropdownTitle}>Maximum Days</Text>
               <TextInput
                 style={styles.input}
@@ -394,7 +396,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    marginBottom:89,
+    marginBottom: 89,
   },
   carListContainer: {
     height: 100,

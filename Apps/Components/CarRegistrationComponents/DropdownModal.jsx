@@ -122,9 +122,7 @@ export default function DropdownModal({
                     ""
                   )}
 
-                  <Text style={styles.optionText}>
-                    {address ? item.city : item.label}
-                  </Text>
+                  <Text style={styles.optionText}>{item.label}</Text>
                 </TouchableOpacity>
               )}
               keyExtractor={(item, index) => item.value}

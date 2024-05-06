@@ -119,7 +119,6 @@ const TabNavigation = ({ route }) => {
             ),
             tabBarButton: (props) => <CustomTabButton {...props} />,
           }}
-          initialParams={{ userData: userData }}
         />
       )}
       <Tab.Screen
