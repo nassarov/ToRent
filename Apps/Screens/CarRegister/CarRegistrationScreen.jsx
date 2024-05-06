@@ -35,7 +35,6 @@ import {
 } from "firebase/firestore";
 import DropdownModal from "../../Components/CarRegistrationComponents/DropdownModal";
 import { color } from "react-native-elements/dist/helpers";
-import { carBrands } from "../../Utils/query";
 
 const { height } = Dimensions.get("window");
 
@@ -97,6 +96,7 @@ export default function CarRegistrationScreen({ route }) {
   const [filteredModels, setFilteredModels] = useState([]);
   const [filteredColors, setFilteredColors] = useState([]);
   const [colorOptions, setColorOptions] = useState([]);
+  const [carBrands ,setCarBrands]=useState([]);
   const [gearTypeOptions, setGearTypeOptions] = useState([]);
   const [fuelTypeOptions, setFuelTypeOptions] = useState([]);
   const [filteredAddresses, setFilteredAddresses] = useState([]);
@@ -106,7 +106,8 @@ export default function CarRegistrationScreen({ route }) {
     fetchColor();
     fetchFuel();
     fetchGears();
-  }, []);
+    fetchBrands();
+    }, []);
 
   const fetchColor = async () => {
     setColorOptions([]);
@@ -115,6 +116,16 @@ export default function CarRegistrationScreen({ route }) {
       setColorOptions((colors) => [...colors, doc.data()]);
     });
   };
+
+  const fetchBrands = async () => {
+    setCarBrands([]);
+    const querySnapshot = await getDocs(collection(db, "carBrands"));
+    querySnapshot.forEach((doc) => {
+      setCarBrands((carBrands) => [...carBrands, doc.data()]);
+    });
+  };
+
+ 
 
   const fetchGears = async () => {
     setGearTypeOptions([]);
