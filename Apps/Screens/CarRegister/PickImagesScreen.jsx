@@ -211,8 +211,10 @@ else{
       <View style={{ height:heightPercentageToDP(8) }} />
       {loading && (
         <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
-          <ActivityIndicator size="large" color="#FFFFFF" />
-          <Text style={{ color: "#FFFFFF", marginTop: 10 }}>Adding car to database...</Text>
+         <View style={{ backgroundColor: 'white', borderRadius: 10, padding: 20 ,alignItems:'center',justifyContent:'center'}}>
+          <ActivityIndicator size="large" color="#7F5AF0" />
+          <Text style={{ color: "#7F5DF0", marginTop: 10 }}>Adding car to database...</Text>
+          </View>
         </View>
       )}
     </ScrollView>
