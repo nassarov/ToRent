@@ -8,13 +8,16 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from "react-native-responsive-screen";
 import { Alert } from "react-native";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
+import { app } from "../../../firebaseConfig";
 
 const { height } = Dimensions.get("window");
 
@@ -35,11 +38,40 @@ export default function DropdownModal({
   dependingOnIt,
   withColor,
   address,
+  collectionName,
 }) {
-  useEffect(() => {
-    setFilteredItems(data);
-  }, [data]);
+  const db = getFirestore(app);
 
+  const [loading, setLoading] = useState(true);
+  const fetchData = async () => {
+    setData([]);
+    setLoading(true);
+    const querySnapshot = await getDocs(collection(db, collectionName));
+
+    // Collect data in a temporary array
+    const newData = [];
+    querySnapshot.forEach((doc) => {
+      newData.push(doc.data());
+    });
+
+    // Update state once with all the collected data
+    setData(newData);
+    setFilteredItems(newData);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (!depends) {
+      fetchData();
+    }
+  }, []);
+
+  if (depends) {
+    useEffect(() => {
+      setFilteredItems(data);
+      setLoading(false);
+    }, [data]);
+  }
   const toggleModal = () => {
     if (!data && depends) {
       Alert.alert("Please fill the Brand first");
@@ -73,9 +105,15 @@ export default function DropdownModal({
     <View>
       <Text style={styles.dropdownTitle}>{title}</Text>
 
-      <TouchableOpacity onPress={toggleModal} style={styles.dropdownButton}>
-        <Text>{selectedItem ? selectedItem.label : `Select a ${title}`}</Text>
-      </TouchableOpacity>
+      {loading ? (
+        <View style={styles.dropdownButton}>
+          <ActivityIndicator />
+        </View>
+      ) : (
+        <TouchableOpacity onPress={toggleModal} style={styles.dropdownButton}>
+          <Text>{selectedItem ? selectedItem.label : `Select a ${title}`}</Text>
+        </TouchableOpacity>
+      )}
 
       <Modal
         visible={modalVisible}

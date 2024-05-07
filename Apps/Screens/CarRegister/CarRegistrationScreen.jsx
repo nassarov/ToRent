@@ -89,58 +89,16 @@ export default function CarRegistrationScreen({ route }) {
   const [MinDays, setMinDay] = useState("");
   const [MaxDays, setMaxDay] = useState("");
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [addressModalVisible, setAddressModalVisible] = useState(false);
   const [filteredBrands, setFilteredBrands] = useState(carBrands);
   const [searchInput, setSearchInput] = useState("");
   const [filteredTypes, setFilteredTypes] = useState([]);
   const [filteredModels, setFilteredModels] = useState([]);
   const [filteredColors, setFilteredColors] = useState([]);
   const [colorOptions, setColorOptions] = useState([]);
-  const [carBrands ,setCarBrands]=useState([]);
+  const [carBrands, setCarBrands] = useState([]);
   const [gearTypeOptions, setGearTypeOptions] = useState([]);
   const [fuelTypeOptions, setFuelTypeOptions] = useState([]);
-  const [filteredAddresses, setFilteredAddresses] = useState([]);
   const [filteredYear, setFilteredYear] = useState([]);
-
-  useEffect(() => {
-    fetchColor();
-    fetchFuel();
-    fetchGears();
-    fetchBrands();
-    }, []);
-
-  const fetchColor = async () => {
-    setColorOptions([]);
-    const querySnapshot = await getDocs(collection(db, "carColors"));
-    querySnapshot.forEach((doc) => {
-      setColorOptions((colors) => [...colors, doc.data()]);
-    });
-  };
-
-  const fetchBrands = async () => {
-    setCarBrands([]);
-    const querySnapshot = await getDocs(collection(db, "carBrands"));
-    querySnapshot.forEach((doc) => {
-      setCarBrands((carBrands) => [...carBrands, doc.data()]);
-    });
-  };
-
- 
-
-  const fetchGears = async () => {
-    setGearTypeOptions([]);
-    const querySnapshot = await getDocs(collection(db, "carGears"));
-    querySnapshot.forEach((doc) => {
-      setGearTypeOptions((gear) => [...gear, doc.data()]);
-    });
-  };
-  const fetchFuel = async () => {
-    setFuelTypeOptions([]);
-    const querySnapshot = await getDocs(collection(db, "fuelTypes"));
-    querySnapshot.forEach((doc) => {
-      setFuelTypeOptions((fuel) => [...fuel, doc.data()]);
-    });
-  };
 
   const onApply = async () => {
     if (
@@ -192,7 +150,6 @@ export default function CarRegistrationScreen({ route }) {
       tabBarStyle: { display: "none" },
     });
   }, [navigation]);
-  const db = getFirestore(app);
 
   const handleBrandSelect = (brand) => {
     setSelectedBrand(brand);
@@ -224,182 +181,183 @@ export default function CarRegistrationScreen({ route }) {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={dismissKeyboard}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : null}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
-      >
-        <View style={styles.container}>
-          <ScrollView>
-            <View style={styles.carListContainer}>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={carBrands}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={[
-                      styles.brandItem,
-                      selectedBrand &&
-                        selectedBrand.label === item.label && {
-                          borderColor: "#7F5AF0",
-                          borderWidth: 2,
-                          borderRadius: 10,
-                        }, // Adjust borderWidth as needed
-                    ]}
-                    onPress={() => handleBrandSelect(item)}
-                  >
-                    {carBrands && (
-                      <Image
-                        source={{ uri: item.image }}
-                        style={styles.image}
-                      />
-                    )}
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item, index) => index}
-                contentContainerStyle={styles.flatListContent}
-              />
-            </View>
-            <DropdownModal
-              title={"Brand"}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
+    >
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.carListContainer}>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
               data={carBrands}
-              selectedItem={selectedBrand}
-              setSelectedItem={setSelectedBrand}
-              modalVisible={brandModalVisible}
-              setModalVisible={setBrandModalVisible}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              filteredItems={filteredBrands}
-              setFilteredItems={setFilteredBrands}
-              withLogo={true}
-              dependingOnIt={[setSelectedModel, setSelectedType]}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[
+                    styles.brandItem,
+                    selectedBrand &&
+                      selectedBrand.label === item.label && {
+                        borderColor: "#7F5AF0",
+                        borderWidth: 2,
+                        borderRadius: 10,
+                      }, // Adjust borderWidth as needed
+                  ]}
+                  onPress={() => handleBrandSelect(item)}
+                >
+                  {carBrands && (
+                    <Image source={{ uri: item.image }} style={styles.image} />
+                  )}
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item, index) => index}
+              contentContainerStyle={styles.flatListContent}
             />
+          </View>
+          <DropdownModal
+            title={"Brand"}
+            data={carBrands}
+            setData={setCarBrands}
+            selectedItem={selectedBrand}
+            setSelectedItem={setSelectedBrand}
+            modalVisible={brandModalVisible}
+            setModalVisible={setBrandModalVisible}
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+            filteredItems={filteredBrands}
+            setFilteredItems={setFilteredBrands}
+            withLogo={true}
+            dependingOnIt={[setSelectedModel, setSelectedType]}
+            collectionName={"carBrands"}
+          />
 
-            <DropdownModal
-              title={"Model"}
-              data={selectedBrand?.models}
-              selectedItem={selectedModel}
-              setSelectedItem={setSelectedModel}
-              modalVisible={modelModalVisible}
-              setModalVisible={setModelModalVisible}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              filteredItems={filteredModels}
-              setFilteredItems={setFilteredModels}
-              depends={true}
-            />
+          <DropdownModal
+            title={"Model"}
+            data={selectedBrand?.models}
+            selectedItem={selectedModel}
+            setSelectedItem={setSelectedModel}
+            modalVisible={modelModalVisible}
+            setModalVisible={setModelModalVisible}
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+            filteredItems={filteredModels}
+            setFilteredItems={setFilteredModels}
+            depends={true}
+          />
 
-            <DropdownModal
-              title={"Types"}
-              data={selectedBrand?.types}
-              selectedItem={selectedType}
-              setSelectedItem={setSelectedType}
-              modalVisible={typeModalVisible}
-              setModalVisible={setTypeModalVisible}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              filteredItems={filteredTypes}
-              setFilteredItems={setFilteredTypes}
-              depends={true}
+          <DropdownModal
+            title={"Types"}
+            data={selectedBrand?.types}
+            selectedItem={selectedType}
+            setSelectedItem={setSelectedType}
+            modalVisible={typeModalVisible}
+            setModalVisible={setTypeModalVisible}
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+            filteredItems={filteredTypes}
+            setFilteredItems={setFilteredTypes}
+            depends={true}
+          />
+          <DropdownModal
+            title={"Color"}
+            data={colorOptions}
+            setData={setColorOptions}
+            selectedItem={selectedColor}
+            setSelectedItem={setSelectedColor}
+            modalVisible={colorModalVisible}
+            setModalVisible={setColorModalVisible}
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+            filteredItems={filteredColors}
+            setFilteredItems={setFilteredColors}
+            withColor={true}
+            collectionName={"carColors"}
+          />
+          <DropdownModal
+            title={"Gear Type"}
+            data={gearTypeOptions}
+            setData={setGearTypeOptions}
+            selectedItem={selectedGearType}
+            setSelectedItem={setSelectedGearType}
+            modalVisible={gearTypeModalVisible}
+            setModalVisible={setGearTypeModalVisible}
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+            filteredItems={gearTypeOptions}
+            setFilteredItems={setGearTypeOptions}
+            collectionName={"carGears"}
+          />
+          <DropdownModal
+            title={"Fuel Type"}
+            data={fuelTypeOptions}
+            setData={setFuelTypeOptions}
+            selectedItem={selectedFuelType}
+            setSelectedItem={setSelectedFuelType}
+            modalVisible={fuelTypeModalVisible}
+            setModalVisible={setFuelTypeModalVisible}
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+            filteredItems={fuelTypeOptions}
+            setFilteredItems={setFuelTypeOptions}
+            collectionName={"fuelTypes"}
+          />
+          <DropdownModal
+            title={"Year"}
+            data={yearOptions}
+            depends={true}
+            selectedItem={selectedYear}
+            setSelectedItem={setSelectedYear}
+            modalVisible={yearModalVisible}
+            setModalVisible={setYearModalVisible}
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+            filteredItems={filteredYear}
+            setFilteredItems={setFilteredYear}
+          />
+          <View>
+            <Text style={styles.dropdownTitle}>Car Seats</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Enter number of the seats"
+              value={carseat}
+              onChangeText={handlecarseatChange}
             />
-            <DropdownModal
-              title={"Color"}
-              data={colorOptions}
-              selectedItem={selectedColor}
-              setSelectedItem={setSelectedColor}
-              modalVisible={colorModalVisible}
-              setModalVisible={setColorModalVisible}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              filteredItems={filteredColors}
-              setFilteredItems={setFilteredColors}
-              withColor={true}
-            />
-            <DropdownModal
-              title={"Gear Type"}
-              data={gearTypeOptions}
-              selectedItem={selectedGearType}
-              setSelectedItem={setSelectedGearType}
-              modalVisible={gearTypeModalVisible}
-              setModalVisible={setGearTypeModalVisible}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              filteredItems={gearTypeOptions}
-              setFilteredItems={setGearTypeOptions}
-            />
-            <DropdownModal
-              title={"Fuel Type"}
-              data={fuelTypeOptions}
-              selectedItem={selectedFuelType}
-              setSelectedItem={setSelectedFuelType}
-              modalVisible={fuelTypeModalVisible}
-              setModalVisible={setFuelTypeModalVisible}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              filteredItems={fuelTypeOptions}
-              setFilteredItems={setFuelTypeOptions}
-            />
-            <DropdownModal
-              title={"Year"}
-              data={yearOptions}
-              selectedItem={selectedYear}
-              setSelectedItem={setSelectedYear}
-              modalVisible={yearModalVisible}
-              setModalVisible={setYearModalVisible}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              filteredItems={filteredYear}
-              setFilteredItems={setFilteredYear}
-            />
-            <View>
-              <Text style={styles.dropdownTitle}>Car Seats</Text>
-              <TextInput
-                style={styles.input}
-                keyboardType="numeric"
-                placeholder="Enter number of the seats"
-                value={carseat}
-                onChangeText={handlecarseatChange}
-              />
-            </View>
+          </View>
 
-            <View>
-              <Text style={styles.dropdownTitle}>Minimum Days</Text>
-              <TextInput
-                style={styles.input}
-                keyboardType="numeric"
-                placeholder="Enter Minimum days to rent"
-                value={MinDays}
-                onChangeText={handleMinDayChange}
-              />
-            </View>
+          <View>
+            <Text style={styles.dropdownTitle}>Minimum Days</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Enter Minimum days to rent"
+              value={MinDays}
+              onChangeText={handleMinDayChange}
+            />
+          </View>
 
-            <View className="mb-40">
-              <Text style={styles.dropdownTitle}>Maximum Days</Text>
-              <TextInput
-                style={styles.input}
-                keyboardType="numeric"
-                placeholder="Enter Maximum days to rent"
-                value={MaxDays}
-                onChangeText={handleMaxDayChange}
-              />
-            </View>
-          </ScrollView>
-        </View>
-        <View style={styles.bottomContainer} className="bg-slate-300 ">
-          <TouchableOpacity onPress={clearAllSelections}>
-            <Text style={styles.clearAllText}>Clear All</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.ApplyButton}
-            onPress={() => onApply()}
-          >
-            <Text style={styles.ApplyButtonText}>Apply</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+          <View className="mb-40">
+            <Text style={styles.dropdownTitle}>Maximum Days</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Enter Maximum days to rent"
+              value={MaxDays}
+              onChangeText={handleMaxDayChange}
+            />
+          </View>
+        </ScrollView>
+      </View>
+      <View style={styles.bottomContainer} className="bg-slate-300 ">
+        <TouchableOpacity onPress={clearAllSelections}>
+          <Text style={styles.clearAllText}>Clear All</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.ApplyButton} onPress={() => onApply()}>
+          <Text style={styles.ApplyButtonText}>Apply</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
