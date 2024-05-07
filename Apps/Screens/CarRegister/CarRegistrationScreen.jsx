@@ -112,13 +112,13 @@ export default function CarRegistrationScreen({ route }) {
     ) {
       const carData = [
         {
-          brand: selectedBrand,
-          model: selectedModel,
-          type: selectedType,
+          brand: selectedBrand.value,
+          model: selectedModel.value ,
+          type: selectedType.value,
           color: selectedColor.value,
-          gearType: selectedGearType,
-          fuelType: selectedFuelType,
-          year: selectedYear,
+          gearType: selectedGearType.value,
+          fuelType: selectedFuelType.value,
+          year: selectedYear.value,
           carseat: carseat,
           mindays: MinDays,
           maxdays: MaxDays,

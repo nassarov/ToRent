@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity,ActivityIndicator, Alert  } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import ImagePickers from "../../Components/CarRegistrationComponents/ImagePickers";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useNavigation } from "@react-navigation/native";
 
 export default function PickImagesScreen({route}) {
   const [frontImage, setFrontImage] = useState(null);
@@ -20,9 +21,20 @@ export default function PickImagesScreen({route}) {
   const userEmail =userData.email;
   console.log(carData)
   console.log(userEmail)
-
+  
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
+  const clear = ()=>{
+    setFrontImage(null);
+    setBackImage(null);
+    setInteriorImage(null);
+    setLeftSideImage(null);
+    setRightSideImage(null);
+    setAddMore(false);
+  }
   const uploadImageToStorage = async (image, userEmail, postId, imageName) => {
   try {
+
     const resp = await fetch(image);
     const blob = await resp.blob();
 
@@ -32,16 +44,27 @@ export default function PickImagesScreen({route}) {
     const downloadURL = await getDownloadURL(storageRef);
     console.log("Image uploaded successfully:", downloadURL);
     return downloadURL;
+
   } catch (error) {
     console.error("Error uploading image:", error);
+
     throw error;
   }
 };
+
+
   const handleSave = async () => {
+    setLoading(true); 
+
     try {
       const imageUrls = [];
       const postId = `${userEmail}_${postCount + 1}`; 
-
+      if (!frontImage || !backImage || !interiorImage) {
+        setLoading(false)
+        Alert.alert("Error", "Please add at least the first three images before proceeding.");
+        return;
+      }
+else{
       // Upload each image and get their download URLs
       if (frontImage) {
         const frontImageUrl = await uploadImageToStorage(
@@ -51,6 +74,7 @@ export default function PickImagesScreen({route}) {
           "front_image.jpg"
         );
         imageUrls.push(frontImageUrl);
+        
       }
 
       if (backImage) {
@@ -103,9 +127,17 @@ export default function PickImagesScreen({route}) {
 
       console.log("Car post added with ID: ", carPostRef.id);
       setPostCount(postCount + 1);
-
+      setLoading(false); 
+      Alert.alert(
+        "Success",
+        "Your car has been successfully added to your list. Clients can start renting now.",
+        [{ text: "OK", onPress: ()=>{} }]
+      );
+      clear();
+    }  
     } catch (error) {
       console.error("Error saving car post:", error);
+      setLoading(false);
     }
   };
 
@@ -116,22 +148,27 @@ export default function PickImagesScreen({route}) {
       }}
     >
       <Text className="font-bold text-xl p-2 flex-1">Car Images</Text>
-
       <View style={{ alignItems: "center", rowGap: 10 }}>
         <ImagePickers
           image={frontImage}
           setImage={setFrontImage}
           whichImage={"Front Image"}
+          disabled={loading} 
+
         />
         <ImagePickers
           image={backImage}
           setImage={setBackImage}
           whichImage={"Back Image"}
+          disabled={loading} 
+
         />
         <ImagePickers
           image={interiorImage}
           setImage={setInteriorImage}
           whichImage={"Interior Image"}
+          disabled={loading} 
+
         />
         {addMore ? (
           <>
@@ -139,11 +176,15 @@ export default function PickImagesScreen({route}) {
               image={leftSideImage}
               setImage={setLeftSideImage}
               whichImage={"Left Side Image"}
+              disabled={loading} 
+
             />
             <ImagePickers
               image={rightSideImage}
               setImage={setRightSideImage}
               whichImage={"Right Side Image"}
+              disabled={loading} 
+
             />
           </>
         ) : (
@@ -157,7 +198,7 @@ export default function PickImagesScreen({route}) {
         )}
       </View>
       <View className='items-center mt-4'>
-      <TouchableOpacity onPress={handleSave}
+      <TouchableOpacity onPress={handleSave}  disabled={loading} 
       style={{ backgroundColor: "#7F5AF0",borderRadius: 8,paddingHorizontal: 24, justifyContent: "center",
       alignItems: "center",
       marginTop:10,
@@ -168,7 +209,12 @@ export default function PickImagesScreen({route}) {
         </Text>
       </TouchableOpacity></View>
       <View style={{ height:heightPercentageToDP(8) }} />
-      
+      {loading && (
+        <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <ActivityIndicator size="large" color="#FFFFFF" />
+          <Text style={{ color: "#FFFFFF", marginTop: 10 }}>Adding car to database...</Text>
+        </View>
+      )}
     </ScrollView>
   );
 }
