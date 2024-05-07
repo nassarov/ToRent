@@ -16,6 +16,7 @@ import CustomHeader2 from "../Components/CustomHeader2";
 import ProfileScreen from "../Screens/Profile/ProfileScreen";
 import Notification from "../Screens/Notification/Notification";
 import Trips from "../Screens/Trips/Trips";
+import CustomHeader3 from "../Components/CustomHeader3";
 
 const Tab = createBottomTabNavigator();
 
@@ -125,7 +126,8 @@ const TabNavigation = ({ route }) => {
         component={Notification}
         initialParams={{ userData: userData }}
         options={{
-          headerShown: false,
+          headerShown: true,
+          header: ()=><CustomHeader2 text={"Notifications"}/>,
           tabBarIcon: ({ focused }) => (
             <Fontisto
               name="bell"
