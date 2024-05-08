@@ -7,6 +7,7 @@ import {
   StatusBar,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { Formik } from "formik";
@@ -58,9 +59,12 @@ export default function LoginScreen() {
       // User is signed in, navigate to Home screen and pass user role
       navigation.replace("HomeScreenNavigation", { userData });
     } catch (error) {
-      // Handle errors here, such as displaying a notification or error message
-      console.error("Error signing in:", error.message);
-      // For example, you can set an error state to display an error message to the user
+      console.log("Error signing in:", error.message);
+      if ( error.code === "auth/invalid-email") {
+        Alert.alert("Alert", "Please Enter a Valid Email.");
+      } else if (error.code ==="auth/invalid-credential"){
+        Alert.alert("Alert", "Please Check Your Credentials.");
+      }
     } finally {
       setIsCheckingCredentials(false); // Reset isCheckingCredentials to false after checking credentials
     }

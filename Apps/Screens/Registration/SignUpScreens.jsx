@@ -39,7 +39,7 @@ export default function SignUpScreen({ route }) {
     { label: "Offer a car", value: "1" },
     { label: "Rent a car", value: "0" },
   ];
-
+  
   // Function to handle signup
 const handelSignUp = async (values) => {
   setIsSigningUp(true); // Set isSigningUp to true when signing up
@@ -56,6 +56,7 @@ const handelSignUp = async (values) => {
       email: email,
       phoneNumber: values.phoneNumber,
       role: values.role,
+      uid :userid,
     });
 
     console.log(userCredential);
@@ -65,6 +66,7 @@ const handelSignUp = async (values) => {
       Alert.alert("Success", "You have successfully signed up!");
       navigation.push("LoginScreen");
     }
+
   } catch (error) {
     console.log("Error in signup:", error.message);
     if ( error.code === "auth/email-already-in-use") {
