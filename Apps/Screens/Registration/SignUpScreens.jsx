@@ -56,7 +56,6 @@ const handelSignUp = async (values) => {
       email: email,
       phoneNumber: values.phoneNumber,
       role: values.role,
-      uid :userid,
     });
 
     console.log(userCredential);

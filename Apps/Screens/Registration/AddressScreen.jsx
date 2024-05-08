@@ -70,7 +70,7 @@ export default function AddressScreen() {
   [lebaneseCities,navigation]);
 
   const handleAddValue = (values, resetForm) => {
-    setValuesList([...valuesList, { city: values.City, googleMapLink: values.GoogleMapLink }]);
+    setValuesList([...valuesList, { label: values.City, value: values.GoogleMapLink }]);
     resetForm();
   };
 
@@ -201,8 +201,8 @@ export default function AddressScreen() {
             {valuesList.map((item, index) => (
               <View key={index} style={styles.AddressContainer}>
                 <View style={styles.rectangle}>
-                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>City:</Text> {item.city} </Text>
-                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>Google Maps Link:</Text> <TouchableOpacity><Text className='text-blue-500'>{item.googleMapLink}</Text></TouchableOpacity></Text>
+                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>City:</Text> {item.label} </Text>
+                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>Google Maps Link:</Text> <TouchableOpacity><Text className='text-blue-500'>{item.value}</Text></TouchableOpacity></Text>
                 </View>
               </View>
             ))}

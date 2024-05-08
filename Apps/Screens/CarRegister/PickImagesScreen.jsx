@@ -19,8 +19,7 @@ export default function PickImagesScreen({route}) {
   const { carData } = route.params;
   const {userData} =route.params;
   const userEmail =userData.email;
-  console.log(carData)
-  console.log(userEmail)
+  console.log(carData,"--email:",userEmail)
   
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();

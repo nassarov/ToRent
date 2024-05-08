@@ -35,32 +35,8 @@ import {
 } from "firebase/firestore";
 import DropdownModal from "../../Components/CarRegistrationComponents/DropdownModal";
 import { color } from "react-native-elements/dist/helpers";
-
+import AddressDropdownModal from "../../Components/CarRegistrationComponents/AddressDropDownModal";
 const { height } = Dimensions.get("window");
-
-const addressOptions = [
-  {
-    id: "1",
-    value: "123 Main St",
-    label: "New York",
-    state: "NY",
-    postalCode: "10001",
-  },
-  {
-    id: "2",
-    value: "456 Elm St",
-    label: "Los Angeles",
-    state: "CA",
-    postalCode: "90001",
-  },
-  {
-    id: "3",
-    value: "789 Oak St",
-    label: "Chicago",
-    state: "IL",
-    postalCode: "60601",
-  },
-];
 const yearOptions = [];
 const currentYear = new Date().getFullYear();
 const startYear = 1990; // You can adjust the start year as needed
@@ -88,7 +64,6 @@ export default function CarRegistrationScreen({ route }) {
   const [carseat, setCarseat] = useState("");
   const [MinDays, setMinDay] = useState("");
   const [MaxDays, setMaxDay] = useState("");
-  const [selectedAddress, setSelectedAddress] = useState(null);
   const [filteredBrands, setFilteredBrands] = useState(carBrands);
   const [searchInput, setSearchInput] = useState("");
   const [filteredTypes, setFilteredTypes] = useState([]);
@@ -99,9 +74,12 @@ export default function CarRegistrationScreen({ route }) {
   const [gearTypeOptions, setGearTypeOptions] = useState([]);
   const [fuelTypeOptions, setFuelTypeOptions] = useState([]);
   const [filteredYear, setFilteredYear] = useState([]);
-
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [addressModalVisible, setAddressModalVisible] = useState(false);
+  
   const onApply = async () => {
     if (
+      selectedAddress&&
       selectedBrand &&
       selectedColor &&
       selectedType &&
@@ -112,6 +90,7 @@ export default function CarRegistrationScreen({ route }) {
     ) {
       const carData = [
         {
+          address:selectedAddress,
           brand: selectedBrand.value,
           model: selectedModel.value ,
           type: selectedType.value,
@@ -150,7 +129,9 @@ export default function CarRegistrationScreen({ route }) {
       tabBarStyle: { display: "none" },
     });
   }, [navigation]);
-
+  
+  
+  
   const handleBrandSelect = (brand) => {
     setSelectedBrand(brand);
     setSelectedModel(null);
@@ -215,6 +196,15 @@ export default function CarRegistrationScreen({ route }) {
               contentContainerStyle={styles.flatListContent}
             />
           </View>
+          <AddressDropdownModal
+            title={"Address"}
+            userData={userData.addresses}
+            selectedItem={selectedAddress}
+            setSelectedItem={setSelectedAddress}
+            modalVisible={addressModalVisible}
+            setModalVisible={setAddressModalVisible}
+          />
+
           <DropdownModal
             title={"Brand"}
             data={carBrands}
