@@ -4,7 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import ImagePickers from "../../Components/CarRegistrationComponents/ImagePickers";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
 
@@ -26,8 +26,21 @@ export default function PickImagesScreen({route}) {
   const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
   const navigation = useNavigation();
 
+  useEffect(() => {
+    // Fetch the latest post count from the database
+    const fetchPostCount = async () => {
+      const db = getFirestore();
+      const postCountDocRef = doc(db, "post_counts", userEmail);
+      const postCountDocSnap = await getDoc(postCountDocRef);
+      if (postCountDocSnap.exists()) {
+        setPostCount(postCountDocSnap.data().count);
+      }
+    };
 
-  const clear = ()=>{
+    fetchPostCount();
+  }, [userEmail]);
+
+  const clear = () => {
     setFrontImage(null);
     setBackImage(null);
     setInteriorImage(null);
@@ -35,26 +48,30 @@ export default function PickImagesScreen({route}) {
     setRightSideImage(null);
     setAddMore(false);
   }
-  const uploadImageToStorage = async (image, userEmail, postId, imageName) => {
-  try {
 
-    const resp = await fetch(image);
-    const blob = await resp.blob();
+  const updatePostCount = async (newPostCount) => {
+    // Update the post count in the database
+    const db = getFirestore();
+    const postCountDocRef = doc(db, "post_counts", userEmail);
+    await setDoc(postCountDocRef, { count: newPostCount });
+  };
 
-    const storage = getStorage();
-    const storageRef = ref(storage, `car_images/${userEmail}/${postId}/${imageName}`);
-    await uploadBytes(storageRef, blob);
-    const downloadURL = await getDownloadURL(storageRef);
-    console.log("Image uploaded successfully:", downloadURL);
-    return downloadURL;
+  const uploadImageToStorage = async (image, postId, imageName) => {
+    try {
+      const resp = await fetch(image);
+      const blob = await resp.blob();
 
-  } catch (error) {
-    console.error("Error uploading image:", error);
-
-    throw error;
-  }
-};
-
+      const storage = getStorage();
+      const storageRef = ref(storage, `car_images/${userEmail}/${postId}/${imageName}`);
+      await uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log("Image uploaded successfully:", downloadURL);
+      return downloadURL;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error;
+    }
+  };
 
   const handleSave = async () => {
     setLoading(true); 
@@ -69,23 +86,19 @@ export default function PickImagesScreen({route}) {
         Alert.alert("Error", "Please add at least the first three images before proceeding.");
         return;
       }
-else{
       // Upload each image and get their download URLs
       if (frontImage) {
         const frontImageUrl = await uploadImageToStorage(
           frontImage,
-          userEmail, 
           postId,
           "front_image.jpg"
         );
         imageUrls.push(frontImageUrl);
-        
       }
 
       if (backImage) {
         const backImageUrl = await uploadImageToStorage(
           backImage,
-          userEmail, 
           postId,
           "back_image.jpg"
         );
@@ -95,7 +108,6 @@ else{
       if (interiorImage) {
         const interiorImageUrl = await uploadImageToStorage(
           interiorImage,
-          userEmail, 
           postId,
           "interior_image.jpg"
         );
@@ -105,7 +117,6 @@ else{
       if (leftSideImage) {
         const leftSideImageUrl = await uploadImageToStorage(
           leftSideImage,
-          userEmail, 
           postId,
           "left_side_image.jpg"
         );
@@ -115,7 +126,6 @@ else{
       if (rightSideImage) {
         const rightSideImageUrl = await uploadImageToStorage(
           rightSideImage,
-          userEmail, 
           postId,
           "right_side_image.jpg"
         );
@@ -131,7 +141,11 @@ else{
       });
 
       console.log("Car post added with ID: ", carPostRef.id);
-      setPostCount(postCount + 1);
+      // Increment the post count and update it in the database
+      const newPostCount = postCount + 1;
+      await updatePostCount(newPostCount);
+      setPostCount(newPostCount);
+
       setLoading(false); 
       setUploading(false); // Finished uploading
       navigation.replace('TabNavigation');
@@ -141,7 +155,6 @@ else{
         [{ text: "OK", onPress: ()=>{} }]
       );
       clear();
-    }  
     } catch (error) {
       console.error("Error saving car post:", error);
       setLoading(false);
@@ -162,21 +175,18 @@ else{
           setImage={setFrontImage}
           whichImage={"Front Image"}
           disabled={loading} 
-
         />
         <ImagePickers
           image={backImage}
           setImage={setBackImage}
           whichImage={"Back Image"}
           disabled={loading} 
-
         />
         <ImagePickers
           image={interiorImage}
           setImage={setInteriorImage}
           whichImage={"Interior Image"}
           disabled={loading} 
-
         />
         {addMore ? (
           <>
@@ -185,14 +195,12 @@ else{
               setImage={setLeftSideImage}
               whichImage={"Left Side Image"}
               disabled={loading} 
-
             />
             <ImagePickers
               image={rightSideImage}
               setImage={setRightSideImage}
               whichImage={"Right Side Image"}
               disabled={loading} 
-
             />
           </>
         ) : (
@@ -206,16 +214,17 @@ else{
         )}
       </View>
       <View className='items-center mt-4'>
-      <TouchableOpacity onPress={handleSave}   disabled={loading || uploading} 
-      style={{ backgroundColor: "#7F5AF0",borderRadius: 8,paddingHorizontal: 24, justifyContent: "center",
-      alignItems: "center",
-      marginTop:10,
-      width: heightPercentageToDP(26),
-      height: widthPercentageToDP(15),}}>
-        <Text style={{ textAlign: "center", fontSize: 18, color: "white" }}>
-          Add Post
-        </Text>
-      </TouchableOpacity></View>
+        <TouchableOpacity onPress={handleSave}   disabled={loading || uploading} 
+          style={{ backgroundColor: "#7F5AF0",borderRadius: 8,paddingHorizontal: 24, justifyContent: "center",
+          alignItems: "center",
+          marginTop:10,
+          width: heightPercentageToDP(26),
+          height: widthPercentageToDP(15),}}>
+          <Text style={{ textAlign: "center", fontSize: 18, color: "white" }}>
+            Add Post
+          </Text>
+        </TouchableOpacity>
+      </View>
       <View style={{ height:heightPercentageToDP(8) }} />
       {loading && (
         <Modal
@@ -224,10 +233,10 @@ else{
           visible={true}
           onRequestClose={() => {}}>
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
-          <View style={{ backgroundColor: 'white', borderRadius: 10, padding: 20 ,alignItems:'center',justifyContent:'center',}}>
-          <ActivityIndicator size="large" color="#7F5AF0" />
-          <Text style={{ color: "#7F5DF0", marginTop: 10 }}>Adding car to database ...</Text>
-          </View>
+            <View style={{ backgroundColor: 'white', borderRadius: 10, padding: 20 ,alignItems:'center',justifyContent:'center',}}>
+              <ActivityIndicator size="large" color="#7F5AF0" />
+              <Text style={{ color: "#7F5DF0", marginTop: 10 }}>Adding car to database ...</Text>
+            </View>
           </View>
         </Modal>
       )}
