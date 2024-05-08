@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity,ActivityIndicator, Alert  } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity,ActivityIndicator, Alert, Modal  } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
@@ -20,9 +20,13 @@ export default function PickImagesScreen({route}) {
   const {userData} =route.params;
   const userEmail =userData.email;
   console.log(carData,"--email:",userEmail)
-  
+
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
   const navigation = useNavigation();
+
+
   const clear = ()=>{
     setFrontImage(null);
     setBackImage(null);
@@ -54,12 +58,14 @@ export default function PickImagesScreen({route}) {
 
   const handleSave = async () => {
     setLoading(true); 
+    setUploading(true); // Start uploading process
 
     try {
       const imageUrls = [];
       const postId = `${userEmail}_${postCount + 1}`; 
       if (!frontImage || !backImage || !interiorImage) {
         setLoading(false)
+        setUploading(false);
         Alert.alert("Error", "Please add at least the first three images before proceeding.");
         return;
       }
@@ -127,6 +133,8 @@ else{
       console.log("Car post added with ID: ", carPostRef.id);
       setPostCount(postCount + 1);
       setLoading(false); 
+      setUploading(false); // Finished uploading
+      navigation.replace('TabNavigation');
       Alert.alert(
         "Success",
         "Your car has been successfully added to your list. Clients can start renting now.",
@@ -137,6 +145,7 @@ else{
     } catch (error) {
       console.error("Error saving car post:", error);
       setLoading(false);
+      setUploading(false);
     }
   };
 
@@ -197,7 +206,7 @@ else{
         )}
       </View>
       <View className='items-center mt-4'>
-      <TouchableOpacity onPress={handleSave}  disabled={loading} 
+      <TouchableOpacity onPress={handleSave}   disabled={loading || uploading} 
       style={{ backgroundColor: "#7F5AF0",borderRadius: 8,paddingHorizontal: 24, justifyContent: "center",
       alignItems: "center",
       marginTop:10,
@@ -209,12 +218,18 @@ else{
       </TouchableOpacity></View>
       <View style={{ height:heightPercentageToDP(8) }} />
       {loading && (
-        <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
-         <View style={{ backgroundColor: 'white', borderRadius: 10, padding: 20 ,alignItems:'center',justifyContent:'center'}}>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={true}
+          onRequestClose={() => {}}>
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <View style={{ backgroundColor: 'white', borderRadius: 10, padding: 20 ,alignItems:'center',justifyContent:'center',}}>
           <ActivityIndicator size="large" color="#7F5AF0" />
           <Text style={{ color: "#7F5DF0", marginTop: 10 }}>Adding car to database ...</Text>
           </View>
-        </View>
+          </View>
+        </Modal>
       )}
     </ScrollView>
   );

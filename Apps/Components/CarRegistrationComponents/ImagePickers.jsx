@@ -13,8 +13,8 @@ export default function ImagePickers({ image, setImage, whichImage }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [5, 3],
-      quality: 1,
+      aspect: [16, 12],
+      quality: 0.5,
     });
 
     if (!result.canceled) {

@@ -78,21 +78,26 @@ export default function CarRegistrationScreen({ route }) {
   const [addressModalVisible, setAddressModalVisible] = useState(false);
   
   const onApply = async () => {
-    if (
-      selectedAddress&&
-      selectedBrand &&
-      selectedColor &&
-      selectedType &&
-      selectedYear &&
-      selectedFuelType &&
-      selectedGearType &&
-      selectedModel
-    ) {
+    const missingParams = [];
+    
+    if (!selectedAddress) missingParams.push("Address");
+    if (!selectedBrand) missingParams.push("Brand");
+    if (!selectedColor) missingParams.push("Color");
+    if (!selectedType) missingParams.push("Type");
+    if (!selectedYear) missingParams.push("Year");
+    if (!selectedFuelType) missingParams.push("Fuel Type");
+    if (!selectedGearType) missingParams.push("Gear Type");
+    if (!selectedModel) missingParams.push("Model");
+    if (!MaxDays) missingParams.push("Maximum Days");
+    if (!MinDays) missingParams.push("Minimum Days");
+    if (!carseat) missingParams.push("Car Seats");
+  
+    if (missingParams.length === 0) {
       const carData = [
         {
-          address:selectedAddress,
+          address: selectedAddress,
           brand: selectedBrand.value,
-          model: selectedModel.value ,
+          model: selectedModel.value,
           type: selectedType.value,
           color: selectedColor.value,
           gearType: selectedGearType.value,
@@ -103,12 +108,16 @@ export default function CarRegistrationScreen({ route }) {
           maxdays: MaxDays,
         },
       ];
-
+    
       navigation.push("PickImagesScreen", { carData: carData, userData });
     } else {
-      Alert.alert("Required", "Please fill all the data first");
+      Alert.alert(
+        "Required",
+        `Please fill in the following data: ${missingParams.join(", ")}`
+      );
     }
   };
+  
   const clearAllSelections = () => {
     setSelectedAddress(null);
     setSelectedBrand(null);
