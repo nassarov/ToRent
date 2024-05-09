@@ -3,7 +3,7 @@ import React from "react";
 import { FlatList } from "react-native-gesture-handler";
 import PostCard from "./PostCard";
 
-export default function Slider({ cars }) {
+export default function Slider({ cars , slideway }) {
   const renderItem = ({ item, index }) => {
     return <PostCard car={item} key={index}  />;
   };
@@ -12,7 +12,7 @@ export default function Slider({ cars }) {
     <FlatList
       data={cars}
       renderItem={renderItem}
-      horizontal={true}
+      horizontal={slideway}
       showsHorizontalScrollIndicator={false}
       
     />
