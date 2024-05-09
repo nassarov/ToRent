@@ -1,6 +1,10 @@
 import { Platform, StyleSheet } from "react-native";
 import { TextInput } from "react-native-paper";
-
+import {
+    heightPercentageToDP,
+    widthPercentageToDP,
+  } from "react-native-responsive-screen";
+  
 const styles = StyleSheet.create({
     container:{
         flex:1,
@@ -139,7 +143,21 @@ TextInput:{
     flex:1,
     paddingLeft: 10,
     color:"#05375a",
-}
+},
+ApplyButton: {
+    backgroundColor: "#7F5AF0",
+    borderRadius: 8,
+    paddingHorizontal: 24,
+    justifyContent: "center",
+    alignItems: "center",
+    width: heightPercentageToDP(16),
+    height: widthPercentageToDP(13),
+  },
+  ApplyButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 
 })
 

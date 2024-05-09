@@ -1,10 +1,18 @@
 import { View, Text , TouchableOpacity , ImageBackground , TextInput , StyleSheet} from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
 import styles from '../../Components/ProfileComponents/profileStyle';
-export default function EditProfile() {
+export default function EditProfile({route}) {
+
+  const { userData } = route.params;
+
+const [name , setName] = useState(userData.name);
+
+
+
+
+console.log(userData)
   return (
     <View style={styles.container}>
       <View style={{margin:20}}></View>
@@ -44,6 +52,19 @@ imageStyle={{borderRadius:15}}
 </View>
 </ImageBackground>
           </View>
+        </TouchableOpacity>
+        <Text style={{marginTop:10 , fontSize:18, fontWeight:"bold"}}>{name}</Text>
+        
+<View style={styles.action}>
+  <FontAwesome name='user-o' size={20}/>
+  <TextInput placeholder='Username' placeholderTextColor="#666666" value={name} onChangeText={text => setName(text)} style={styles.TextInput} >
+
+  </TextInput>
+</View>
+
+
+<TouchableOpacity style={styles.ApplyButton} onPress={() => onApply()}>
+          <Text style={styles.ApplyButtonText}>Apply</Text>
         </TouchableOpacity>
       </View>
     </View>
