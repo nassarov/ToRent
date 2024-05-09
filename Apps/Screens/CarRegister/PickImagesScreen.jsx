@@ -60,7 +60,7 @@ const fetchPostCount = async () => {
   const addCar = async()=>{
     const carPostRef = doc(db,"car_post",postId);
     const updatedCarData = { ...carData, imageUrls };
-    await setDoc(carPostRef,updatedCarData);
+    await setDoc(carPostRef,{ carDetails: updatedCarData });
   }
 
   const uploadImageToStorage = async (image, postId, imageName) => {
