@@ -18,7 +18,7 @@ import { app } from "../../../firebaseConfig";
 export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
   const auth = getAuth();
-
+const slide = true;
   const handleLogout = async () => {
     try {
       await signOut(auth);
