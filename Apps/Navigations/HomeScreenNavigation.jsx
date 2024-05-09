@@ -7,7 +7,7 @@ import Filter from "../Components/HomeComponents/Filter";
 import CustomHeader2 from "../Components/CustomHeader2";
 import TabNavigation from "./TabNavigation";
 import PickImagesScreen from "../Screens/CarRegister/PickImagesScreen";
-
+import EditProfile from '../Screens/Profile/EditProfile';
 const Stack = createStackNavigator();
 export default function HomeScreenNavigation({ route }) {
   const { userData } = route.params;
@@ -35,6 +35,13 @@ export default function HomeScreenNavigation({ route }) {
         name="PickImagesScreen"
         component={PickImagesScreen}
         initialParams={{ userData: userData }}
+      />
+
+
+<Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

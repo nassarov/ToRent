@@ -1,22 +1,16 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import CustomHeader2 from "../../Components/CustomHeader2";
-import Constants from "expo-constants";
-
+import { View, StyleSheet} from 'react-native'
+import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import UserProfile from '../../Components/ProfileComponents/UserProfile'
+import ListofCars from '../../Components/ProfileComponents/ListOfcars'
 export default function ProfileScreen({ route }) {
-  const { userData } = route.params;
-  console.log(userData);
-  return userData.role === "0" || userData.role === "1" ? (
-    <View style={{ paddingTop: Constants.statusBarHeight }}>
-      <Text> {userData.name}</Text>
-    </View>
-  ) : (
-    <View>
-      <Text>Only Logged In users can see their profile page</Text>
-      <TouchableOpacity>
-        <Text>LogIn</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    const { userData } = route.params;
+  return (
+    <SafeAreaView style={{flex:1}}>
+
+  <UserProfile userData={userData }/>
+  <ListofCars  userData={userData }/>
+
+    </SafeAreaView>
+  )
 }

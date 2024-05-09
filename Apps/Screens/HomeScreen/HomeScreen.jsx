@@ -13,10 +13,7 @@ import { app } from "../../../firebaseConfig";
 export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
   const auth = getAuth();
-  const db = getFirestore(app);
-  useEffect(() => {
-    fetchData();
-  }, []);
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -186,7 +183,7 @@ export default function HomeScreen() {
               <Text className="text-violet-600 text-xs">See More</Text>
             </TouchableOpacity>
           </View>
-          <Slider cars={company.cars} />
+          <Slider cars={company.cars} slideway={slide} />
         </View>
       ))}
     </ScrollView>
