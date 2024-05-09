@@ -19,24 +19,26 @@ export default function PickImagesScreen({route}) {
   const { carData } = route.params;
   const {userData} =route.params;
   const userEmail =userData.email;
+  const db = getFirestore();
+  const imageUrls = [];
+  const postId = `${userEmail}_${postCount + 1}`;
+
   console.log(carData,"--email:",userEmail)
 
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
   const navigation = useNavigation();
-
+// Fetch the latest post count from the database
+const fetchPostCount = async () => {
+  const db = getFirestore();
+  const postCountDocRef = doc(db, "post_counts", userEmail);
+  const postCountDocSnap = await getDoc(postCountDocRef);
+  if (postCountDocSnap.exists()) {
+    setPostCount(postCountDocSnap.data().count);
+  }
+};
   useEffect(() => {
-    // Fetch the latest post count from the database
-    const fetchPostCount = async () => {
-      const db = getFirestore();
-      const postCountDocRef = doc(db, "post_counts", userEmail);
-      const postCountDocSnap = await getDoc(postCountDocRef);
-      if (postCountDocSnap.exists()) {
-        setPostCount(postCountDocSnap.data().count);
-      }
-    };
-
     fetchPostCount();
   }, [userEmail]);
 
@@ -51,16 +53,20 @@ export default function PickImagesScreen({route}) {
 
   const updatePostCount = async (newPostCount) => {
     // Update the post count in the database
-    const db = getFirestore();
     const postCountDocRef = doc(db, "post_counts", userEmail);
     await setDoc(postCountDocRef, { count: newPostCount });
-  };
+  }; 
+  
+  const addCar = async()=>{
+    const carPostRef = doc(db,"car_post",postId);
+    const updatedCarData = { ...carData, imageUrls };
+    await setDoc(carPostRef,updatedCarData);
+  }
 
   const uploadImageToStorage = async (image, postId, imageName) => {
     try {
       const resp = await fetch(image);
       const blob = await resp.blob();
-
       const storage = getStorage();
       const storageRef = ref(storage, `car_images/${userEmail}/${postId}/${imageName}`);
       await uploadBytes(storageRef, blob);
@@ -78,8 +84,7 @@ export default function PickImagesScreen({route}) {
     setUploading(true); // Start uploading process
 
     try {
-      const imageUrls = [];
-      const postId = `${userEmail}_${postCount + 1}`; 
+     
       if (!frontImage || !backImage || !interiorImage) {
         setLoading(false)
         setUploading(false);
@@ -132,20 +137,13 @@ export default function PickImagesScreen({route}) {
         imageUrls.push(rightSideImageUrl);
       }
 
-      // Save car data+image urls to Firestore
-      const db = getFirestore();
-      const carPostRef = await addDoc(collection(db, "car_posts"), {
-        ...carData,
-        imageUrls,
-        postId
-      });
+      //add car post 
+      addCar();
 
-      console.log("Car post added with ID: ", carPostRef.id);
       // Increment the post count and update it in the database
       const newPostCount = postCount + 1;
       await updatePostCount(newPostCount);
       setPostCount(newPostCount);
-
       setLoading(false); 
       setUploading(false); // Finished uploading
       navigation.replace('TabNavigation');

@@ -14,7 +14,7 @@ export default function Slider({ cars }) {
       renderItem={renderItem}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-     
+      
     />
   );
 }
