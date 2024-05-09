@@ -1,63 +1,22 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ImageBackground,
-  TextInput,
-  StyleSheet,
-} from "react-native";
-import React, { useState } from "react";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import styles from "../../Components/ProfileComponents/profileStyle";
-import {
-  collection,
-  doc,
-  getDocs,
-  getFirestore,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
-import { app } from "../../../firebaseConfig";
-import { useNavigation } from "@react-navigation/native";
-export default function EditProfile({ route }) {
-  const navigation = useNavigation();
-  const db = getFirestore(app);
+import { View, Text , TouchableOpacity , ImageBackground , TextInput , StyleSheet} from 'react-native'
+import React, { useState } from 'react'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import styles from '../../Components/ProfileComponents/profileStyle';
+export default function EditProfile({route}) {
+
   const { userData } = route.params;
 
   const [name, setName] = useState(userData.name);
 
-  const onApply = async () => {
-    console.log(1);
-    let id = "";
-    const querySnapshot = await getDocs(
-      query(collection(db, "users"), where("email", "==", userData.email))
-    );
-    querySnapshot.forEach((doc) => {
-      id = doc.id;
-    });
-    console.log(id);
 
-    // Update user data using the retrieved ID
-    if (id !== "") {
-      await updateDoc(doc(db, "users", id), {
-        // Update the fields you want here
-        name: name,
-        // Add more fields as needed
-      });
-      console.log("User data updated successfully!");
-      userData.name=name
-      navigation.replace("HomeScreenStack", { userData: userData });
-    } else {
-      console.log("User not found!");
-    }
-  };
 
+
+console.log(userData)
   return (
     <View style={styles.container}>
-      <View style={{ margin: 20 }}></View>
-      <View style={{ alignItems: "center" }}>
+      <View style={{margin:20}}></View>
+      <View style={{alignItems:"center"}}>
         <TouchableOpacity>
           <View
             style={{
@@ -113,12 +72,8 @@ export default function EditProfile({ route }) {
           ></TextInput>
         </View>
 
-        <TouchableOpacity
-          style={styles.ApplyButton}
-          onPress={() => {
-            onApply();
-          }}
-        >
+
+<TouchableOpacity style={styles.ApplyButton} onPress={() => onApply()}>
           <Text style={styles.ApplyButtonText}>Apply</Text>
         </TouchableOpacity>
       </View>
