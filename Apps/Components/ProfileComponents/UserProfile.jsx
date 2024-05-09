@@ -6,7 +6,7 @@ import styles from '../../Components/ProfileComponents/profileStyle'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from "@react-navigation/native";
 export default function UserProfile({ userData }) {
-  const cities = userData.addresses.map(address => address.city);
+  const cities = userData.addresses.map(address => address.label);
   const UserRole = userData.role;
   const [role, setRole] = useState("");
   const navigation = useNavigation();
@@ -38,10 +38,10 @@ export default function UserProfile({ userData }) {
       </View>
 
       <View style={[styles.userInfoSection , {marginTop:16}]}>
-        {cities.map((city, index) => (
+        {cities.map((label, index) => (
           <View key={index} style={styles.row}>
             <Icon name="map-marker-radius" color='#777777' size={20} style={{ paddingRight: 10 }} />
-            <Text style={{ color: "#777777" }}>{index + 1}-{city}, Lebanon</Text>
+            <Text style={{ color: "#777777" }}>{index + 1}-{label}, Lebanon</Text>
           </View>
         ))}
 

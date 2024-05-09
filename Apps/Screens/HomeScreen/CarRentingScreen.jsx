@@ -9,6 +9,7 @@ import PictureSwitching from "../../Components/HomeComponents/PictureSwitching";
 import DetailsGrid from "../../Components/HomeComponents/DetailsGrid";
 import CarRentingDetails from "../../Components/CarRegistrationComponents/CarRentingDetails";
 import { StyleSheet } from "react-native";
+import { collection, collectionGroup, doc, getDocs, getFirestore } from "firebase/firestore";
 
 export default function CarRentingScreen({route}) {
   const { userData } = route.params;
@@ -18,6 +19,7 @@ export default function CarRentingScreen({route}) {
   const maxDate = new Date(2025, 6, 3);
   const [buttonVisible, setButtonVisible] = useState(true);
   const scrollViewRef = useRef(null);
+  const db = getFirestore();
 
   const handlePress = () => {
     // Open Google Maps with the location of Beirut
@@ -47,11 +49,40 @@ export default function CarRentingScreen({route}) {
     const handleEndDateChange = (date) => {
       setSelectedEndDate(date ? date.toString() : "");
     };
+
     useEffect(() => {
+      const retrieveCarPosts = async () => {
+        try {
+          // Use a collection group query to target all 'user_posts' subcollections
+          const userPostsRef = collectionGroup(db, 'user_posts');
+          const querySnapshot = await getDocs(userPostsRef);
+          if (querySnapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }
+    
+          const carPosts = querySnapshot.docs.map(doc => {
+            // Extract the user's email or identifier from the document reference
+            const pathSegments = doc.ref.path.split('/');
+            const ownerEmailOrId = pathSegments[pathSegments.length - 3]; // Assuming the structure is 'car_post/{userEmail}/user_posts/{postId}'
+            return {
+              id: doc.id,
+              owner: ownerEmailOrId,
+              ...doc.data().carDetails,
+            };
+          });
+          console.log(carPosts);
+    
+        } catch (error) {
+          console.error("Error retrieving car posts: ", error);
+        }
+      };
+    
+      retrieveCarPosts();
       setSelectedStartDate(minDate);
       setSelectedEndDate(minDate);
     }, []);
-
+    
   const images = [
     {
       id: 1,

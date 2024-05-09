@@ -22,6 +22,8 @@ export default function HomeScreen() {
       console.error("Failed to sign out:", error);
     }
   };
+  
+  
 
   const fetchData = async () => {
     const querySnapshot = await getDocs(collection(db, "car_posts"));
@@ -183,7 +185,7 @@ export default function HomeScreen() {
               <Text className="text-violet-600 text-xs">See More</Text>
             </TouchableOpacity>
           </View>
-          <Slider cars={company.cars} slideway={slide} />
+          <Slider cars={company.cars} slideway={true} />
         </View>
       ))}
     </ScrollView>

@@ -62,6 +62,7 @@ const fetchPostCount = async () => {
         const carDetails = { carData, imageUrls };
     await setDoc(userDocRef,{ carDetails });
   }
+  
 
   const uploadImageToStorage = async (image, postId, imageName) => {
     try {
@@ -84,7 +85,7 @@ const fetchPostCount = async () => {
     setUploading(true); // Start uploading process
 
     try {
-     
+      
       if (!frontImage || !backImage || !interiorImage) {
         setLoading(false)
         setUploading(false);
