@@ -93,7 +93,7 @@ export default function CarRegistrationScreen({ route }) {
     if (!carseat) missingParams.push("Car Seats");
   
     if (missingParams.length === 0) {
-      const carData = [
+      const carData = 
         {
           address: selectedAddress,
           brand: selectedBrand.value,
@@ -106,8 +106,7 @@ export default function CarRegistrationScreen({ route }) {
           carseat: carseat,
           mindays: MinDays,
           maxdays: MaxDays,
-        },
-      ];
+        };
     
       navigation.push("PickImagesScreen", { carData: carData, userData });
     } else {
