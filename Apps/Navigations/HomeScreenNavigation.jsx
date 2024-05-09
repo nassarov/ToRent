@@ -42,6 +42,7 @@ export default function HomeScreenNavigation({ route }) {
         name="EditProfile"
         component={EditProfile}
         options={{ headerShown: false }}
+        initialParams={{ userData: userData }}
       />
     </Stack.Navigator>
   );

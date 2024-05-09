@@ -7,13 +7,18 @@ import SearchBarCar from "../../Components/HomeComponents/SearchBar";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { getAuth, signOut } from "firebase/auth";
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  collectionGroup,
+  getDocs,
+  getFirestore,
+} from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 
 export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
   const auth = getAuth();
-
+const slide = true;
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -26,13 +31,12 @@ export default function HomeScreen() {
   
 
   const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(db, "car_posts"));
+    const querySnapshot = await getDocs(collection(db,"car_post"));
 
     const newData = [];
     querySnapshot.forEach((doc) => {
-      newData.push(doc.data().imageUrls);
-      console.log(doc.data()[0].addresses)
-    
+      newData.push(doc.data());
+      console.log(doc.data());
     });
     setPosts(newData);
   };
