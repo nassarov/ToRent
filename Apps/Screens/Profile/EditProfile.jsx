@@ -1,23 +1,111 @@
-import { View, Text , TouchableOpacity , ImageBackground , TextInput , StyleSheet} from 'react-native'
-import React, { useState } from 'react'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import styles from '../../Components/ProfileComponents/profileStyle';
-export default function EditProfile({route}) {
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  ImageBackground,
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import styles from "../../Components/ProfileComponents/profileStyle";
+import * as ImagePicker from "expo-image-picker";
 
+import {
+  collection,
+  doc,
+  getDocs,
+  getFirestore,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { app } from "../../../firebaseConfig";
+import { useNavigation } from "@react-navigation/native";
+import userProfile from '../../../assets/Profile/DPI.jpg';
+export default function EditProfile({ route }) {
+  const navigation = useNavigation();
+  const db = getFirestore(app);
   const { userData } = route.params;
-
+  const [ProfileImage, setProfileImage] = useState(null);
   const [name, setName] = useState(userData.name);
+  const [showButtons, setShowButtons] = useState(false);
 
+  const onApply = async () => {
+    console.log(1);
+    let id = "";
+    const querySnapshot = await getDocs(
+      query(collection(db, "users"), where("email", "==", userData.email))
+    );
+    querySnapshot.forEach((doc) => {
+      id = doc.id;
+    });
+    console.log(id);
 
+    // Update user data using the retrieved ID
+    if (id !== "") {
+      await updateDoc(doc(db, "users", id), {
+        // Update the fields you want here
+        name: name,
+        // Add more fields as needed
+      });
+      console.log("User data updated successfully!");
+      userData.name = name;
+      navigation.replace("HomeScreenStack", { userData: userData });
+    } else {
+      console.log("User not found!");
+    }
+  };
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [16, 12],
+      quality: 0.5,
+      
+    });
+  
+    if (!result.canceled) {
+      setProfileImage(result.assets[0].uri);
+    }
 
+    
+  };
 
-console.log(userData)
+  const renderButtons = () => {
+    if (showButtons) {
+      return (
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
+          <TouchableOpacity
+           style={styles.panelButton}
+            onPress={pickImage}
+          >
+            <Text style={styles.panelButtonTitle}>Choose Photo</Text>
+          </TouchableOpacity>
+         
+          <TouchableOpacity
+            style={[styles.panelButton , {marginLeft:10} ]}
+            onPress={() => setShowButtons(false)}
+            
+          >
+            <Text style={styles.panelButtonTitle}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    return null;
+  };
+
   return (
     <View style={styles.container}>
-      <View style={{margin:20}}></View>
-      <View style={{alignItems:"center"}}>
-        <TouchableOpacity>
+      <View style={{ margin: 20 }}></View>
+      <View style={{ alignItems: "center" }}>
+        <TouchableOpacity
+       
+          onPress={() => setShowButtons(true)}
+        >
           <View
             style={{
               height: 100,
@@ -28,11 +116,12 @@ console.log(userData)
             }}
           >
             <ImageBackground
-              source={{
-                uri: "https://api.adorable.io/avatars/80/abott@adorable.png",
-              }}
+            
+                source={ProfileImage? {uri: ProfileImage} : userProfile }
+                setImage={setProfileImage}
               style={{ height: 100, width: 100 }}
               imageStyle={{ borderRadius: 15 }}
+              
             >
               <View
                 style={{
@@ -72,8 +161,14 @@ console.log(userData)
           ></TextInput>
         </View>
 
+        {renderButtons()}
 
-<TouchableOpacity style={styles.ApplyButton} onPress={() => onApply()}>
+        <TouchableOpacity
+          style={styles.ApplyButton}
+          onPress={() => {
+            onApply();
+          }}
+        >
           <Text style={styles.ApplyButtonText}>Apply</Text>
         </TouchableOpacity>
       </View>
