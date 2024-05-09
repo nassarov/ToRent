@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import Carousel from "../../Components/HomeComponents/Carousel";
 import Slider from "../../Components/HomeComponents/Slider";
@@ -7,11 +7,16 @@ import SearchBarCar from "../../Components/HomeComponents/SearchBar";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { getAuth, signOut } from "firebase/auth";
-
+import { collection, getDocs, getFirestore } from "firebase/firestore";
+import { app } from "../../../firebaseConfig";
 
 export default function HomeScreen() {
+  const [posts, setPosts] = useState([]);
   const auth = getAuth();
-
+  const db = getFirestore(app);
+  useEffect(() => {
+    fetchData();
+  }, []);
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -19,6 +24,18 @@ export default function HomeScreen() {
     } catch (error) {
       console.error("Failed to sign out:", error);
     }
+  };
+
+  const fetchData = async () => {
+    const querySnapshot = await getDocs(collection(db, "car_posts"));
+
+    const newData = [];
+    querySnapshot.forEach((doc) => {
+      newData.push(doc.data().imageUrls);
+      console.log(doc.data()[0].addresses)
+    
+    });
+    setPosts(newData);
   };
 
   const navigation = useNavigation();
