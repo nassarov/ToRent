@@ -43,10 +43,11 @@ export default function HomeScreen() {
     let companyData = [];
     let newData = [];
     queryUserData.forEach(async (doc1) => {
+      const id = doc1.data().id;
       const queryPostData = await getDocs(
         query(
           collection(db, "car_post"),
-          where("carDetails.ownerId", "==", doc1.data().id),
+          where("ownerId", "==", id ? id : ""),
           limit(4)
         )
       );
@@ -55,11 +56,14 @@ export default function HomeScreen() {
       queryPostData.forEach((doc2) => {
         newData = [...newData, doc2.data()];
       });
-      companyData = [
-        ...companyData,
-        { ownerInfo: doc1.data(), cars: { newData } },
-      ];
-      setData(companyData);
+      if (newData.length !== 0) {
+        companyData = [
+          ...companyData,
+
+          { ownerInfo: doc1.data(), cars: { newData } },
+        ];
+        setData(companyData);
+      }
     });
   };
   useEffect(() => {
