@@ -41,7 +41,7 @@ export default function HomeScreen() {
     );
     let companyData = [];
     let newData = [];
-    await queryUserData.forEach(async (doc1) => {
+    queryUserData.forEach(async (doc1) => {
       const queryPostData = await getDocs(
         query(
           collection(db, "car_post"),
@@ -54,11 +54,17 @@ export default function HomeScreen() {
         newData = [...newData, doc2.data()];
       });
       console.log(newData);
-      companyData = [...companyData, { owner: doc1.data(), cars: { newData } }];
+      companyData = [
+        ...companyData,
+        { owner: { ownerInfo: doc1.data(), cars: { newData } } },
+      ];
+      console.log(companyData);
+      setData(companyData);
     });
-    setData(companyData);
   };
-
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
   const navigation = useNavigation();
   const images = [
     require("../../../assets/HomeSlider/s0.jpg"),
