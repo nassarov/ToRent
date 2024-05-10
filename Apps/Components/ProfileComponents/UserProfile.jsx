@@ -4,7 +4,9 @@ import { Avatar, Title, Caption } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from '../../Components/ProfileComponents/profileStyle'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getAuth, signOut } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from '@expo/vector-icons';
 export default function UserProfile({ userData }) {
   const profileimage = userData.profileImage;
   const UserRole = userData.role;
@@ -12,7 +14,7 @@ export default function UserProfile({ userData }) {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
-  
+  const auth = getAuth();
   
   const [role, setRole] = useState("");
   const navigation = useNavigation();
@@ -37,8 +39,24 @@ export default function UserProfile({ userData }) {
       setRole("Client");
     }
   }
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigation.replace("Registration");
+    } catch (error) {
+      console.error("Failed to sign out:", error);
+    }
+  };
   return (
     <View>
+      <View style={{position:"absolute" , top: 1 , right:0 , padding:10, flexDirection:"row"}}>
+
+      <TouchableOpacity onPress={handleLogout}>
+          <Text style={{fontSize:16 , color:"red"}} >Logout </Text>
+        </TouchableOpacity>
+        <MaterialIcons name="logout" size={18} color="black" />
+      </View>
       <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center' }}>
         <Avatar.Image
           source={{

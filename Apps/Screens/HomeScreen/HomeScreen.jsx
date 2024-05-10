@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View ,  StyleSheet, } from "react-native";
 import Carousel from "../../Components/HomeComponents/Carousel";
 import Slider from "../../Components/HomeComponents/Slider";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -31,14 +31,7 @@ export default function HomeScreen() {
     });
   }, [navigation]);
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigation.replace("Registration");
-    } catch (error) {
-      console.error("Failed to sign out:", error);
-    }
-  };
+  
   const fetchData = async () => {
     setData([]);
     const queryUserData = await getDocs(
@@ -198,9 +191,6 @@ export default function HomeScreen() {
       <View className="flex-row mb-2 ">
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
         <Text className="text-xl"> Your Favorite Car</Text>
-        <TouchableOpacity onPress={handleLogout}>
-          <Text>Logout</Text>
-        </TouchableOpacity>
       </View>
 
       <View className="flex-row justify-between px-1 items-center">
@@ -227,3 +217,7 @@ export default function HomeScreen() {
     </ScrollView>
   );
 }
+const styles = StyleSheet.create({ 
+
+logout:{}
+})
