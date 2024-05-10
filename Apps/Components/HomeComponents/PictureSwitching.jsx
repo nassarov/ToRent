@@ -6,12 +6,13 @@ import { widthPercentageToDP } from "react-native-responsive-screen";
 export default function PictureSwitching({ images }) {
   const screenWidth = Dimensions.get("window").width - 20;
 
-  const [selectedImage, setSelectedImage] = useState(images[0].image);
+  const [selectedImage, setSelectedImage] = useState(images[0]);
+  console.log(images[0]);
   return (
     <View>
       <View className="items-center">
         <Image
-          source={selectedImage}
+          source={{ uri: selectedImage }}
           style={{
             objectFit: "cover",
             width: screenWidth,
@@ -27,17 +28,15 @@ export default function PictureSwitching({ images }) {
           renderItem={({ item, index }) => (
             <TouchableOpacity
               onPress={() => {
-                setSelectedImage(item.image);
+                setSelectedImage(item);
               }}
               key={index}
               className={`border-2 ${
-                selectedImage == item.image
-                  ? "border-violet-600"
-                  : "border-gray-200"
+                selectedImage == item ? "border-violet-600" : "border-gray-200"
               } rounded-lg ml-1`}
             >
               <Image
-                source={item.image}
+                source={{ uri: item }}
                 style={{
                   width: widthPercentageToDP(86 / images.length),
                   height: widthPercentageToDP(15),

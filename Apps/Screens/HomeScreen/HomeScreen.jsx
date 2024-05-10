@@ -26,10 +26,10 @@ export default function HomeScreen() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    navigation.addListener('focus',(e)=>{
+    navigation.addListener("focus", (e) => {
       fetchData();
-    })  
-  },[navigation])
+    });
+  }, [navigation]);
 
   const handleLogout = async () => {
     try {

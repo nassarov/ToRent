@@ -18,7 +18,12 @@ export default function PostCard({ car, imageUrls }) {
       }}
       className="bg-violet-300 rounded-lg  gap-y-1 p-2 ml-2 mt-1"
       key={car.id}
-      onPress={() => navigation.navigate("CarRentingScreen")}
+      onPress={() =>
+        navigation.navigate("CarRentingScreen", {
+          images: imageUrls,
+          carData: car,
+        })
+      }
     >
       <Image
         source={{ uri: imageUrls[0] }}
