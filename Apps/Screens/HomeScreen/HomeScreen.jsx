@@ -12,13 +12,20 @@ import {
   collectionGroup,
   getDocs,
   getFirestore,
+  query,
+  where,
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 
 export default function HomeScreen() {
+  const db = getFirestore(app);
   const [posts, setPosts] = useState([]);
   const auth = getAuth();
-const slide = true;
+  const slide = true;
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetchData();
+  }, []);
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -27,18 +34,29 @@ const slide = true;
       console.error("Failed to sign out:", error);
     }
   };
-  
-  
 
   const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(db,"car_post"));
+    const queryUserData = await getDocs(
+      query(collection(db, "users"), where("role", "==", "1"))
+    );
+    let companyData = [];
+    let newData = [];
+    await queryUserData.forEach(async (doc1) => {
+      const queryPostData = await getDocs(
+        query(
+          collection(db, "car_post"),
+          where("carDetails.ownerId", "==", doc1.data().id)
+        )
+      );
 
-    const newData = [];
-    querySnapshot.forEach((doc) => {
-      newData.push(doc.data());
-      console.log(doc.data());
+      newData = [];
+      queryPostData.forEach((doc2) => {
+        newData = [...newData, doc2.data()];
+      });
+      console.log(newData);
+      companyData = [...companyData, { owner: doc1.data(), cars: { newData } }];
     });
-    setPosts(newData);
+    setData(companyData);
   };
 
   const navigation = useNavigation();
