@@ -61,9 +61,7 @@ export default function CarRegistrationScreen({ route }) {
   const [selectedGearType, setSelectedGearType] = useState(null);
   const [selectedFuelType, setSelectedFuelType] = useState(null);
   const [selectedYear, setSelectedYear] = useState("");
-  const [carseat, setCarseat] = useState("");
-  const [MinDays, setMinDay] = useState("");
-  const [MaxDays, setMaxDay] = useState("");
+ 
   const [filteredBrands, setFilteredBrands] = useState(carBrands);
   const [searchInput, setSearchInput] = useState("");
   const [filteredTypes, setFilteredTypes] = useState([]);
@@ -88,9 +86,7 @@ export default function CarRegistrationScreen({ route }) {
     if (!selectedFuelType) missingParams.push("Fuel Type");
     if (!selectedGearType) missingParams.push("Gear Type");
     if (!selectedModel) missingParams.push("Model");
-    if (!MaxDays) missingParams.push("Maximum Days");
-    if (!MinDays) missingParams.push("Minimum Days");
-    if (!carseat) missingParams.push("Car Seats");
+   
   
     if (missingParams.length === 0) {
       const carData = 
@@ -103,12 +99,10 @@ export default function CarRegistrationScreen({ route }) {
           gearType: selectedGearType.value,
           fuelType: selectedFuelType.value,
           year: selectedYear.value,
-          carseat: carseat,
-          mindays: MinDays,
-          maxdays: MaxDays,
+          
         };
     
-      navigation.push("PickImagesScreen", { carData: carData, userData });
+      navigation.push("CarTextInput", { carData: carData, userData });
     } else {
       Alert.alert(
         "Required",
@@ -126,9 +120,6 @@ export default function CarRegistrationScreen({ route }) {
     setSelectedFuelType(null);
     setSelectedGearType(null);
     setSelectedYear(null);
-    setCarseat(null);
-    setMinDay(null);
-    setMaxDay(null);
   };
   const navigation = useNavigation();
   // hide bottom tab bar
@@ -144,29 +135,6 @@ export default function CarRegistrationScreen({ route }) {
     setSelectedBrand(brand);
     setSelectedModel(null);
     setSelectedType(null);
-  };
-
-  const handleMinDayChange = (text) => {
-    const regex = /^[1-9][0-9]*$/;
-    if (regex.test(text) || text === "") {
-      setMinDay(text);
-    }
-  };
-  const handleMaxDayChange = (text) => {
-    const regex = /^[1-9][0-9]*$/;
-    if (regex.test(text) || text === "") {
-      setMaxDay(text);
-    }
-  };
-
-  const handlecarseatChange = (text) => {
-    const regex = /^[1-9][0-9]*$/;
-    if (regex.test(text) || text === "") {
-      setCarseat(text);
-    }
-  };
-  const dismissKeyboard = () => {
-    Keyboard.dismiss();
   };
 
   return (
@@ -205,7 +173,7 @@ export default function CarRegistrationScreen({ route }) {
             />
           </View>
           <AddressDropdownModal
-            title={"Address"}
+            title={<Text style={{color:"#7F5AF0"}}>Add<Text style={{color:"black"}} >ress</Text></Text>}
             userData={userData.addresses}
             selectedItem={selectedAddress}
             setSelectedItem={setSelectedAddress}
@@ -214,7 +182,7 @@ export default function CarRegistrationScreen({ route }) {
           />
 
           <DropdownModal
-            title={"Brand"}
+            title={<Text style={{color:"#7F5AF0"}}>Bra<Text style={{color:"black"}} >nd</Text></Text>}
             data={carBrands}
             setData={setCarBrands}
             selectedItem={selectedBrand}
@@ -231,7 +199,7 @@ export default function CarRegistrationScreen({ route }) {
           />
 
           <DropdownModal
-            title={"Model"}
+            title={<Text style={{color:"#7F5AF0"}}>Mod<Text style={{color:"black"}} >el</Text></Text>}
             data={selectedBrand?.models}
             selectedItem={selectedModel}
             setSelectedItem={setSelectedModel}
@@ -258,7 +226,7 @@ export default function CarRegistrationScreen({ route }) {
             depends={true}
           />
           <DropdownModal
-            title={"Color"}
+            title={<Text style={{color:"#7F5AF0"}}>Co<Text style={{color:"black"}} >lor</Text></Text>}
             data={colorOptions}
             setData={setColorOptions}
             selectedItem={selectedColor}
@@ -313,38 +281,6 @@ export default function CarRegistrationScreen({ route }) {
             filteredItems={filteredYear}
             setFilteredItems={setFilteredYear}
           />
-          <View>
-            <Text style={styles.dropdownTitle}>Car Seats</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Enter number of the seats"
-              value={carseat}
-              onChangeText={handlecarseatChange}
-            />
-          </View>
-
-          <View>
-            <Text style={styles.dropdownTitle}>Minimum Days</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Enter Minimum days to rent"
-              value={MinDays}
-              onChangeText={handleMinDayChange}
-            />
-          </View>
-
-          <View className="mb-40">
-            <Text style={styles.dropdownTitle}>Maximum Days</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Enter Maximum days to rent"
-              value={MaxDays}
-              onChangeText={handleMaxDayChange}
-            />
-          </View>
         </ScrollView>
       </View>
       <View style={styles.bottomContainer} className="bg-slate-300 ">
@@ -447,8 +383,8 @@ const styles = StyleSheet.create({
   },
   line: {
     flex: 1,
-    height: 1, // Adjust line height as needed
+    height: 1, 
     backgroundColor: "#7F5AF0",
-    alignItems: "baseline", // Adjust line color as needed
+    alignItems: "baseline",
   },
 });
