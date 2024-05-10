@@ -12,6 +12,7 @@ import {
   collectionGroup,
   getDocs,
   getFirestore,
+  limit,
   query,
   where,
 } from "firebase/firestore";
@@ -45,7 +46,8 @@ export default function HomeScreen() {
       const queryPostData = await getDocs(
         query(
           collection(db, "car_post"),
-          where("carDetails.ownerId", "==", doc1.data().id)
+          where("carDetails.ownerId", "==", doc1.data().id),
+          limit(4)
         )
       );
 
@@ -53,18 +55,16 @@ export default function HomeScreen() {
       queryPostData.forEach((doc2) => {
         newData = [...newData, doc2.data()];
       });
-      console.log(newData);
       companyData = [
         ...companyData,
-        { owner: { ownerInfo: doc1.data(), cars: { newData } } },
+        { ownerInfo: doc1.data(), cars: { newData } },
       ];
-      console.log(companyData);
       setData(companyData);
     });
   };
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
+  useEffect(() => {
+    data && console.log(data);
+  }, [data]);
   const navigation = useNavigation();
   const images = [
     require("../../../assets/HomeSlider/s0.jpg"),
@@ -72,110 +72,110 @@ export default function HomeScreen() {
     require("../../../assets/HomeSlider/s2.webp"),
     require("../../../assets/HomeSlider/s1.png"),
   ];
-  const companyData = [
-    {
-      id: 1,
-      name: "ABC Motors",
-      cars: [
-        {
-          id: 1,
-          image: require("./../../../assets/CarPosts/hyundai.png"),
-          brand: "Hyundai",
-          model: "Creta-2018",
-          price: "30",
-        },
-        {
-          id: 2,
-          image: require("./../../../assets/CarPosts/mahindra.jpeg"),
-          brand: "Mahindra",
-          model: "Scorpion-2020",
-          price: "20",
-        },
-        {
-          id: 3,
-          image: require("./../../../assets/CarPosts/suzuki.jpeg"),
-          brand: "Suzuki",
-          model: "Fronx-2012",
-          price: "40",
-        },
-        {
-          id: 4,
-          image: require("./../../../assets/CarPosts/toyota.png"),
-          brand: "Toyota",
-          model: "Urban Cruiser Taysor-2010",
-          price: "50",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "DEF Motors",
-      cars: [
-        {
-          id: 1,
-          image: require("./../../../assets/CarPosts/hyundai.png"),
-          brand: "Hyundai",
-          model: "Creta-2018",
-          price: "30",
-        },
-        {
-          id: 2,
-          image: require("./../../../assets/CarPosts/mahindra.jpeg"),
-          brand: "Mahindra",
-          model: "Scorpion-2020",
-          price: "55",
-        },
-        {
-          id: 3,
-          image: require("./../../../assets/CarPosts/suzuki.jpeg"),
-          brand: "Suzuki",
-          model: "Fronx-2012",
-          price: "35",
-        },
-        {
-          id: 4,
-          image: require("./../../../assets/CarPosts/toyota.png"),
-          brand: "Toyota",
-          model: "Urban Cruiser Taysor-2010",
-          price: "70",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "DEF Motors",
-      cars: [
-        {
-          id: 1,
-          image: require("./../../../assets/CarPosts/hyundai.png"),
-          brand: "Hyundai",
-          model: "Creta-2018",
-          price: "30",
-        },
-        {
-          id: 2,
-          image: require("./../../../assets/CarPosts/mahindra.jpeg"),
-          brand: "Mahindra",
-          model: "Scorpion-2020",
-          price: "55",
-        },
-        {
-          id: 3,
-          image: require("./../../../assets/CarPosts/suzuki.jpeg"),
-          brand: "Suzuki",
-          model: "Fronx-2012",
-          price: "35",
-        },
-        {
-          id: 4,
-          image: require("./../../../assets/CarPosts/toyota.png"),
-          brand: "Toyota",
-          model: "Urban Cruiser Taysor-2010",
-          price: "70",
-        },
-      ],
-    },
-  ];
+  // const companyData = [
+  //   {
+  //     id: 1,
+  //     name: "ABC Motors",
+  //     cars: [
+  //       {
+  //         id: 1,
+  //         image: require("./../../../assets/CarPosts/hyundai.png"),
+  //         brand: "Hyundai",
+  //         model: "Creta-2018",
+  //         price: "30",
+  //       },
+  //       {
+  //         id: 2,
+  //         image: require("./../../../assets/CarPosts/mahindra.jpeg"),
+  //         brand: "Mahindra",
+  //         model: "Scorpion-2020",
+  //         price: "20",
+  //       },
+  //       {
+  //         id: 3,
+  //         image: require("./../../../assets/CarPosts/suzuki.jpeg"),
+  //         brand: "Suzuki",
+  //         model: "Fronx-2012",
+  //         price: "40",
+  //       },
+  //       {
+  //         id: 4,
+  //         image: require("./../../../assets/CarPosts/toyota.png"),
+  //         brand: "Toyota",
+  //         model: "Urban Cruiser Taysor-2010",
+  //         price: "50",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "DEF Motors",
+  //     cars: [
+  //       {
+  //         id: 1,
+  //         image: require("./../../../assets/CarPosts/hyundai.png"),
+  //         brand: "Hyundai",
+  //         model: "Creta-2018",
+  //         price: "30",
+  //       },
+  //       {
+  //         id: 2,
+  //         image: require("./../../../assets/CarPosts/mahindra.jpeg"),
+  //         brand: "Mahindra",
+  //         model: "Scorpion-2020",
+  //         price: "55",
+  //       },
+  //       {
+  //         id: 3,
+  //         image: require("./../../../assets/CarPosts/suzuki.jpeg"),
+  //         brand: "Suzuki",
+  //         model: "Fronx-2012",
+  //         price: "35",
+  //       },
+  //       {
+  //         id: 4,
+  //         image: require("./../../../assets/CarPosts/toyota.png"),
+  //         brand: "Toyota",
+  //         model: "Urban Cruiser Taysor-2010",
+  //         price: "70",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "DEF Motors",
+  //     cars: [
+  //       {
+  //         id: 1,
+  //         image: require("./../../../assets/CarPosts/hyundai.png"),
+  //         brand: "Hyundai",
+  //         model: "Creta-2018",
+  //         price: "30",
+  //       },
+  //       {
+  //         id: 2,
+  //         image: require("./../../../assets/CarPosts/mahindra.jpeg"),
+  //         brand: "Mahindra",
+  //         model: "Scorpion-2020",
+  //         price: "55",
+  //       },
+  //       {
+  //         id: 3,
+  //         image: require("./../../../assets/CarPosts/suzuki.jpeg"),
+  //         brand: "Suzuki",
+  //         model: "Fronx-2012",
+  //         price: "35",
+  //       },
+  //       {
+  //         id: 4,
+  //         image: require("./../../../assets/CarPosts/toyota.png"),
+  //         brand: "Toyota",
+  //         model: "Urban Cruiser Taysor-2010",
+  //         price: "70",
+  //       },
+  //     ],
+  //   },
+  // ];
 
   const handleSearch = (text) => {
     setSearchQuery(text);
@@ -205,15 +205,15 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       <Carousel />
-      {companyData.map((company, index) => (
+      {data.map((dat, index) => (
         <View key={index} className=" py-2 mb-2">
           <View className="flex-row justify-between px-1 items-center">
-            <Text className="font-bold">{company.name}</Text>
+            <Text className="font-bold">{dat.ownerInfo.name}</Text>
             <TouchableOpacity>
               <Text className="text-violet-600 text-xs">See More</Text>
             </TouchableOpacity>
           </View>
-          <Slider cars={company.cars} slideway={true} />
+          <Slider cars={dat.cars.newData} slideway={true} />
         </View>
       ))}
     </ScrollView>

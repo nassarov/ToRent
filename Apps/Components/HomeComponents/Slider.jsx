@@ -3,9 +3,16 @@ import React from "react";
 import { FlatList } from "react-native-gesture-handler";
 import PostCard from "./PostCard";
 
-export default function Slider({ cars , slideway }) {
+export default function Slider({ cars, slideway }) {
   const renderItem = ({ item, index }) => {
-    return <PostCard car={item} key={index}  />;
+    console.log(item);
+    return (
+      <PostCard
+        car={item.carDetails.carData}
+        key={index}
+        imageUrls={item.carDetails.imageUrls}
+      />
+    );
   };
 
   return (
@@ -14,7 +21,6 @@ export default function Slider({ cars , slideway }) {
       renderItem={renderItem}
       horizontal={slideway}
       showsHorizontalScrollIndicator={false}
-      
     />
   );
 }

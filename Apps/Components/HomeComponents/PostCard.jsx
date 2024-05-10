@@ -7,7 +7,7 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
-export default function PostCard({ car }) {
+export default function PostCard({ car, imageUrls }) {
   const navigation = useNavigation();
 
   return (
@@ -21,10 +21,11 @@ export default function PostCard({ car }) {
       onPress={() => navigation.navigate("CarRentingScreen")}
     >
       <Image
-        source={car.image}
+        source={{ uri: imageUrls[0] }}
         className=" object-cohtain rounded-lg "
         style={{ width: "90%", height: "50%" }}
       />
+
       <View>
         <Text className="font-bold text-violet-600 text-lg">{car.brand}</Text>
         <Text className="text-xs">{car.model}</Text>
