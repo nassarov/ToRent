@@ -6,6 +6,8 @@ import {
   Image,
   TextInput,
   ImageBackground,
+  ActivityIndicator,
+  Modal,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -24,6 +26,7 @@ import { app } from "../../../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 import userProfile from "../../../assets/Profile/DPI.jpg";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+
 export default function EditProfile({ route }) {
   const navigation = useNavigation();
   const db = getFirestore(app);
@@ -32,8 +35,12 @@ export default function EditProfile({ route }) {
   const [profileImage, setProfileImage] = useState(null);
   const [name, setName] = useState(userData.name);
   const [showButtons, setShowButtons] = useState(false);
+  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [modalVisible, setModalVisible] = useState(false);
 
   const onApply = async () => {
+    setLoading(true);
+    setModalVisible(true);
     try {
       if (profileImage) {
         // Upload the new profile image to Firebase Storage
@@ -56,6 +63,7 @@ export default function EditProfile({ route }) {
 
         userData.name = name;
         userData.profileImage = imageUrl;
+        
       } else {
         // Update user data in Firestore without changing the profile image
         const querySnapshot = await getDocs(
@@ -70,9 +78,13 @@ export default function EditProfile({ route }) {
         userData.name = name;
       }
       // Navigate back to the previous screen
+      setLoading(false);
+      setModalVisible(false);
       navigation.goBack({ userData: userData });
     } catch (error) {
       console.error("Error updating profile:", error);
+      setLoading(false);
+      setModalVisible(false);
     }
   };
 
@@ -81,7 +93,7 @@ export default function EditProfile({ route }) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 1,
+      quality: 0.4,
     });
 
     if (!result.cancelled) {
@@ -199,6 +211,22 @@ export default function EditProfile({ route }) {
           <Text style={styles.ApplyButtonText}>Apply</Text>
         </TouchableOpacity>
       </View>
+
+       {/* Loading Modal */}
+       <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(false);
+          }}
+        >
+          <View className='flex-1 items-center justify-center bg-slate-200'>
+            <Text>Updating Your Profile's Data </Text>
+            <ActivityIndicator size="large" color="#7F5DF0" />
+          </View>
+        </Modal>
+        
     </View>
   );
 }
