@@ -24,9 +24,13 @@ export default function HomeScreen() {
   const auth = getAuth();
   const slide = true;
   const [data, setData] = useState([]);
+
   useEffect(() => {
-    fetchData();
-  }, []);
+    navigation.addListener('focus',(e)=>{
+      fetchData();
+    })  
+  },[navigation])
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
