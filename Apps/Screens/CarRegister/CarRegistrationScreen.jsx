@@ -173,7 +173,7 @@ export default function CarRegistrationScreen({ route }) {
             />
           </View>
           <AddressDropdownModal
-            title={<Text style={{color:"#7F5AF0"}}>Add<Text style={{color:"black"}} >ress</Text></Text>}
+            title={"Address"}
             userData={userData.addresses}
             selectedItem={selectedAddress}
             setSelectedItem={setSelectedAddress}
@@ -182,7 +182,7 @@ export default function CarRegistrationScreen({ route }) {
           />
 
           <DropdownModal
-            title={<Text style={{color:"#7F5AF0"}}>Bra<Text style={{color:"black"}} >nd</Text></Text>}
+            title={"Brand"}
             data={carBrands}
             setData={setCarBrands}
             selectedItem={selectedBrand}
@@ -199,7 +199,7 @@ export default function CarRegistrationScreen({ route }) {
           />
 
           <DropdownModal
-            title={<Text style={{color:"#7F5AF0"}}>Mod<Text style={{color:"black"}} >el</Text></Text>}
+            title={"Model"}
             data={selectedBrand?.models}
             selectedItem={selectedModel}
             setSelectedItem={setSelectedModel}
@@ -226,7 +226,7 @@ export default function CarRegistrationScreen({ route }) {
             depends={true}
           />
           <DropdownModal
-            title={<Text style={{color:"#7F5AF0"}}>Co<Text style={{color:"black"}} >lor</Text></Text>}
+            title={"Color"}
             data={colorOptions}
             setData={setColorOptions}
             selectedItem={selectedColor}
