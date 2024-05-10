@@ -40,8 +40,8 @@ export default function SignUpScreen({ route }) {
   const [phoneNumber, setPhoneNumber] = useState(route.params?.value);
   const [userid, setUserid] = useState("");
   const [isSigningUp, setIsSigningUp] = useState(false); // State to track if signing up is in progress
-
-  // Function to toggle password visibility
+ 
+ // Function to toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -67,6 +67,7 @@ export default function SignUpScreen({ route }) {
         email,
         password
       );
+
       const user = userCredential.user;
       // Firestore: Add additional user data
       const db = getFirestore(app);
@@ -78,6 +79,7 @@ export default function SignUpScreen({ route }) {
         phoneNumber: values.phoneNumber,
         role: values.role,
         id: user.uid,
+        profileImage:"https://firebasestorage.googleapis.com/v0/b/test-b60fa.appspot.com/o/profile_Images%2FDPI.jpg?alt=media&token=22e74a22-5874-48b5-83f3-8a1dbea2b62f"
       });
 
       console.log(userCredential);

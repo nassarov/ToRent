@@ -39,8 +39,8 @@ export default function HomeScreen() {
       console.error("Failed to sign out:", error);
     }
   };
-
   const fetchData = async () => {
+    setData([]);
     const queryUserData = await getDocs(
       query(collection(db, "users"), where("role", "==", "1"))
     );

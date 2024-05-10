@@ -6,13 +6,29 @@ import styles from '../../Components/ProfileComponents/profileStyle'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from "@react-navigation/native";
 export default function UserProfile({ userData }) {
-  const cities = userData.addresses.map(address => address.label);
+  const profileimage = userData.profileImage;
   const UserRole = userData.role;
+  const [cities, setCities] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPhoneNumber, setUserPhoneNumber] = useState("");
+  
+  
   const [role, setRole] = useState("");
   const navigation = useNavigation();
   useEffect(() => {
     handleRole();
   }, []);
+
+  useEffect(() => {
+    navigation.addListener('focus',(e)=>{
+      setCities(userData.addresses.map(address => address.label))
+      setUserName(userData.name)
+      setUserEmail(userData.email)
+      setUserPhoneNumber(userData.phoneNumber)
+      handleRole()
+    })  
+  },[navigation])
 
   const handleRole = () => {
     if (UserRole === "1") {
@@ -21,19 +37,18 @@ export default function UserProfile({ userData }) {
       setRole("Client");
     }
   }
-
   return (
     <View>
       <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center' }}>
         <Avatar.Image
           source={{
-            uri: "https://api.adorable.io/avatars/80/abott@adorable.png",
+            uri: profileimage,
           }}
           size={80}
         />
         <View style={{ marginLeft: 10 }}>
-          <Title style={styles.title}>{userData.name}</Title>
-          <Caption style={styles.caption}>@{userData.name}</Caption>
+          <Title style={styles.title}>{ userName }</Title>
+          <Caption style={styles.caption}>@{userName}</Caption>
         </View>
       </View>
 
@@ -47,12 +62,12 @@ export default function UserProfile({ userData }) {
 
         <View style={styles.row}>
           <Icon name='phone' color="#777777" size={20} style={{ paddingRight: 10 }} />
-          <Text style={{ color: "#777777" }}>{userData.phoneNumber}</Text>
+          <Text style={{ color: "#777777" }}>{userPhoneNumber}</Text>
         </View>
 
         <View style={styles.row}>
           <Icon name='email' color="#777777" size={20} style={{ paddingRight: 10 }} />
-          <Text style={{ color: "#777777" }}>{userData.email}</Text>
+          <Text style={{ color: "#777777" }}>{userEmail}</Text>
         </View>
 
         <View style={styles.row}>

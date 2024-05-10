@@ -11,7 +11,6 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import styles from "../../Components/ProfileComponents/profileStyle";
 import * as ImagePicker from "expo-image-picker";
-
 import {
   collection,
   doc,
@@ -23,72 +22,99 @@ import {
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
-import userProfile from '../../../assets/Profile/DPI.jpg';
+import userProfile from "../../../assets/Profile/DPI.jpg";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 export default function EditProfile({ route }) {
   const navigation = useNavigation();
   const db = getFirestore(app);
+  const storage = getStorage()
   const { userData } = route.params;
-  const [ProfileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
   const [name, setName] = useState(userData.name);
   const [showButtons, setShowButtons] = useState(false);
 
   const onApply = async () => {
-    console.log(1);
-    let id = "";
-    const querySnapshot = await getDocs(
-      query(collection(db, "users"), where("email", "==", userData.email))
-    );
-    querySnapshot.forEach((doc) => {
-      id = doc.id;
-    });
-    console.log(id);
+    try {
+      if (profileImage) {
+        // Upload the new profile image to Firebase Storage
+        const imageUrl = await uploadImageToStorage(
+          profileImage,
+          userData.email
+        );
 
-    // Update user data using the retrieved ID
-    if (id !== "") {
-      await updateDoc(doc(db, "users", id), {
-        // Update the fields you want here
-        name: name,
-        // Add more fields as needed
-      });
-      console.log("User data updated successfully!");
-      userData.name = name;
-      navigation.replace("HomeScreenStack", { userData: userData });
-    } else {
-      console.log("User not found!");
+        // Update user data in Firestore with the new image URL
+        const querySnapshot = await getDocs(
+          query(collection(db, "users"), where("email", "==", userData.email))
+        );
+
+        querySnapshot.forEach(async (doc) => {
+          await updateDoc(doc.ref, {
+            name: name,
+            profileImage: imageUrl,
+          });
+        });
+
+        userData.name = name;
+        userData.profileImage = imageUrl;
+      } else {
+        // Update user data in Firestore without changing the profile image
+        const querySnapshot = await getDocs(
+          query(collection(db, "users"), where("email", "==", userData.email))
+        );
+        querySnapshot.forEach(async (doc) => {
+          await updateDoc(doc.ref, {
+            name: name,
+          });
+        });
+
+        userData.name = name;
+      }
+      // Navigate back to the previous screen
+      navigation.goBack({ userData: userData });
+    } catch (error) {
+      console.error("Error updating profile:", error);
     }
   };
+
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [16, 12],
-      quality: 0.5,
-      
+      aspect: [1, 1],
+      quality: 1,
     });
-  
-    if (!result.canceled) {
+
+    if (!result.cancelled) {
       setProfileImage(result.assets[0].uri);
     }
-
-    
+  };
+  const uploadImageToStorage = async (image) => {
+    try {
+      const response = await fetch(image);
+      const blob = await response.blob();
+      const storageRef = ref(storage, `profile_Images/${userData.email}`);
+      await uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log(downloadURL)
+      return downloadURL;
+      
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error; // Throw the error so it can be caught in the calling function
+    }
   };
 
   const renderButtons = () => {
     if (showButtons) {
       return (
         <View style={{ flexDirection: "row", marginTop: 10 }}>
-          <TouchableOpacity
-           style={styles.panelButton}
-            onPress={pickImage}
-          >
+          <TouchableOpacity style={styles.panelButton} onPress={pickImage}>
             <Text style={styles.panelButtonTitle}>Choose Photo</Text>
           </TouchableOpacity>
-         
+
           <TouchableOpacity
-            style={[styles.panelButton , {marginLeft:10} ]}
+            style={[styles.panelButton, { marginLeft: 10 }]}
             onPress={() => setShowButtons(false)}
-            
           >
             <Text style={styles.panelButtonTitle}>Cancel</Text>
           </TouchableOpacity>
@@ -102,10 +128,7 @@ export default function EditProfile({ route }) {
     <View style={styles.container}>
       <View style={{ margin: 20 }}></View>
       <View style={{ alignItems: "center" }}>
-        <TouchableOpacity
-       
-          onPress={() => setShowButtons(true)}
-        >
+        <TouchableOpacity onPress={() => setShowButtons(true)}>
           <View
             style={{
               height: 100,
@@ -116,12 +139,16 @@ export default function EditProfile({ route }) {
             }}
           >
             <ImageBackground
-            
-                source={ProfileImage? {uri: ProfileImage} : userProfile }
-                setImage={setProfileImage}
+              source={
+                profileImage
+                  ? { uri: profileImage }
+                  : userData.profileImage
+                  ? { uri: userData.profileImage }
+                  : userProfile
+              }
+              setImage={setProfileImage}
               style={{ height: 100, width: 100 }}
               imageStyle={{ borderRadius: 15 }}
-              
             >
               <View
                 style={{
