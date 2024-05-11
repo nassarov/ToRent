@@ -43,7 +43,6 @@ export default function ForgotPasswordScreen() {
       if (phoneNumber.length === 8) {
         // Check if the phone number consists of exactly 8 digits
         const phoneNumberCCode = `+961${phoneNumber}`;
-        console.log(phoneNumberCCode);
         navigation.navigate("VerificationCodeScreen", {
           value: phoneNumberCCode,
         });

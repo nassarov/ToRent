@@ -7,7 +7,13 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
-export default function PostCard({ car, imageUrls,ownerId ,ownerData}) {
+export default function PostCard({
+  car,
+  imageUrls,
+  ownerId,
+  ownerData,
+  horizontal,
+}) {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -15,14 +21,16 @@ export default function PostCard({ car, imageUrls,ownerId ,ownerData}) {
         width: widthPercentageToDP(50),
         height: widthPercentageToDP(50),
       }}
-      className="bg-violet-300 rounded-lg  gap-y-1 p-2 ml-2 mt-1"
+      className={`bg-violet-300 rounded-lg p-2 ${
+        horizontal ? "gap-y-1 ml-2 mt-1" : "ml-[1px] mt-[1px]"
+      }  `}
       key={car.id}
       onPress={() =>
         navigation.navigate("CarRentingScreen", {
           images: imageUrls,
           carData: car,
-          ownerId:ownerId,
-          ownerData:ownerData,
+          ownerId: ownerId,
+          ownerData: ownerData,
         })
       }
     >

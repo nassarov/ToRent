@@ -74,7 +74,6 @@ export default function LoginScreen() {
     <Formik
       initialValues={{ email: "", password: "" }}
       onSubmit={(values) => {
-        console.log(values);
         handleSubmit(values);
         // You can add your form submission logic here
       }}

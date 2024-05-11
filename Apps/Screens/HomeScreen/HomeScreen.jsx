@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View ,  StyleSheet, Image, } from "react-native";
+import { Text, View, StyleSheet, Image } from "react-native";
 import Carousel from "../../Components/HomeComponents/Carousel";
 import Slider from "../../Components/HomeComponents/Slider";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -31,7 +31,6 @@ export default function HomeScreen() {
     });
   }, [navigation]);
 
-  
   const fetchData = async () => {
     setData([]);
     const queryUserData = await getDocs(
@@ -63,9 +62,7 @@ export default function HomeScreen() {
       }
     });
   };
-  useEffect(() => {
-    data && console.log(data);
-  }, [data]);
+
   const navigation = useNavigation();
   const images = [
     require("../../../assets/HomeSlider/s0.jpg"),
@@ -73,7 +70,7 @@ export default function HomeScreen() {
     require("../../../assets/HomeSlider/s2.webp"),
     require("../../../assets/HomeSlider/s1.png"),
   ];
- 
+
   const handleSearch = (text) => {
     setSearchQuery(text);
     setShowSearchResults(true);
@@ -102,11 +99,12 @@ export default function HomeScreen() {
       {data.map((dat, index) => (
         <View key={index} className=" py-2 mb-2" style={styles.container}>
           <View className="flex-row justify-between px-1 items-center ">
-            <View className='flex-row items-center '>
-          <Image className='rounded-full w-10 h-10 mr-3'
-              source={{ uri: dat.ownerInfo.profileImage }}
-            />
-            <Text className="font-bold">{dat.ownerInfo.name}</Text>
+            <View className="flex-row items-center ">
+              <Image
+                className="rounded-full w-10 h-10 mr-3"
+                source={{ uri: dat.ownerInfo.profileImage }}
+              />
+              <Text className="font-bold">{dat.ownerInfo.name}</Text>
             </View>
             <TouchableOpacity>
               <Text className="text-violet-600 text-xs">See More</Text>
@@ -132,6 +130,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 8, 
-  }
-  });
+    elevation: 8,
+  },
+});
