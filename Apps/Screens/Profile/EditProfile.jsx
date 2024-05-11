@@ -107,7 +107,6 @@ export default function EditProfile({ route }) {
       const storageRef = ref(storage, `profile_Images/${userData.email}`);
       await uploadBytes(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
-      console.log(downloadURL)
       return downloadURL;
       
     } catch (error) {

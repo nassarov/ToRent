@@ -82,7 +82,7 @@ export default function SignUpScreen({ route }) {
         profileImage:"https://firebasestorage.googleapis.com/v0/b/test-b60fa.appspot.com/o/profile_Images%2FDPI.jpg?alt=media&token=22e74a22-5874-48b5-83f3-8a1dbea2b62f"
       });
 
-      console.log(userCredential);
+     
       if (values.role === "1") {
         navigation.replace("AddressScreen");
       } else {
@@ -117,7 +117,6 @@ export default function SignUpScreen({ route }) {
             userid: userid,
           }}
           onSubmit={(values) => {
-            console.log(values);
             handelSignUp(values);
           }}
           validate={(values) => {
