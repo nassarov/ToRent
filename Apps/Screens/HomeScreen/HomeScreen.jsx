@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View ,  StyleSheet, } from "react-native";
+import { Text, View ,  StyleSheet, Image, } from "react-native";
 import Carousel from "../../Components/HomeComponents/Carousel";
 import Slider from "../../Components/HomeComponents/Slider";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -73,111 +73,7 @@ export default function HomeScreen() {
     require("../../../assets/HomeSlider/s2.webp"),
     require("../../../assets/HomeSlider/s1.png"),
   ];
-  // const companyData = [
-  //   {
-  //     id: 1,
-  //     name: "ABC Motors",
-  //     cars: [
-  //       {
-  //         id: 1,
-  //         image: require("./../../../assets/CarPosts/hyundai.png"),
-  //         brand: "Hyundai",
-  //         model: "Creta-2018",
-  //         price: "30",
-  //       },
-  //       {
-  //         id: 2,
-  //         image: require("./../../../assets/CarPosts/mahindra.jpeg"),
-  //         brand: "Mahindra",
-  //         model: "Scorpion-2020",
-  //         price: "20",
-  //       },
-  //       {
-  //         id: 3,
-  //         image: require("./../../../assets/CarPosts/suzuki.jpeg"),
-  //         brand: "Suzuki",
-  //         model: "Fronx-2012",
-  //         price: "40",
-  //       },
-  //       {
-  //         id: 4,
-  //         image: require("./../../../assets/CarPosts/toyota.png"),
-  //         brand: "Toyota",
-  //         model: "Urban Cruiser Taysor-2010",
-  //         price: "50",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "DEF Motors",
-  //     cars: [
-  //       {
-  //         id: 1,
-  //         image: require("./../../../assets/CarPosts/hyundai.png"),
-  //         brand: "Hyundai",
-  //         model: "Creta-2018",
-  //         price: "30",
-  //       },
-  //       {
-  //         id: 2,
-  //         image: require("./../../../assets/CarPosts/mahindra.jpeg"),
-  //         brand: "Mahindra",
-  //         model: "Scorpion-2020",
-  //         price: "55",
-  //       },
-  //       {
-  //         id: 3,
-  //         image: require("./../../../assets/CarPosts/suzuki.jpeg"),
-  //         brand: "Suzuki",
-  //         model: "Fronx-2012",
-  //         price: "35",
-  //       },
-  //       {
-  //         id: 4,
-  //         image: require("./../../../assets/CarPosts/toyota.png"),
-  //         brand: "Toyota",
-  //         model: "Urban Cruiser Taysor-2010",
-  //         price: "70",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "DEF Motors",
-  //     cars: [
-  //       {
-  //         id: 1,
-  //         image: require("./../../../assets/CarPosts/hyundai.png"),
-  //         brand: "Hyundai",
-  //         model: "Creta-2018",
-  //         price: "30",
-  //       },
-  //       {
-  //         id: 2,
-  //         image: require("./../../../assets/CarPosts/mahindra.jpeg"),
-  //         brand: "Mahindra",
-  //         model: "Scorpion-2020",
-  //         price: "55",
-  //       },
-  //       {
-  //         id: 3,
-  //         image: require("./../../../assets/CarPosts/suzuki.jpeg"),
-  //         brand: "Suzuki",
-  //         model: "Fronx-2012",
-  //         price: "35",
-  //       },
-  //       {
-  //         id: 4,
-  //         image: require("./../../../assets/CarPosts/toyota.png"),
-  //         brand: "Toyota",
-  //         model: "Urban Cruiser Taysor-2010",
-  //         price: "70",
-  //       },
-  //     ],
-  //   },
-  // ];
-
+ 
   const handleSearch = (text) => {
     setSearchQuery(text);
     setShowSearchResults(true);
@@ -204,9 +100,14 @@ export default function HomeScreen() {
       </View>
       <Carousel />
       {data.map((dat, index) => (
-        <View key={index} className=" py-2 mb-2">
-          <View className="flex-row justify-between px-1 items-center">
+        <View key={index} className=" py-2 mb-2" style={styles.container}>
+          <View className="flex-row justify-between px-1 items-center ">
+            <View className='flex-row items-center '>
+          <Image className='rounded-full w-10 h-10 mr-3'
+              source={{ uri: dat.ownerInfo.profileImage }}
+            />
             <Text className="font-bold">{dat.ownerInfo.name}</Text>
+            </View>
             <TouchableOpacity>
               <Text className="text-violet-600 text-xs">See More</Text>
             </TouchableOpacity>
@@ -217,7 +118,20 @@ export default function HomeScreen() {
     </ScrollView>
   );
 }
-const styles = StyleSheet.create({ 
 
-logout:{}
-})
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 20, // Adjust the value as needed for the desired roundness
+    backgroundColor: "#FFFFFF",
+    padding: 6,
+    margin: 2,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 8, 
+  }
+  });

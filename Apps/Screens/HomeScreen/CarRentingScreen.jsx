@@ -29,10 +29,13 @@ import {
   doc,
   getDocs,
   getFirestore,
+  query,
+  where,
 } from "firebase/firestore";
+import { Card } from "react-native-elements";
 
 export default function CarRentingScreen({ route }) {
-  const { userData, carData, images } = route.params;
+  const { userData, carData, images,ownerId ,ownerData  } = route.params;
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [selectedEndDate, setSelectedEndDate] = useState("");
   const minDate = new Date(); // Today
@@ -41,9 +44,11 @@ export default function CarRentingScreen({ route }) {
   const scrollViewRef = useRef(null);
   const db = getFirestore();
 
+
+  const locationLink = carData.address.value;
   const handlePress = () => {
     // Open Google Maps with the location of Beirut
-    const url = "https://www.google.com/maps/search/?api=1&query=Beirut";
+    const url = locationLink;
     Linking.openURL(url);
   };
 
@@ -70,43 +75,17 @@ export default function CarRentingScreen({ route }) {
     setSelectedEndDate(date ? date.toString() : "");
   };
 
-  useEffect(() => {
-    const retrieveCarPosts = async () => {
-      try {
-        // Use a collection group query to target all 'user_posts' subcollections
-        const userPostsRef = collectionGroup(db, "user_posts");
-        const querySnapshot = await getDocs(userPostsRef);
-        if (querySnapshot.empty) {
-          console.log("No matching documents.");
-          return;
-        }
+  useEffect(() => {    
+setSelectedStartDate(minDate);
+setSelectedEndDate(minDate);
 
-        const carPosts = querySnapshot.docs.map((doc) => {
-          // Extract the user's email or identifier from the document reference
-          const pathSegments = doc.ref.path.split("/");
-          const ownerEmailOrId = pathSegments[pathSegments.length - 3]; // Assuming the structure is 'car_post/{userEmail}/user_posts/{postId}'
-          return {
-            id: doc.id,
-            owner: ownerEmailOrId,
-            ...doc.data().carDetails,
-          };
-        });
-        console.log(carPosts);
-      } catch (error) {
-        console.error("Error retrieving car posts: ", error);
-      }
-    };
-
-    retrieveCarPosts();
-    setSelectedStartDate(minDate);
-    setSelectedEndDate(minDate);
   }, []);
 
   const details = [
     {
       id: 1,
       attribute: "Model-Type",
-      value: carData.model + "-" + carData.type,
+      value: carData.model + " (" + carData.type+")",
       icon: <FontAwesome5 name="car" size={24} color="#7F5AF0" />,
     },
     {
@@ -144,7 +123,7 @@ export default function CarRentingScreen({ route }) {
     {
       id: 6,
       attribute: "Price",
-      value: carData.price+"$/day",
+      value: carData.price+"$ /day",
       icon: <Entypo name="price-tag" size={24} color="#7F5AF0" />,
     },
     {
@@ -169,11 +148,24 @@ export default function CarRentingScreen({ route }) {
         onScroll={handleScroll}
         scrollEventThrottle={20}
       >
-        <CustomHeader2 text={"Car Details"} />
+        <CustomHeader2 text={carData.brand+" "+carData.model+"("+carData.year+")"} />
         <View style={styles.container}>
           <PictureSwitching images={images} />
         </View>
         <View style={styles.container}>
+          {/* Car Owner Data */}
+         
+          <TouchableOpacity style={styles.profileContainer} >
+            <Image
+              source={{ uri: ownerData.profileImage }}
+              style={styles.profileImage}
+            />
+            <View>
+            <Text style={styles.userName}>{ownerData.name}</Text>
+            <Text>{carData.address.label}</Text>
+            </View>
+          </TouchableOpacity>
+          
           {/* Grid */}
           <View>
             <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
@@ -188,12 +180,7 @@ export default function CarRentingScreen({ route }) {
             </Text>
             <View className="m-4 border-2 border-violet-600 p-4 rounded-lg">
               <Text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur.
+                  {carData.description}
               </Text>
             </View>
           </View>
@@ -205,7 +192,7 @@ export default function CarRentingScreen({ route }) {
           >
             <View className=" flex-row">
               <Text className="font-bold">City:</Text>
-              <Text>Beirut</Text>
+              <Text>{carData.address.label}</Text>
             </View>
             <Text className="font-bold mb-1">Google maps Link:</Text>
             <TouchableOpacity
@@ -309,5 +296,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 8, // Android shadow elevation
+  },profileContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent:'center'
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25, // Assuming you want a circular profile image
+    marginRight: 10, // Adjust as needed for spacing between image and text
+  },
+  userName: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
