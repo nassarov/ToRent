@@ -12,6 +12,9 @@ import {
   where,
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
+import ProfileHeader from "../../Components/ProfileComponents/ProfileHeader";
+import ProfileDetails from "../../Components/ProfileComponents/ProfileDetails";
+import { ScrollView } from "react-native-gesture-handler";
 export default function ProfileScreen({ route }) {
   const { userData } = route.params;
   const db = getFirestore(app);
@@ -31,10 +34,14 @@ export default function ProfileScreen({ route }) {
     setUserPosts(newData);
   };
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <UserProfile userData={userData} />
-      <Text style={{ fontWeight: "bold", fontSize: 20 }}>Posts</Text>
+    <ScrollView>
+
+    <SafeAreaView style={{ flex: 1 ,backgroundColor:"white" }}>
+      <ProfileHeader userData={userData}/>
+<ProfileDetails userData={userData} numberOfPosts={userPosts.length} />
+ 
       <ListofCars userPosts={userPosts} />
     </SafeAreaView>
+    </ScrollView>
   );
 }
