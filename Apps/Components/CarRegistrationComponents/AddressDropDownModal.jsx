@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    color:"#7F5AF0",
   },
   dropdownButton: {
     borderWidth: 1,
