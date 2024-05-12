@@ -109,14 +109,14 @@ export default function HomeScreen({ route }) {
         </View>
       ) : (
         data.map((dat, index) => (
-          <View key={index} className=" py-2 mb-2" style={styles.container}>
-            <View className="flex-row justify-between px-1 items-center ">
+          <View key={index} className=" mt-2 mb-2 bg-slate-200"style={styles.container} >
+            <View className="flex-row justify-between px-1 items-center bg-slate-300 rounded-xl py-1">
               <View className="flex-row items-center ">
                 <Image
                   className="rounded-full w-10 h-10 mr-3"
                   source={{ uri: dat.ownerInfo.profileImage }}
                 />
-                <Text className="font-bold">{dat.ownerInfo.name}</Text>
+                <Text className="font-bold text-[17px]">{dat.ownerInfo.name}</Text>
               </View>
               <TouchableOpacity
                 onPress={() => {
@@ -138,10 +138,7 @@ export default function HomeScreen({ route }) {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 20, // Adjust the value as needed for the desired roundness
-    backgroundColor: "#FFFFFF",
-    padding: 6,
-    margin: 2,
+    borderRadius:20,
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
