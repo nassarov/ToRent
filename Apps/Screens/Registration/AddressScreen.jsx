@@ -1,20 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Text, TouchableOpacity, ScrollView, Alert,ActivityIndicator,BackHandler  } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+  BackHandler,
+} from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import {
+  heightPercentageToDP,
+  widthPercentageToDP,
+} from "react-native-responsive-screen";
 import { Formik } from "formik";
 import { AntDesign } from "@expo/vector-icons";
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import { app, auth } from "../../../firebaseConfig";
-import { doc, getFirestore, updateDoc, collection, getDocs,query, orderBy, } from "firebase/firestore";
+import {
+  doc,
+  getFirestore,
+  updateDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
 
 export default function AddressScreen() {
   const navigation = useNavigation();
   const db = getFirestore(app); // Make sure you have initialized your app
-  const [isFocus, setIsFocus] = useState(false); 
-  const [valuesList, setValuesList] = useState([]); 
-  const [yourAdd, setYourAdd] = useState('');
-  const[addAnotherAdd, setAddAnotherAdd] = useState('');
+  const [isFocus, setIsFocus] = useState(false);
+  const [valuesList, setValuesList] = useState([]);
+  const [yourAdd, setYourAdd] = useState("");
+  const [addAnotherAdd, setAddAnotherAdd] = useState("");
   const [lebaneseCities, setLebaneseCities] = useState(null); // Define state to hold dropdown data
   const [loading, setLoading] = useState(false);
 
@@ -25,7 +46,10 @@ export default function AddressScreen() {
     const citiesQuery = query(citiesCollection, orderBy("label"));
     try {
       const querySnapshot = await getDocs(citiesQuery);
-      const cityList = querySnapshot.docs.map(doc => ({ label: doc.data().label, value: doc.data().value }));
+      const cityList = querySnapshot.docs.map((doc) => ({
+        label: doc.data().label,
+        value: doc.data().value,
+      }));
       setLebaneseCities(cityList);
       setLoading(false);
     } catch (error) {
@@ -66,11 +90,13 @@ export default function AddressScreen() {
       backAction
     );
     return () => backHandler.remove();
-  }, 
-  [lebaneseCities,navigation]);
+  }, [lebaneseCities, navigation]);
 
   const handleAddValue = (values, resetForm) => {
-    setValuesList([...valuesList, { label: values.City, value: values.GoogleMapLink }]);
+    setValuesList([
+      ...valuesList,
+      { label: values.City, value: values.GoogleMapLink },
+    ]);
     resetForm();
   };
 
@@ -81,14 +107,14 @@ export default function AddressScreen() {
 
       // Update the Firestore document for the current user with all addresses
       await updateDoc(doc(db, "users", user.uid), {
-        addresses: valuesList
+        addresses: valuesList,
       });
 
       // Show success message
       Alert.alert(
         "Addresses Added",
         "Your addresses have been successfully added!",
-        [{ text: "OK", onPress: () => navigation.replace('LoginScreen') }]
+        [{ text: "OK", onPress: () => navigation.replace("LoginScreen") }]
       );
     } catch (error) {
       console.error("Error updating document: ", error);
@@ -116,7 +142,9 @@ export default function AddressScreen() {
         }
         if (values.GoogleMapLink === "") {
           errors.GoogleMapLink = "Required: Please enter Google Maps link";
-        } else if (!values.GoogleMapLink.startsWith("https://maps.app.goo.gl/")) {
+        } else if (
+          !values.GoogleMapLink.startsWith("https://maps.app.goo.gl/")
+        ) {
           errors.GoogleMapLink = "Invalid Google Maps link";
         }
         return errors;
@@ -128,87 +156,116 @@ export default function AddressScreen() {
       }}
     >
       {({ handleChange, handleSubmit, values, errors, resetForm }) => (
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
-          <View style={{height:heightPercentageToDP(33), marginBottom:2}}>
-            <View style={{ height: heightPercentageToDP(12)}}>
-            <Text style={{ fontSize: 16, fontWeight: "bold",marginLeft:15 ,color:'#7F5AF0'}}>{addAnotherAdd}</Text>
-              {lebaneseCities && (
-                <Dropdown
-                  style={[styles.dropdown, isFocus && { borderColor: "#7F5AF0" }]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={lebaneseCities}
-                  search={true}
-                  maxHeight={300}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={!isFocus ? "Address" : "Select one"}
-                  searchPlaceholder="Search..."
-                  value={values.City}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
-                  onChange={(item) => {
-                    handleChange("City")(item.value);
-                    setIsFocus(false);
+            <View style={{ height: heightPercentageToDP(33), marginBottom: 2 }}>
+              <View style={{ height: heightPercentageToDP(12) }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "bold",
+                    marginLeft: 15,
+                    color: "#7F5AF0",
                   }}
-                  renderLeftIcon={() => (
-                    <AntDesign
-                      style={styles.icon}
-                      color={isFocus ? "blue" : "black"}
-                      name="Safety"
-                      size={20}
-                    />
-                  )}
-                />
-              )}
-              {errors.City && (
-                <Text style={styles.errorText}>{errors.City}</Text>
-              )}
-            </View>
-            {values.City && (
-              <View style={{ height:heightPercentageToDP(11)}}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Google Maps link(https://maps.app.goo.gl/abc)"
-                  value={values.GoogleMapLink}
-                  onChangeText={(text) => handleChange("GoogleMapLink")(text)}
-                />
-                {errors.GoogleMapLink && (
-                  <Text style={styles.errorText}>{errors.GoogleMapLink}</Text>
+                >
+                  {addAnotherAdd}
+                </Text>
+                {lebaneseCities && (
+                  <Dropdown
+                    style={[
+                      styles.dropdown,
+                      isFocus && { borderColor: "#7F5AF0" },
+                    ]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={lebaneseCities}
+                    search={true}
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={!isFocus ? "Address" : "Select one"}
+                    searchPlaceholder="Search..."
+                    value={values.City}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={(item) => {
+                      handleChange("City")(item.value);
+                      setIsFocus(false);
+                    }}
+                    renderLeftIcon={() => (
+                      <AntDesign
+                        style={styles.icon}
+                        color={isFocus ? "blue" : "black"}
+                        name="Safety"
+                        size={20}
+                      />
+                    )}
+                  />
+                )}
+                {errors.City && (
+                  <Text style={styles.errorText}>{errors.City}</Text>
                 )}
               </View>
-            )}
-            {/* Done Button */}
-            {values.City && (
-            <View className='items-center text-center justify-center'>
-              <TouchableOpacity
-                style={styles.DoneButton}
-                onPress={handleSubmit}
-              >
-                <Text style={styles.signupButtonText}>Done</Text>
-              </TouchableOpacity>
+              {values.City && (
+                <View style={{ height: heightPercentageToDP(11) }}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Google Maps link(https://maps.app.goo.gl/abc)"
+                    value={values.GoogleMapLink}
+                    onChangeText={(text) => handleChange("GoogleMapLink")(text)}
+                  />
+                  {errors.GoogleMapLink && (
+                    <Text style={styles.errorText}>{errors.GoogleMapLink}</Text>
+                  )}
+                </View>
+              )}
+              {/* Done Button */}
+              {values.City && (
+                <View className="items-center text-center justify-center">
+                  <TouchableOpacity
+                    style={styles.DoneButton}
+                    onPress={handleSubmit}
+                  >
+                    <Text style={styles.signupButtonText}>Done</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
-            )}</View>
-
 
             {/* Addresses */}
-           <View className='mt-2'>
-            <Text style={{ fontSize: 18, fontWeight: "bold",marginLeft:15 }}>{yourAdd}</Text>
-           </View>
+            <View className="mt-2">
+              <Text
+                style={{ fontSize: 18, fontWeight: "bold", marginLeft: 15 }}
+              >
+                {yourAdd}
+              </Text>
+            </View>
             {valuesList.map((item, index) => (
               <View key={index} style={styles.AddressContainer}>
                 <View style={styles.rectangle}>
-                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>City:</Text> {item.label} </Text>
-                  <Text><Text style={{ fontSize: 15, fontWeight: "bold" }}>Google Maps Link:</Text> <TouchableOpacity><Text className='text-blue-500'>{item.value}</Text></TouchableOpacity></Text>
+                  <Text>
+                    <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                      City:
+                    </Text>{" "}
+                    {item.label}{" "}
+                  </Text>
+                  <Text>
+                    <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                      Google Maps Link:
+                    </Text>{" "}
+                    <TouchableOpacity>
+                      <Text className="text-blue-500">{item.value}</Text>
+                    </TouchableOpacity>
+                  </Text>
                 </View>
               </View>
             ))}
             {valuesList.length > 0 && (
-              <View className='items-center text-center justify-center'>
-                <TouchableOpacity  onPress={confirmAndSendAddresses}
+              <View className="items-center text-center justify-center">
+                <TouchableOpacity
+                  onPress={confirmAndSendAddresses}
                   style={styles.signupButton}
                 >
                   <Text style={styles.signupButtonText}>Confirm</Text>
@@ -216,7 +273,7 @@ export default function AddressScreen() {
               </View>
             )}
           </View>
-        </ScrollView> 
+        </ScrollView>
       )}
     </Formik>
   );
@@ -227,7 +284,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     paddingTop: 20,
-    
   },
   input: {
     borderColor: "#7F5AF0",
@@ -235,11 +291,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
     margin: 15,
-    marginBottom:0,
+    marginBottom: 0,
     padding: 18,
-    paddingRight:10,
+    paddingRight: 10,
     width: heightPercentageToDP(42),
-    height: widthPercentageToDP(15)
+    height: widthPercentageToDP(15),
   },
   passwordContainer: {
     position: "relative",
@@ -268,7 +324,6 @@ const styles = StyleSheet.create({
     width: heightPercentageToDP(42),
     height: widthPercentageToDP(15),
     margin: 15,
-    
   },
   signupButton: {
     backgroundColor: "#7F5AF0",
@@ -281,7 +336,7 @@ const styles = StyleSheet.create({
     width: heightPercentageToDP(16),
     height: widthPercentageToDP(18),
   },
-  DoneButton:{
+  DoneButton: {
     backgroundColor: "#7F5AF0",
     borderRadius: 30,
     paddingVertical: 8,
@@ -289,7 +344,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 15,
-    marginTop:9,
+    marginTop: 9,
     width: heightPercentageToDP(16),
     height: widthPercentageToDP(18),
   },
@@ -331,15 +386,14 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
-  AddressContainer:{
+  AddressContainer: {
     marginTop: 15,
-   
   },
   rectangle: {
     borderWidth: 1,
-    borderColor: '#7F5AF0',
+    borderColor: "#7F5AF0",
     borderRadius: 5,
     padding: 10,
-    marginHorizontal:19,
+    marginHorizontal: 19,
   },
 });

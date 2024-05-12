@@ -98,7 +98,7 @@ export default function CarTextInput({route}) {
   };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <View>
           <Text style={styles.dropdownTitle}>Car Seats <MaterialCommunityIcons name="car-seat" size={30} color="#7F5AF0" /></Text>

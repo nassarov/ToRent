@@ -173,6 +173,7 @@ export default function CarRentingScreen({ route }) {
         ref={scrollViewRef}
         onScroll={handleScroll}
         scrollEventThrottle={20}
+        showsVerticalScrollIndicator={false}
       >
         <CustomHeader2
           text={carData.brand + " " + carData.model + "(" + carData.year + ")"}

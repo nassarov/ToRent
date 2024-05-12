@@ -15,6 +15,7 @@ export default function PostCard({
   horizontal,
   postId
 }) {
+  console.log(ownerData)
   const navigation = useNavigation();
   const customWidth = horizontal ? widthPercentageToDP(50) :widthPercentageToDP(45) ;
   const customHeight = horizontal ? widthPercentageToDP(50) :widthPercentageToDP(50) ;

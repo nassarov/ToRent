@@ -60,6 +60,7 @@ export default function Slider({ cars, slideway }) {
       horizontal={slideway}
       numColumns={slideway ? "" : 2}
       showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
       scrollEnabled={slideway}
     />
   );

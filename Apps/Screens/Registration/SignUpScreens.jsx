@@ -105,7 +105,7 @@ export default function SignUpScreen({ route }) {
 
   return (
     <KeyboardAvoidingView>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Formik
           initialValues={{
             name: "",

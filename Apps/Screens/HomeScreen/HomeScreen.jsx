@@ -85,6 +85,7 @@ export default function HomeScreen({ route }) {
     <ScrollView
       className="mt-[38px] pt-3 flex-1 mb-[50px]"
       keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
     >
       <View className="flex-row mb-2 ">
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>

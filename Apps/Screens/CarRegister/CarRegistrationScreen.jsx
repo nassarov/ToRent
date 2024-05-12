@@ -144,7 +144,7 @@ export default function CarRegistrationScreen({ route }) {
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
     >
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.carListContainer}>
             <FlatList
               showsHorizontalScrollIndicator={false}
