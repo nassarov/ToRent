@@ -10,7 +10,6 @@ import PostCard from "../../Components/HomeComponents/PostCard"; // Import your 
 export default function ListOfcars({ userPosts }) {
 
   const slide = false;
- console.log(userPosts)
 
   const [selected, setSelected] = useState(1);
 
@@ -48,7 +47,7 @@ export default function ListOfcars({ userPosts }) {
           data={userPosts}
           numColumns={2}
           showsHorizontalScrollIndicator={false}
-          scrollEnabled={true}
+          scrollEnabled={false}
           renderItem={({ item }) => (
             <View style={{ flex: 1 }}>
               <View style={{ margin: 8 }}>
@@ -59,6 +58,7 @@ export default function ListOfcars({ userPosts }) {
                   ownerId={item.ownerId}
                   ownerData={item.ownerData || {}}
                   horizontal={false}
+                  postId={item.carDetails.postId}
                 />
               </View>
             </View>

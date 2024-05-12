@@ -34,12 +34,12 @@ import {
   where,
 } from "firebase/firestore";
 import { Card } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CarRentingScreen({ route }) {
   const { userData, carData, images, ownerId, ownerData, postId } =
     route.params;
   const isOwner = userData.id === ownerId;
-  console.log(isOwner);
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [selectedEndDate, setSelectedEndDate] = useState("");
   const minDate = new Date(); // Today
@@ -47,7 +47,7 @@ export default function CarRentingScreen({ route }) {
   const [buttonVisible, setButtonVisible] = useState(true);
   const scrollViewRef = useRef(null);
   const db = getFirestore();
-
+  const navigation = useNavigation();
   const locationLink = carData.address.value;
   const handlePress = () => {
     // Open Google Maps with the location of Beirut
@@ -91,8 +91,9 @@ export default function CarRentingScreen({ route }) {
           text: "Yes",
           onPress: async () => {
             const postRef = doc(db, "car_post", postId);
+            console.log(postId);
             deleteDoc(postRef).then(() => {
-              console.log("deleted success")
+              navigation.goBack();
             });
           },
         },
@@ -239,10 +240,10 @@ export default function CarRentingScreen({ route }) {
           </View>
         </View>
         {/* Calendar */}
-        <View style={styles.container} className='pb-5'>
-        <Text className="ml-2 font-bold text-lg mb-[2px] mt-2">
-          Car Pick-up and Drop-off Dates
-        </Text>
+        <View style={styles.container} className="pb-5">
+          <Text className="ml-2 font-bold text-lg mb-[2px] mt-2">
+            Car Pick-up and Drop-off Dates
+          </Text>
           <CarRentingDetails
             startDate={new Date(selectedStartDate)}
             endDate={new Date(selectedEndDate)}

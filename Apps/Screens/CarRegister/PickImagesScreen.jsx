@@ -40,8 +40,6 @@ export default function PickImagesScreen({ route }) {
   const imageUrls = [];
   const postId = `${userEmail}_${postCount + 1}`;
 
-  console.log(carData, "--email:", userEmail);
-
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
@@ -91,7 +89,6 @@ export default function PickImagesScreen({ route }) {
       );
       await uploadBytes(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
-      console.log("Image uploaded successfully:", downloadURL);
       return downloadURL;
     } catch (error) {
       console.error("Error uploading image:", error);

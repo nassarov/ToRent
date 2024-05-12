@@ -7,7 +7,6 @@ export default function PictureSwitching({ images }) {
   const screenWidth = Dimensions.get("window").width - 20;
 
   const [selectedImage, setSelectedImage] = useState(images[0]);
-  console.log(images[0]);
   return (
     <View>
       <View className="items-center">

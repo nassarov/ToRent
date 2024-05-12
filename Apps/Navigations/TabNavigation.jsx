@@ -47,7 +47,6 @@ const CustomTabButton = ({ children, onPress }) => {
 
 const TabNavigation = ({ route }) => {
   const { userData } = route.params;
-  console.log("HomeTabNAv", userData);
   const insets = useSafeAreaInsets(); // Use safe area insets for better compatibility with iOS devices
   return (
     <Tab.Navigator

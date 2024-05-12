@@ -17,7 +17,6 @@ import { useNavigation } from "@react-navigation/native";
 export default function CarTextInput({route}) {
     const [carDatalist ,setCarDatalist] = useState(null)
     const { carData } = route.params;
-    console.log(carData)
     const { userData } = route.params;
     const navigation = useNavigation();
   const [carseat, setCarseat] = useState("");
