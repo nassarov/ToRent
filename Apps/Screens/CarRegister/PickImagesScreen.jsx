@@ -76,7 +76,7 @@ export default function PickImagesScreen({ route }) {
 
   const addCar = async () => {
     const userDocRef = doc(db, `car_post`, postId);
-    const carDetails = { carData, imageUrls };
+    const carDetails = { carData, imageUrls, postId };
     await setDoc(userDocRef, { ownerId: userData.id, carDetails });
   };
 

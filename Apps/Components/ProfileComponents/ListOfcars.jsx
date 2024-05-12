@@ -6,6 +6,7 @@ import { Icon } from "react-native-elements";
 
 export default function ListOfcars({ userPosts }) {
   const slide = false;
+ console.log(userPosts)
 
   return (
     <ScrollView style={styles.infoBoxWrapper}>

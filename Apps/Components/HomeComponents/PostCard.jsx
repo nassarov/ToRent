@@ -13,6 +13,7 @@ export default function PostCard({
   ownerId,
   ownerData,
   horizontal,
+  postId
 }) {
   const navigation = useNavigation();
   return (
@@ -31,6 +32,7 @@ export default function PostCard({
           carData: car,
           ownerId: ownerId,
           ownerData: ownerData,
+          postId:postId
         })
       }
     >

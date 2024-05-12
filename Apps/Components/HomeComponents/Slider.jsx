@@ -12,7 +12,6 @@ import {
 
 export default function Slider({ cars, slideway }) {
   const [ownersData, setOwnersData] = useState({});
-
   useEffect(() => {
     // Fetch owner data for all cars
     const fetchOwnersData = async () => {
@@ -49,6 +48,7 @@ export default function Slider({ cars, slideway }) {
         ownerId={item.ownerId}
         ownerData={ownerData}
         horizontal={slideway}
+        postId={item.carDetails.postId}
       />
     );
   };

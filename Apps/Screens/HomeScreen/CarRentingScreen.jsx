@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, Linking } from "react-native";
+import { View, Text, Image, Dimensions, Linking, Alert } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
@@ -26,6 +26,7 @@ import { StyleSheet } from "react-native";
 import {
   collection,
   collectionGroup,
+  deleteDoc,
   doc,
   getDocs,
   getFirestore,
@@ -35,7 +36,10 @@ import {
 import { Card } from "react-native-elements";
 
 export default function CarRentingScreen({ route }) {
-  const { userData, carData, images,ownerId ,ownerData  } = route.params;
+  const { userData, carData, images, ownerId, ownerData, postId } =
+    route.params;
+  const isOwner = userData.id === ownerId;
+  console.log(isOwner);
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [selectedEndDate, setSelectedEndDate] = useState("");
   const minDate = new Date(); // Today
@@ -43,7 +47,6 @@ export default function CarRentingScreen({ route }) {
   const [buttonVisible, setButtonVisible] = useState(true);
   const scrollViewRef = useRef(null);
   const db = getFirestore();
-
 
   const locationLink = carData.address.value;
   const handlePress = () => {
@@ -74,18 +77,40 @@ export default function CarRentingScreen({ route }) {
   const handleEndDateChange = (date) => {
     setSelectedEndDate(date ? date.toString() : "");
   };
+  const handleDelete = () => {
+    Alert.alert(
+      "Confirmation",
+      "Do you want to proceed?",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("No pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            const postRef = doc(db, "car_post", postId);
+            deleteDoc(postRef).then(() => {
+              console.log("deleted success")
+            });
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
-  useEffect(() => {    
-setSelectedStartDate(minDate);
-setSelectedEndDate(minDate);
-
+  useEffect(() => {
+    setSelectedStartDate(minDate);
+    setSelectedEndDate(minDate);
   }, []);
 
   const details = [
     {
       id: 1,
       attribute: "Model-Type",
-      value: carData.model + " (" + carData.type+")",
+      value: carData.model + " (" + carData.type + ")",
       icon: <FontAwesome5 name="car" size={24} color="#7F5AF0" />,
     },
     {
@@ -123,7 +148,7 @@ setSelectedEndDate(minDate);
     {
       id: 6,
       attribute: "Price",
-      value: carData.price+"$ /day",
+      value: carData.price + "$ /day",
       icon: <Entypo name="price-tag" size={24} color="#7F5AF0" />,
     },
     {
@@ -148,24 +173,26 @@ setSelectedEndDate(minDate);
         onScroll={handleScroll}
         scrollEventThrottle={20}
       >
-        <CustomHeader2 text={carData.brand+" "+carData.model+"("+carData.year+")"} />
+        <CustomHeader2
+          text={carData.brand + " " + carData.model + "(" + carData.year + ")"}
+        />
         <View style={styles.container}>
           <PictureSwitching images={images} />
         </View>
         <View style={styles.container}>
           {/* Car Owner Data */}
-         
-          <TouchableOpacity style={styles.profileContainer} >
+
+          <TouchableOpacity style={styles.profileContainer}>
             <Image
               source={{ uri: ownerData.profileImage }}
               style={styles.profileImage}
             />
             <View>
-            <Text style={styles.userName}>{ownerData.name}</Text>
-            <Text>{carData.address.label}</Text>
+              <Text style={styles.userName}>{ownerData.name}</Text>
+              <Text>{carData.address.label}</Text>
             </View>
           </TouchableOpacity>
-          
+
           {/* Grid */}
           <View>
             <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
@@ -179,9 +206,7 @@ setSelectedEndDate(minDate);
               Description
             </Text>
             <View className="m-4 border-2 border-violet-600 p-4 rounded-lg">
-              <Text>
-                  {carData.description}
-              </Text>
+              <Text>{carData.description}</Text>
             </View>
           </View>
           {/* Address  */}
@@ -230,32 +255,78 @@ setSelectedEndDate(minDate);
         <View
           style={{
             position: "relative",
-
+            flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
+            columnGap: 10,
             marginBottom: 20, // Adjust as needed
           }}
         >
-          <TouchableOpacity
-            onPress={() => {
-              /* Your onPress function */
-            }}
-            style={{
-              backgroundColor: "#7F5AF0",
-              padding: 10,
-              borderRadius: 10,
-              marginTop: 10,
-              width: widthPercentageToDP(40),
-              height: heightPercentageToDP(7),
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {/* Button content */}
-            <Text style={{ color: "white", fontWeight: "bold" }}>
-              Request Rent
-            </Text>
-          </TouchableOpacity>
+          {isOwner ? (
+            <>
+              <TouchableOpacity
+                onPress={() => {
+                  /* Your onPress function */
+                }}
+                style={{
+                  backgroundColor: "#7F5AF0",
+                  padding: 10,
+                  borderRadius: 10,
+                  marginTop: 10,
+                  width: widthPercentageToDP(40),
+                  height: heightPercentageToDP(7),
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {/* Button content */}
+                <Text style={{ color: "white", fontWeight: "bold" }}>
+                  Update Post
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  handleDelete();
+                }}
+                style={{
+                  backgroundColor: "#fff",
+                  padding: 10,
+                  borderRadius: 10,
+                  marginTop: 10,
+                  width: widthPercentageToDP(40),
+                  height: heightPercentageToDP(7),
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {/* Button content */}
+                <Text style={{ color: "red", fontWeight: "bold" }}>
+                  Delete Post
+                </Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                /* Your onPress function */
+              }}
+              style={{
+                backgroundColor: "#7F5AF0",
+                padding: 10,
+                borderRadius: 10,
+                marginTop: 10,
+                width: widthPercentageToDP(40),
+                height: heightPercentageToDP(7),
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {/* Button content */}
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                Request Rent
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
       {buttonVisible && (
@@ -274,7 +345,7 @@ setSelectedEndDate(minDate);
           }}
         >
           <Text style={{ color: "white", fontWeight: "bold" }}>
-            Schedule A Rent
+            {isOwner ? "Update OR Delete" : "Schedule A Rent"}
           </Text>
         </TouchableOpacity>
       )}
@@ -296,10 +367,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 8, // Android shadow elevation
-  },profileContainer: {
+  },
+  profileContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:'center'
+    justifyContent: "center",
   },
   profileImage: {
     width: 50,

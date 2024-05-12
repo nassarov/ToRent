@@ -30,6 +30,7 @@ export default function ProfileScreen({ route }) {
     });
     setUserPosts(newData);
   };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <UserProfile userData={userData} />
