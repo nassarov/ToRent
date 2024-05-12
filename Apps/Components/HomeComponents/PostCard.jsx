@@ -16,11 +16,13 @@ export default function PostCard({
   postId
 }) {
   const navigation = useNavigation();
+  const customWidth = horizontal ? widthPercentageToDP(50) :widthPercentageToDP(45) ;
+  const customHeight = horizontal ? widthPercentageToDP(50) :widthPercentageToDP(60) ;
   return (
     <TouchableOpacity
       style={{
-        width: widthPercentageToDP(50),
-        height: widthPercentageToDP(50),
+        width: customWidth,
+        height: customHeight,
       }}
       className={`bg-violet-300 rounded-lg p-2 ${
         horizontal ? "gap-y-1 ml-2 mt-1" : "ml-[1px] mt-[1px]"

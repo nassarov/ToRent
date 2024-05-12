@@ -11,9 +11,9 @@ const styles = StyleSheet.create({
   },
 
   userInfoSection: {
-    paddingHorizontal: 30,
-    marginBottom: 25,
-    marginTop: 10,
+    // paddingHorizontal: 30,
+    // marginBottom: 25,
+    // marginTop: 10,
   },
 
   title: {

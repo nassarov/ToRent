@@ -239,11 +239,10 @@ export default function CarRentingScreen({ route }) {
           </View>
         </View>
         {/* Calendar */}
+        <View style={styles.container} className='pb-5'>
         <Text className="ml-2 font-bold text-lg mb-[2px] mt-2">
           Car Pick-up and Drop-off Dates
         </Text>
-
-        <View>
           <CarRentingDetails
             startDate={new Date(selectedStartDate)}
             endDate={new Date(selectedEndDate)}

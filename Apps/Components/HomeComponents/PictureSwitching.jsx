@@ -25,6 +25,7 @@ export default function PictureSwitching({ images }) {
         <FlatList
           scrollEnabled={false}
           data={images}
+          showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => (
             <TouchableOpacity
               onPress={() => {
