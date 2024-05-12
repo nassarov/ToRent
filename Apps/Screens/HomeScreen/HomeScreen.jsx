@@ -18,13 +18,14 @@ import {
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 
-export default function HomeScreen() {
+export default function HomeScreen({ route }) {
   const db = getFirestore(app);
   const [posts, setPosts] = useState([]);
   const auth = getAuth();
   const slide = true;
   const [data, setData] = useState([]);
 
+  const { userData } = route.params;
   useEffect(() => {
     navigation.addListener("focus", (e) => {
       fetchData();
@@ -106,7 +107,13 @@ export default function HomeScreen() {
               />
               <Text className="font-bold">{dat.ownerInfo.name}</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("ProfileScreen", {
+                  userData: dat.ownerInfo,
+                });
+              }}
+            >
               <Text className="text-violet-600 text-xs">See More</Text>
             </TouchableOpacity>
           </View>

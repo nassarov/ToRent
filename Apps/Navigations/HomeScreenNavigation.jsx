@@ -9,6 +9,7 @@ import TabNavigation from "./TabNavigation";
 import PickImagesScreen from "../Screens/CarRegister/PickImagesScreen";
 import EditProfile from "../Screens/Profile/EditProfile";
 import CarTextInput from "../Screens/CarRegister/CarTextInput";
+import ProfileScreen from "../Screens/Profile/ProfileScreen";
 const Stack = createStackNavigator();
 export default function HomeScreenNavigation({ route }) {
   const { userData } = route.params;
@@ -47,6 +48,12 @@ export default function HomeScreenNavigation({ route }) {
         component={EditProfile}
         options={{ headerShown: false }}
         initialParams={{ userData: userData }}
+      />
+      <Stack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+        initialParams={{ visitorData: userData }}
       />
     </Stack.Navigator>
   );

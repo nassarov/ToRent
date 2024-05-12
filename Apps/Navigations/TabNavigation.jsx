@@ -126,7 +126,7 @@ const TabNavigation = ({ route }) => {
         initialParams={{ userData: userData }}
         options={{
           headerShown: true,
-          header: ()=><CustomHeader2 text={"Notifications"}/>,
+          header: () => <CustomHeader2 text={"Notifications"} />,
           tabBarIcon: ({ focused }) => (
             <Fontisto
               name="bell"
@@ -139,7 +139,7 @@ const TabNavigation = ({ route }) => {
       <Tab.Screen
         name="ProfileTab"
         component={ProfileScreen}
-        initialParams={{ userData: userData }}
+        initialParams={{ userData: userData, visitorData: userData }}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (

@@ -5,14 +5,18 @@ import { Avatar, Title, Caption } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import styles from "../ProfileComponents/profileStyle";
 import { TouchableOpacity } from "react-native-gesture-handler";
-export default function ProfileDetails({ userData, numberOfPosts, ownerId }) {
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+export default function ProfileDetails({
+  userData,
+  numberOfPosts,
+  visitorData,
+}) {
   const navigation = useNavigation();
   const profileimage = userData.profileImage;
   const [userEmail, setUserEmail] = useState("");
   const [cities, setCities] = useState([]);
-
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
-
+  console.log();
   const UserRole = userData.role;
 
   const [role, setRole] = useState("");
@@ -122,7 +126,7 @@ export default function ProfileDetails({ userData, numberOfPosts, ownerId }) {
           marginBottom: 5,
         }}
       >
-        {ownerId === userData.id && (
+        {userData.id === visitorData.id && (
           <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
             <Text
               style={{
