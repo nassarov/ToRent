@@ -107,7 +107,7 @@ export default function ProfileDetails({
                 width: 60,
                 height: 30,
                 borderRadius: 50,
-                backgroundColor: "#EFEFEF",
+                marginRight:5,                backgroundColor: "#EFEFEF",
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -143,7 +143,6 @@ export default function ProfileDetails({
             </Text>
           </TouchableOpacity>
         )}
-
         <TouchableOpacity>
           <Text
             style={{
@@ -159,6 +158,23 @@ export default function ProfileDetails({
             Share Profile
           </Text>
         </TouchableOpacity>
+        {userData.id !== visitorData.id && (
+    <TouchableOpacity onPress={() => {/* handle message action */}}>
+      <Text
+        style={{
+          backgroundColor: "#E1E1E1",
+          width: 150,
+          paddingHorizontal: 10,
+          paddingVertical: 5,
+          borderRadius: 5,
+          textAlign: "center",
+          color: "black",
+        }}
+      >
+        Message
+      </Text>
+    </TouchableOpacity>
+  )}
       </View>
     </View>
   );

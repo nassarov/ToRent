@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image,ActivityIndicator  } from "react-native";
 import Carousel from "../../Components/HomeComponents/Carousel";
 import Slider from "../../Components/HomeComponents/Slider";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -24,6 +24,7 @@ export default function HomeScreen({ route }) {
   const auth = getAuth();
   const slide = true;
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false); 
 
   const { userData } = route.params;
   useEffect(() => {
@@ -33,6 +34,7 @@ export default function HomeScreen({ route }) {
   }, [navigation]);
 
   const fetchData = async () => {
+    setLoading(true); 
     setData([]);
     const queryUserData = await getDocs(
       query(collection(db, "users"), where("role", "==", "1"))
@@ -60,8 +62,10 @@ export default function HomeScreen({ route }) {
           { ownerInfo: doc1.data(), cars: { newData } },
         ];
         setData(companyData);
+        
       }
     });
+    setLoading(false); 
   };
 
   const navigation = useNavigation();
@@ -97,29 +101,36 @@ export default function HomeScreen({ route }) {
         </TouchableOpacity>
       </View>
       <Carousel />
-      {data.map((dat, index) => (
-        <View key={index} className=" py-2 mb-2" style={styles.container}>
-          <View className="flex-row justify-between px-1 items-center ">
-            <View className="flex-row items-center ">
-              <Image
-                className="rounded-full w-10 h-10 mr-3"
-                source={{ uri: dat.ownerInfo.profileImage }}
-              />
-              <Text className="font-bold">{dat.ownerInfo.name}</Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("ProfileScreen", {
-                  userData: dat.ownerInfo,
-                });
-              }}
-            >
-              <Text className="text-violet-600 text-xs">See More</Text>
-            </TouchableOpacity>
-          </View>
-          <Slider cars={dat.cars.newData} slideway={true} />
+      {loading ? ( 
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#7F5AF0" />
+          <Text style={styles.loadingText}>Getting Latest Cars...</Text>
         </View>
-      ))}
+      ) : (
+        data.map((dat, index) => (
+          <View key={index} className=" py-2 mb-2" style={styles.container}>
+            <View className="flex-row justify-between px-1 items-center ">
+              <View className="flex-row items-center ">
+                <Image
+                  className="rounded-full w-10 h-10 mr-3"
+                  source={{ uri: dat.ownerInfo.profileImage }}
+                />
+                <Text className="font-bold">{dat.ownerInfo.name}</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("ProfileScreen", {
+                    userData: dat.ownerInfo,
+                  });
+                }}
+              >
+                <Text className="text-violet-600 text-xs">See More</Text>
+              </TouchableOpacity>
+            </View>
+            <Slider cars={dat.cars.newData} slideway={true} />
+          </View>
+        ))
+      )}
     </ScrollView>
   );
 }
@@ -138,5 +149,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop:50,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#7F5AF0",
   },
 });

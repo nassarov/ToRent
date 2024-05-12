@@ -49,10 +49,10 @@ export default function ProfileHeader({ userData }) {
     return (
         <View style={{ paddingHorizontal: 15, paddingTop: 10, height: 55 }}>
             <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
-                <Text style={{ fontSize: 24, fontWeight: "500", color: "black" }}>@_{userName}</Text>
+                <Text style={{ fontSize: 22, fontWeight: "500", color: "black" }}>@{userName}</Text>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <TouchableOpacity onPress={handleLogout}>
-                        <Text style={{ fontSize: 12, color: "red" }}>Logout </Text>
+                        <Text style={{ fontSize: 18, color: "red" }}>Logout </Text>
                     </TouchableOpacity>
                     <MaterialIcons name="logout" size={18} color="gray" />
                 </View>

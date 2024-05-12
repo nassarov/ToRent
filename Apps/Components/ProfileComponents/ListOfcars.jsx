@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Dimensions } from "react-native";
 import styles from "../../Components/ProfileComponents/profileStyle";
 import Slider from "../../Components/HomeComponents/Slider";
 import { Icon } from "react-native-elements";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import PostCard from "../../Components/HomeComponents/PostCard"; // Import your PostCard component here
+const windowWidth = Dimensions.get('window').width;
 
 export default function ListOfcars({ userPosts }) {
 
@@ -15,7 +16,7 @@ export default function ListOfcars({ userPosts }) {
 
 
   return (
-    <View style={{ marginTop: 20, }}>
+    <View style={{ marginTop: 10, }}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15 }}>
         <TouchableOpacity
           style={{ width: 98, padding: 15, borderBottomWidth: selected === 1 ? 2 : 0, borderColor: selected === 1 ? "black" : "transparent" }}
@@ -48,11 +49,11 @@ export default function ListOfcars({ userPosts }) {
           numColumns={2}
           showsHorizontalScrollIndicator={false}
           scrollEnabled={false}
+          contentContainerStyle={style.container}
           renderItem={({ item }) => (
             <View style={{ flex: 1 }}>
-              <View style={{ margin: 8 }}>
+              <View style={{ margin: 8 ,}}>
                 <PostCard
-
                   car={item.carDetails.carData}
                   imageUrls={item.carDetails.imageUrls}
                   ownerId={item.ownerId}
@@ -75,3 +76,16 @@ export default function ListOfcars({ userPosts }) {
     </View>
   );
 }
+
+const style = StyleSheet.create({
+  container: {
+    marginBottom:50,
+    paddingHorizontal: 4,
+    paddingTop: 4,
+  },
+  itemContainer: {
+    flex: 1,
+    margin: 4,
+    width: (windowWidth - 16) /2, // Adjusted width to fit two columns
+  },
+});

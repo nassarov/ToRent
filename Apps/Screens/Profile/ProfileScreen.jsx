@@ -41,7 +41,7 @@ export default function ProfileScreen({ route }) {
   };
 
   return (
-    <ScrollView>
+    <ScrollView className='pb-5 bg-white'>
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         {userPosts &&visitorData&& (
           <>
