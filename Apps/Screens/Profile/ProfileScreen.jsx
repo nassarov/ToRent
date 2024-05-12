@@ -44,7 +44,7 @@ export default function ProfileScreen({ route }) {
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         {userPosts && visitorData && (
           <>
-            <ProfileHeader userData={userData} />
+            <ProfileHeader userData={userData} visitorData={visitorData} />
             <ProfileDetails
               userData={userData}
               visitorData={visitorData}

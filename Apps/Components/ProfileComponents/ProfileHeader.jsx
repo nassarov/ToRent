@@ -5,7 +5,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { getAuth, signOut } from "firebase/auth";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function ProfileHeader({ userData }) {
+export default function ProfileHeader({ userData , visitorData}) {
     const navigation = useNavigation();
     const [userName, setUserName] = useState("");
     const auth = getAuth();
@@ -50,12 +50,13 @@ export default function ProfileHeader({ userData }) {
         <View style={{ paddingHorizontal: 15, paddingTop: 10, height: 55 }}>
             <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
                 <Text style={{ fontSize: 22, fontWeight: "500", color: "black" }}>@{userName}</Text>
+                {userData.id === visitorData.id && (
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <TouchableOpacity onPress={handleLogout}>
                         <Text style={{ fontSize: 18, color: "red" }}>Logout </Text>
                     </TouchableOpacity>
                     <MaterialIcons name="logout" size={18} color="gray" />
-                </View>
+                </View>)}
             </View>
         </View>
     );

@@ -6,6 +6,7 @@ import {
 } from "react-native-responsive-screen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function PostCard({
   car,
@@ -26,14 +27,14 @@ export default function PostCard({
     width: customWidth,
     height: customHeight,
     borderRadius: 10,
-    shadowColor: "#000", // Shadow color
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2, // Shadow direction: here it's set to be below the card
+      height: 2, 
     },
-    shadowOpacity: 0.30, // Shadow opacity
-    shadowRadius: 4.65, // Shadow blur radius
-    elevation: 8, // Elevation for Android
+    shadowOpacity: 0.30, 
+    shadowRadius: 4.65, 
+    elevation: 8,
   }}
       className={`rounded-lg bg-white ${
         horizontal ? " ml-2 mt-1 mb-2" : "ml-[1px] mt-[1px]"
@@ -53,12 +54,20 @@ export default function PostCard({
         source={{ uri: imageUrls[0] }}
         style={{ width: '100%', height: '55%', borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
       />
-
-      <View className='p-2 border-t-[1px] border-violet-400'>
-        <Text className="font-bold text-violet-600 text-lg">{car.brand}</Text>
-        <Text className="text-xs">{car.model}</Text>
-      
+      <View className='p-2'>
+        <Text className="font-bold text-violet-600 text-lg">{car.model}</Text>
+        <Text className="text-xs">{car.brand} ({car.year})</Text>
+      <View className='p2 flex-row justify-between'>
+        <View className='flex-row'>
+      <Icon
+          name="map-marker-radius"
+          color="#777777"
+          size={18}
+        />
+      <Text className="text-violet-900">{car.address.label}</Text>
+      </View>
       <Text className="text-violet-900">${car.price}/day</Text>
+      </View>
       </View>
     </TouchableOpacity>
   );
