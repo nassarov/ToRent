@@ -17,9 +17,8 @@ import ProfileDetails from "../../Components/ProfileComponents/ProfileDetails";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 export default function ProfileScreen({ route }) {
-  const { userData,visitorData } = route.params;
+  const { userData, visitorData } = route.params;
 
-  
   const db = getFirestore(app);
   const [userPosts, setUserPosts] = useState([]);
   const navigation = useNavigation();
@@ -41,9 +40,9 @@ export default function ProfileScreen({ route }) {
   };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-        {userPosts &&visitorData&& (
+        {userPosts && visitorData && (
           <>
             <ProfileHeader userData={userData} />
             <ProfileDetails

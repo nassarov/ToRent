@@ -35,7 +35,7 @@ const carData = [
     id: "5",
     brand: "Hyundai",
     model: "Elantra",
-  }
+  },
   // Add more car data as needed
 ];
 
@@ -147,11 +147,19 @@ export default class CarSearch extends Component {
 
           {searchBarFocused && (
             <FlatList
-              style={{ position: "absolute", top: 59,right:0,left:0,borderRadius:10,backgroundColor:"#fff", }}
+              style={{
+                position: "absolute",
+                top: 59,
+                right: 0,
+                left: 0,
+                borderRadius: 10,
+                backgroundColor: "#fff",
+              }}
               data={this.state.data}
               renderItem={renderItem}
               keyExtractor={(item) => item.id}
               scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
             />
           )}
         </View>

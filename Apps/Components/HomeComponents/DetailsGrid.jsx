@@ -12,6 +12,7 @@ export default function DetailsGrid({details}) {
       <FlatList
         scrollEnabled={false}
         numColumns={2}
+        showsVerticalScrollIndicator={false}
         columnWrapperStyle={{ justifyContent: "space-around" }}
         data={details}
         renderItem={({ item, index }) => (

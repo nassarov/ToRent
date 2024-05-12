@@ -184,6 +184,7 @@ export default function PickImagesScreen({ route }) {
       style={{
         paddingTop: Constants.statusBarHeight,
       }}
+      showsVerticalScrollIndicator={false}
     >
       <Text className="font-bold text-xl p-2 flex-1">Car Images</Text>
       <View style={{ alignItems: "center", rowGap: 10 }}>
