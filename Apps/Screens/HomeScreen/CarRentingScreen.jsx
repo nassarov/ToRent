@@ -80,7 +80,7 @@ export default function CarRentingScreen({ route }) {
   const handleDelete = () => {
     Alert.alert(
       "Confirmation",
-      "Do you want to proceed?",
+      "Do you want to delete this post?",
       [
         {
           text: "No",
