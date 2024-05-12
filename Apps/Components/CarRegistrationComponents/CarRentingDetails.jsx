@@ -15,6 +15,7 @@ export default function CarRentingDetails({
   onEndDateChange,
   minDays,
   maxDays,
+  price
 }) {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
   const [rangeColor, setRangeColor] = useState("white");
@@ -24,6 +25,7 @@ export default function CarRentingDetails({
   const maxDate = new Date(2024, 5, 11);
   console.log(minDate);
   console.log(maxDate);
+  console.log(price);
 
   const toggleCalendar = () => {
     setIsCalendarVisible(!isCalendarVisible);
@@ -90,7 +92,7 @@ export default function CarRentingDetails({
         {/* Price */}
         <View className="flex-row justify-between border-b-[1px] border-white mb-2">
           <Text className="text-white">Price</Text>
-          <Text className="text-white">22$/day</Text>
+          <Text className="text-white">{price}$/day</Text>
         </View>
         {/* Total time */}
         <View className="flex-row justify-between border-b-[1px] border-white mb-2">

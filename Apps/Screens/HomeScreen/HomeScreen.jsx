@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Image,ActivityIndicator  } from "react-native";
 import Carousel from "../../Components/HomeComponents/Carousel";
 import Slider from "../../Components/HomeComponents/Slider";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import SearchBarCar from "../../Components/HomeComponents/SearchBar";
+import SearchBarCar from "../../Components/HomeComponents/SearchBar2";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { getAuth, signOut } from "firebase/auth";
@@ -83,7 +83,7 @@ export default function HomeScreen({ route }) {
 
   return (
     <ScrollView
-      className="mt-[38px] pt-3 flex-1 mb-[50px]"
+      className="mt-[38px] pt-3 flex-1 mb-[55px]"
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
