@@ -250,6 +250,8 @@ export default function CarRentingScreen({ route }) {
             endDate={new Date(selectedEndDate)}
             onStartDateChange={handleStartDateChange}
             onEndDateChange={handleEndDateChange}
+            minDays={carData.mindays}
+            maxDays={carData.maxdays}
           />
         </View>
         {/* TouchableOpacity fixed at center bottom */}
