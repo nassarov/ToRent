@@ -89,3 +89,31 @@ export default function ProfileScreen({ route }) {
     </ScrollView>
   );
 }
+
+
+/*
+                nextComponent={
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <MaterialCommunityIcons
+                      name="car-door"
+                      size={24}
+                      color="#7300e6"
+                      style={{ transform: [{ scaleX: -1 }] }}
+                    />
+                  </View>
+                }
+                previousComponent={
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <MaterialCommunityIcons
+                      name="car-door"
+                      size={24}
+                      color="#7300e6"
+                      style={{ transform: [{ scaleX: 1 }] }}
+                    />
+                  </View>
+                } 
+*/
