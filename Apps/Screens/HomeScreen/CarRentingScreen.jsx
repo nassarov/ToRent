@@ -49,6 +49,7 @@ export default function CarRentingScreen({ route }) {
   const db = getFirestore();
   const navigation = useNavigation();
   const locationLink = carData.address.value;
+  console.log("OWNER ID ",ownerId)
   const handlePress = () => {
     // Open Google Maps with the location of Beirut
     const url = locationLink;
@@ -184,7 +185,7 @@ export default function CarRentingScreen({ route }) {
         <View style={styles.container}>
           {/* Car Owner Data */}
 
-          <TouchableOpacity style={styles.profileContainer}>
+          <TouchableOpacity style={styles.profileContainer} >
             <Image
               source={{ uri: ownerData.profileImage }}
               style={styles.profileImage}
@@ -313,7 +314,7 @@ export default function CarRentingScreen({ route }) {
           ) : (
             <TouchableOpacity
               onPress={() => {
-                /* Your onPress function */
+                navigation.navigate('Message', { userData: userData, ownerData: ownerData ,ownerId:ownerId});
               }}
               style={{
                 backgroundColor: "#7F5AF0",

@@ -10,6 +10,8 @@ import PickImagesScreen from "../Screens/CarRegister/PickImagesScreen";
 import EditProfile from "../Screens/Profile/EditProfile";
 import CarTextInput from "../Screens/CarRegister/CarTextInput";
 import ProfileScreen from "../Screens/Profile/ProfileScreen";
+import Trips from "../Screens/Trips/Trips";
+import Message from "../Screens/Message/Messages";
 const Stack = createStackNavigator();
 export default function HomeScreenNavigation({ route }) {
   const { userData } = route.params;
@@ -19,7 +21,7 @@ export default function HomeScreenNavigation({ route }) {
         name="CarRentingScreen"
         component={CarRentingScreen}
         options={{ headerShown: false }}
-        initialParams={{ userData: userData }}
+        initialParams={{ userData: userData}}
       />
       <Stack.Screen
         name="TabNavigation"
@@ -54,6 +56,14 @@ export default function HomeScreenNavigation({ route }) {
         component={ProfileScreen}
         options={{ headerShown: false }}
         initialParams={{ visitorData: userData }}
+      />
+      <Stack.Screen
+        name="Message"
+        component={Message}
+        options={{ headerShown: true,
+          header: () => <CustomHeader2 />
+         }}
+        initialParams={{ userData: userData }}
       />
     </Stack.Navigator>
   );
