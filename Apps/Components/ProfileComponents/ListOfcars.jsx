@@ -8,7 +8,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import PostCard from "../../Components/HomeComponents/PostCard"; // Import your PostCard component here
 const windowWidth = Dimensions.get('window').width;
 
-export default function ListOfcars({ userPosts ,favPosts }) {
+export default function ListOfcars({ userPosts ,favPosts,visitorData ,userData}) {
 
   const slide = false;
 
@@ -32,10 +32,10 @@ export default function ListOfcars({ userPosts ,favPosts }) {
 
         <TouchableOpacity
           style={{ width: 98, padding: 15, borderBottomWidth: selected === 2 ? 2 : 0, borderColor: selected === 2 ? "black" : "transparent" }}
-          onPress={() => setSelected(2)}
-        >
+          onPress={() => setSelected(2)}>
+
           <MaterialIcons
-            name="car-rental"
+            name="bookmarks"
             size={24}
             color={selected === 2 ? "black" : "#6B6B6B"}
             style={{ alignSelf: "center" }}
@@ -44,54 +44,67 @@ export default function ListOfcars({ userPosts ,favPosts }) {
       </View>
 
       {selected === 1 ? (
-        <FlatList
-          data={userPosts}
-          numColumns={2}
-          showsHorizontalScrollIndicator={false}
-          scrollEnabled={false}
-          contentContainerStyle={style.container}
-          renderItem={({ item }) => (
-            <View style={{ flex: 1 }}>
-              <View style={{ margin: 8 ,}}>
-                <PostCard
-                  car={item.carDetails.carData}
-                  imageUrls={item.carDetails.imageUrls}
-                  ownerId={item.ownerId}
-                  ownerData={item.ownerData || {}}
-                  horizontal={false}
-                  postId={item.carDetails.postId}
-                />
-              </View>
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-        />
-      ) : (
-        <FlatList
-          data={favPosts}
-          numColumns={2}
-          showsHorizontalScrollIndicator={false}
-          scrollEnabled={false}
-          contentContainerStyle={style.container}
-          renderItem={({ item }) => (
-            <View style={{ flex: 1 }}>
-              <View style={{ margin: 8 ,}}>
-                <PostCard
-                  car={item.carDetails.carData}
-                  imageUrls={item.carDetails.imageUrls}
-                  ownerId={item.ownerId}
-                  ownerData={item.ownerData || {}}
-                  horizontal={false}
-                  postId={item.carDetails.postId}
-                />
-              </View>
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-        />
+  userPosts.length > 0 ? (
+    <FlatList
+      data={userPosts}
+      numColumns={2}
+      showsHorizontalScrollIndicator={false}
+      scrollEnabled={false}
+      contentContainerStyle={style.container}
+      renderItem={({ item }) => (
+        <View style={{ flex: 1 }}>
+          <View style={{ margin: 8 }}>
+            <PostCard
+              car={item.carDetails.carData}
+              imageUrls={item.carDetails.imageUrls}
+              ownerId={item.ownerId}
+              ownerData={item.ownerData || {}}
+              horizontal={false}
+              postId={item.carDetails.postId}
+            />
+          </View>
+        </View>
       )}
+      keyExtractor={(item, index) => index.toString()}
+      showsVerticalScrollIndicator={false}
+    />
+  ) : (
+    <Text className='text-center text-xl mt-4'>No posts are added</Text>
+  )
+) : (
+  visitorData.id === userData.id ? (
+    favPosts.length > 0 ? (
+      <FlatList
+        data={favPosts}
+        numColumns={2}
+        showsHorizontalScrollIndicator={false}
+        scrollEnabled={false}
+        contentContainerStyle={style.container}
+        renderItem={({ item }) => (
+          <View style={{ flex: 1 }}>
+            <View style={{ margin: 8 }}>
+              <PostCard
+                car={item.carDetails.carData}
+                imageUrls={item.carDetails.imageUrls}
+                ownerId={item.ownerId}
+                ownerData={item.ownerData || {}}
+                horizontal={false}
+                postId={item.carDetails.postId}
+              />
+            </View>
+          </View>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
+      />
+    ) : (
+      <Text className='text-center text-xl mt-4'>No favorite posts yet </Text>
+    )
+  ) : (
+    <Text className='text-center text-xl mt-4'>You are not allowed to view saved posts</Text>
+  )
+)}
+
     </View>
   );
 }
