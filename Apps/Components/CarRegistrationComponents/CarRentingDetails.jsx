@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Modal, Button } from "react-native";
+import { View, Text, TouchableOpacity, Modal, Button, Alert } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
   heightPercentageToDP,
@@ -7,10 +7,9 @@ import {
 } from "react-native-responsive-screen";
 import CalendarPicker from "react-native-calendar-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons/";
+import { Calendar } from "react-native-calendars";
 
 export default function CarRentingDetails({
-  startDate,
-  endDate,
   onStartDateChange,
   onEndDateChange,
   minDays,
@@ -24,7 +23,97 @@ export default function CarRentingDetails({
   const maxDate = new Date(2024, 5, 11);
   console.log(minDate);
   console.log(maxDate);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const disabledDatesArray = [
+    { startDate: "2024-5-12", endDate: "2024-5-15" },
+    { startDate: "2024-5-20", endDate: "2024-5-25" },
+  ];
 
+  const handleDateSelection = (date) => {
+    const disabledDates = getDisabledDates(disabledDatesArray);
+    let isValid = false;
+    if (!startDate && !endDate) {
+      setStartDate(new Date(date.dateString));
+    } else if (!endDate && startDate <= new Date(date.dateString)) {
+      for (
+        let dateStart = new Date(startDate);
+        dateStart <= new Date(date.dateString);
+        dateStart.setDate(dateStart.getDate() + 1)
+      ) {
+        const dateString = dateStart.toISOString().split("T")[0];
+        if (disabledDates[dateString]) {
+          Alert.alert("Please choose a valid date");
+          return;
+        }
+      }
+      isValid = true;
+    } else {
+      setStartDate(new Date(date.dateString));
+      setEndDate("");
+      return;
+    }
+
+    if (isValid) {
+      setEndDate(new Date(date.dateString));
+    }
+  };
+
+  const getSelectedDates = () => {
+    var selectedDates = {};
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    if (startDate && !endDate) {
+      const dateString = start.toISOString().split("T")[0];
+      selectedDates[dateString] = {
+        disabled: true,
+        disableTouchEvent: true,
+        color: "purple",
+        textColor: "white",
+        selected: true,
+      };
+    } else if (startDate && endDate) {
+      for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+        const dateString = date.toISOString().split("T")[0];
+        selectedDates[dateString] = {
+          disabled: true,
+          disableTouchEvent: true,
+          color: "purple",
+          textColor: "white",
+          startingDay: date.getTime() === startDate.getTime() ? true : false,
+          endingDay: date.getTime() === endDate.getTime() ? true : false,
+        };
+      }
+    }
+    return selectedDates;
+  };
+
+  const getDisabledDates = (disabledDatesArray) => {
+    const disabledDates = {};
+    for (let i = 0; i < disabledDatesArray.length; i++) {
+      const start = new Date(disabledDatesArray[i].startDate);
+      const end = new Date(disabledDatesArray[i].endDate);
+      for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+        const dateString = date.toISOString().split("T")[0];
+        disabledDates[dateString] = {
+          disabled: true,
+          disableTouchEvent: true,
+          color: "red",
+          textColor: "white",
+          startingDay:
+            date.getTime() ===
+            new Date(disabledDatesArray[i].startDate).getTime()
+              ? true
+              : false,
+          endingDay:
+            date.getTime() === new Date(disabledDatesArray[i].endDate).getTime()
+              ? true
+              : false,
+        };
+      }
+    }
+    return disabledDates;
+  };
   const toggleCalendar = () => {
     setIsCalendarVisible(!isCalendarVisible);
   };
@@ -157,53 +246,19 @@ export default function CarRentingDetails({
               className="border-2 border-violet-600 rounded-lg p-2 m-1 "
               style={{ height: heightPercentageToDP(37) }}
             >
-              <CalendarPicker
-              en
-                startFromMonday={true}
-                allowRangeSelection={true}
-                minDate={minDate}
-                maxDate={maxDate}
-                todayBackgroundColor="gray"
-                todayTextStyle="#7300e6"
-                selectedDayColor="#7300e6"
-                selectedRangeStyle={{ backgroundColor: "#7F5AF0" }} // Style for dates between start and end dates
-                disabledDates={[minDate]}
-                selectedDisabledDatesTextStyle="#7300e6"
-                selectedDayTextColor="#FFFFFF"
-                onDateChange={onDateChange}
-                dayLabelsWrapper={{
-                  borderTopWidth: 2,
-                  borderBottomWidth: 2,
-                  borderColor: "#7F5AF0",
+              <Calendar
+                minDate={new Date()}
+                markingType={"period"}
+                markedDates={{
+                  ...getDisabledDates(disabledDatesArray),
+                  ...getSelectedDates(),
                 }}
-                nextComponent={
-                  <View
-                    style={{ justifyContent: "center", alignItems: "center" }}
-                  >
-                    <MaterialCommunityIcons
-                      name="car-door"
-                      size={24}
-                      color="#7300e6"
-                      style={{ transform: [{ scaleX: -1 }] }}
-                    />
-                  </View>
-                }
-                previousComponent={
-                  <View
-                    style={{ justifyContent: "center", alignItems: "center" }}
-                  >
-                    <MaterialCommunityIcons
-                      name="car-door"
-                      size={24}
-                      color="#7300e6"
-                      style={{ transform: [{ scaleX: 1 }] }}
-                    />
-                  </View>
-                }
-                style={{
-                  width: "100%", // Use 100% of the container's width
-                  height: "100%", // Use 100% of the container's height
+                disableAllTouchEventsForDisabledDays={true}
+                hideExtraDays={true}
+                onDayPress={(date) => {
+                  handleDateSelection(date);
                 }}
+                enableSwipeMonths={true}
               />
             </View>
             {/* Button to apply selected dates */}
