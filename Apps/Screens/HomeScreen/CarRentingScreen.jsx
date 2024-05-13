@@ -16,7 +16,7 @@ import {
   FontAwesome5,
   FontAwesome,
   Ionicons,
-  FontAwesome6,
+  FontAwesome6,MaterialIcons 
 } from "@expo/vector-icons/";
 import CalendarPicker from "react-native-calendar-picker";
 import PictureSwitching from "../../Components/HomeComponents/PictureSwitching";
@@ -32,9 +32,12 @@ import {
   getFirestore,
   query,
   where,
+  updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { Card } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import FavoriteButton from "./favorite";
 
 export default function CarRentingScreen({ route }) {
   const { userData, carData, images, ownerId, ownerData, postId } =
@@ -49,6 +52,7 @@ export default function CarRentingScreen({ route }) {
   const db = getFirestore();
   const navigation = useNavigation();
   const locationLink = carData.address.value;
+  console.log("OWNER ID ",ownerId)
   const handlePress = () => {
     // Open Google Maps with the location of Beirut
     const url = locationLink;
@@ -166,6 +170,24 @@ export default function CarRentingScreen({ route }) {
     },
   ];
 
+// Function to update user data when a post is favorited
+const addToFavorites = async (postId) => {
+  try {
+    const userRef = doc(db, "users", userData.id);
+    const userSnapshot = await getDoc(userRef);
+    const userData = userSnapshot.data();
+    const updatedFavorites = [...userData.favorites, postId];
+    await updateDoc(userRef, {
+      favorites: updatedFavorites
+    });
+  } catch (error) {
+    console.error("Error updating favorites:", error);
+    Alert.alert("Error", "Failed to update favorites. Please try again later.");
+  }
+};
+
+
+
   return (
     <View className="flex-1">
       <ScrollView
@@ -181,10 +203,11 @@ export default function CarRentingScreen({ route }) {
         <View style={styles.container}>
           <PictureSwitching images={images} />
         </View>
+        
         <View style={styles.container}>
           {/* Car Owner Data */}
-
-          <TouchableOpacity style={styles.profileContainer}>
+          <View className='flex-row justify-between items-center' >
+            <View style={styles.profileContainer} >
             <Image
               source={{ uri: ownerData.profileImage }}
               style={styles.profileImage}
@@ -192,9 +215,15 @@ export default function CarRentingScreen({ route }) {
             <View>
               <Text style={styles.userName}>{ownerData.name}</Text>
               <Text>{carData.address.label}</Text>
+            </View> 
             </View>
-          </TouchableOpacity>
-
+           {!isOwner && (
+            <View className='items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2'>
+            <FavoriteButton userId={userData.id} postId={postId} userData={userData} addToFavorites={addToFavorites} />
+            </View>)}
+            {/* FavoriteButton */}
+          </View>
+       
           {/* Grid */}
           <View>
             <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
@@ -252,6 +281,8 @@ export default function CarRentingScreen({ route }) {
             onEndDateChange={handleEndDateChange}
             minDays={carData.mindays}
             maxDays={carData.maxdays}
+            price = {carData.price}
+
           />
         </View>
         {/* TouchableOpacity fixed at center bottom */}
@@ -311,7 +342,7 @@ export default function CarRentingScreen({ route }) {
           ) : (
             <TouchableOpacity
               onPress={() => {
-                /* Your onPress function */
+                navigation.navigate('Message', { userData: userData, ownerData: ownerData ,ownerId:ownerId});
               }}
               style={{
                 backgroundColor: "#7F5AF0",
