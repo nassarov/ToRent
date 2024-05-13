@@ -9,15 +9,14 @@ import {
 
 export default function ImagePickers({ image, setImage, whichImage }) {
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // Only allow images
       allowsEditing: true,
       aspect: [16, 12],
       quality: 0.5,
     });
-
-    if (!result.canceled) {
+  
+    if (!result.cancelled) {
       setImage(result.assets[0].uri);
     }
   };

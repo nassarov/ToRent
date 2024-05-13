@@ -26,7 +26,10 @@ export default function CarTextInput({route}) {
   const [description, setDescription] = useState("");
 
   const handleCarseatChange = (text) => {
-    setCarseat(text);
+    if (text !== "" && text.charAt(0) !== "0") {
+      setCarseat(text);
+    }
+  
   };
 
   const handleMinDaysChange = (text) => {
