@@ -21,12 +21,20 @@ export default function ProfileScreen({ route }) {
 
   const db = getFirestore(app);
   const [userPosts, setUserPosts] = useState([]);
+  const [favPosts,setFavPosts] = useState([]);
   const navigation = useNavigation();
   useEffect(() => {
     navigation.addListener("focus", (e) => {
       fetchData();
+      fetchFav();
+      console.log("favPost",favPosts);
+      console.log("CarData",userPosts)
     });
   }, [navigation]);
+  useEffect(() => {
+    
+    console.log('DATA',userData.favorites)
+  }, [favPosts]);
 
   const fetchData = async () => {
     const querySnapshot = await getDocs(
@@ -37,8 +45,19 @@ export default function ProfileScreen({ route }) {
       newData = [...newData, element.data()];
     });
     setUserPosts(newData);
+    
   };
 
+  const fetchFav = async () => {
+    const querySnapshot = await getDocs(
+      query(collection(db, "car_post"), where("carDetails.postId", "in", userData.favorites))
+    );
+    newData = [];
+    querySnapshot.forEach((element) => {
+      newData = [...newData, element.data()];
+    });
+    setFavPosts(newData);
+  };
   return (
     <ScrollView showsVerticalScrollIndicator={false} className='pb-5 bg-white'>
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -50,7 +69,7 @@ export default function ProfileScreen({ route }) {
               visitorData={visitorData}
               numberOfPosts={userPosts.length}
             />
-            <ListofCars userPosts={userPosts} />
+            <ListofCars userPosts={userPosts} favPosts={favPosts}/>
           </>
         )}
       </SafeAreaView>
