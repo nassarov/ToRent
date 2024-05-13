@@ -14,18 +14,30 @@ export default function CarRentingDetails({
   onEndDateChange,
   minDays,
   maxDays,
-  price
+  price,
+  onTotalPriceChange,
+  onDaysDifferenceChange
 }) {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
   const [rangeColor, setRangeColor] = useState("white");
   const [rangeColorText, setRangeColorText] = useState("white");
   console.log(minDays, maxDays);
   const minDate = new Date(); // Today
-  const maxDate = new Date(2024, 5, 11);
+  const maxDate = new Date(2024, 6, 11);
   console.log(minDate);
   console.log(maxDate);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [totalPrice, setTotalPrice] = useState(0); // State variable to hold the total price
+  
+
+  const calculateTotalPrice = () => {
+    const daysDifference = calculateDaysDifference(startDate, endDate);
+    const totalPrice = daysDifference * price;
+    setTotalPrice(totalPrice);
+    onTotalPriceChange(totalPrice); // Update total price in parent component
+    onDaysDifferenceChange(daysDifference);
+  };
   const disabledDatesArray = [
     { startDate: "2024-5-12", endDate: "2024-5-15" },
     { startDate: "2024-5-20", endDate: "2024-5-25" },
@@ -57,7 +69,7 @@ export default function CarRentingDetails({
 
     if (isValid) {
       setEndDate(new Date(date.dateString));
-    }
+      calculateTotalPrice();}
   };
 
   const getSelectedDates = () => {
@@ -130,6 +142,7 @@ export default function CarRentingDetails({
   const calculateDaysDifference = (start, end) => {
     if (!start || !end) return 0;
     return Math.round((end - start) / (1000 * 60 * 60 * 24));
+    
   };
 
   const daysDifference = calculateDaysDifference(startDate, endDate);
@@ -146,12 +159,16 @@ export default function CarRentingDetails({
     onStartDateChange(startDate);
     onEndDateChange(endDate);
     setIsCalendarVisible(false);
+    calculateTotalPrice();
   };
 
   const handleClear = () => {
     onStartDateChange(minDate);
     onEndDateChange(minDate);
+    setTotalPrice(0); // Reset total price
   };
+  
+  
 
   return (
     <View className="bg-violet-300  rounded-lg  w-11/12  m-auto mt-2 py-2">
@@ -195,8 +212,7 @@ export default function CarRentingDetails({
           <View>
             <Text className="text-xl font-bold text-white">
               Total Price:{" "}
-              {formatedStartDate && formatedEndDate ? daysDifference * 22 : "0"}
-              $
+              {formatedStartDate && formatedEndDate ? totalPrice : "0"}$
             </Text>
           </View>
           {/* Clear */}

@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, Linking, Alert } from "react-native";
+import { View, Text, Image, Dimensions, Linking, Alert ,StyleSheet,Modal,ActivityIndicator} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
@@ -22,7 +22,6 @@ import CalendarPicker from "react-native-calendar-picker";
 import PictureSwitching from "../../Components/HomeComponents/PictureSwitching";
 import DetailsGrid from "../../Components/HomeComponents/DetailsGrid";
 import CarRentingDetails from "../../Components/CarRegistrationComponents/CarRentingDetails";
-import { StyleSheet } from "react-native";
 import {
   collection,
   collectionGroup,
@@ -34,6 +33,8 @@ import {
   where,
   updateDoc,
   getDoc,
+  serverTimestamp,
+  addDoc,
 } from "firebase/firestore";
 import { Card } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
@@ -43,8 +44,6 @@ export default function CarRentingScreen({ route }) {
   const { userData, carData, images, ownerId, ownerData, postId } =
     route.params;
   const isOwner = userData.id === ownerId;
-  const [selectedStartDate, setSelectedStartDate] = useState("");
-  const [selectedEndDate, setSelectedEndDate] = useState("");
   const minDate = new Date(); // Today
   const maxDate = new Date(2025, 6, 3);
   const [buttonVisible, setButtonVisible] = useState(true);
@@ -52,7 +51,32 @@ export default function CarRentingScreen({ route }) {
   const db = getFirestore();
   const navigation = useNavigation();
   const locationLink = carData.address.value;
+  const [loading, setLoading] = useState(false);
   console.log("OWNER ID ",ownerId)
+
+
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+  const [selectedEndDate, setSelectedEndDate] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [daysDifference, setDaysDifference] = useState(0);
+
+
+  const handleStartDateChange = (date) => {
+    setSelectedStartDate(date);
+  };
+
+  // Function to update selected end date
+  const handleEndDateChange = (date) => {
+    setSelectedEndDate(date);
+  };
+
+  // Function to update total price
+  const handleTotalPriceChange = (price) => {
+    setTotalPrice(price);
+  };
+  const updateDaysDifference = (difference) => {
+    setDaysDifference(difference);
+  };
   const handlePress = () => {
     // Open Google Maps with the location of Beirut
     const url = locationLink;
@@ -73,14 +97,7 @@ export default function CarRentingScreen({ route }) {
     scrollViewRef.current.scrollToEnd({ animated: true, duration: 1000 });
   };
 
-  // Handlers for date change
-  const handleStartDateChange = (date) => {
-    setSelectedStartDate(date ? date.toString() : "");
-  };
-
-  const handleEndDateChange = (date) => {
-    setSelectedEndDate(date ? date.toString() : "");
-  };
+ 
   const handleDelete = () => {
     Alert.alert(
       "Confirmation",
@@ -108,7 +125,7 @@ export default function CarRentingScreen({ route }) {
 
   useEffect(() => {
     setSelectedStartDate(minDate);
-    setSelectedEndDate(minDate);
+    setSelectedEndDate(maxDate);
   }, []);
 
   const details = [
@@ -173,6 +190,7 @@ export default function CarRentingScreen({ route }) {
 // Function to update user data when a post is favorited
 const addToFavorites = async (postId) => {
   try {
+    
     const userRef = doc(db, "users", userData.id);
     const userSnapshot = await getDoc(userRef);
     const userData = userSnapshot.data();
@@ -186,6 +204,42 @@ const addToFavorites = async (postId) => {
   }
 };
 
+
+const addToReservation = async () => {
+  try {
+    setLoading(true);
+    // reservation ID hiye combination of userData.id and postId
+    const reservationId = userData.id + '_' + postId;
+    
+    // reservation data
+    const reservationData = {
+      clientId: userData.id,
+      carData: carData,
+      ownerData:ownerData,
+      ownerId:ownerId,
+      startDate: selectedStartDate,
+      endDate: selectedEndDate,
+      totalPrice: totalPrice,
+      daysDifference: daysDifference,
+      status: "pending",
+      createdAt: serverTimestamp(),
+    };
+
+    const reservationRef = await addDoc(collection(db, "Reservation"), {
+      [reservationId]: reservationData
+    });
+
+    console.log("Reservation added with ID: ", reservationRef.id);
+    setLoading(false);
+    Alert.alert(
+      "Success",
+      "Request sent successfully. Please wait for the owner's response.",
+      [{ text: "OK", onPress: (navigation.replace('TabNavigation'))  }]
+    );
+  } catch (error) {
+    console.error("Error adding reservation: ", error);
+  }
+};
 
 
   return (
@@ -275,15 +329,17 @@ const addToFavorites = async (postId) => {
             Car Pick-up and Drop-off Dates
           </Text>
           <CarRentingDetails
-            startDate={new Date(selectedStartDate)}
-            endDate={new Date(selectedEndDate)}
-            onStartDateChange={handleStartDateChange}
-            onEndDateChange={handleEndDateChange}
-            minDays={carData.mindays}
-            maxDays={carData.maxdays}
-            price = {carData.price}
-
-          />
+          startDate={selectedStartDate}
+          endDate={selectedEndDate}
+          onStartDateChange={handleStartDateChange}
+          onEndDateChange={handleEndDateChange}
+          minDays={carData.mindays}
+          maxDays={carData.maxdays}
+          price={carData.price}
+          onTotalPriceChange={handleTotalPriceChange}
+          onDaysDifferenceChange={updateDaysDifference} 
+           />
+  
         </View>
         {/* TouchableOpacity fixed at center bottom */}
         <View
@@ -341,9 +397,11 @@ const addToFavorites = async (postId) => {
             </>
           ) : (
             <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Message', { userData: userData, ownerData: ownerData ,ownerId:ownerId});
-              }}
+              // onPress={() => {
+              //   navigation.navigate('Message', { userData: userData, ownerData: ownerData ,ownerId:ownerId});
+              // }}
+              onPress={addToReservation}
+              
               style={{
                 backgroundColor: "#7F5AF0",
                 padding: 10,
@@ -361,6 +419,13 @@ const addToFavorites = async (postId) => {
               </Text>
             </TouchableOpacity>
           )}
+          <Modal visible={loading} transparent animationType="fade">
+          <View style={styles.modalBackground}>
+            <View style={styles.activityIndicatorWrapper}>
+              <ActivityIndicator size="large" color="#FFFFFF" />
+            </View>
+          </View>
+        </Modal>
         </View>
       </ScrollView>
       {buttonVisible && (
@@ -416,5 +481,16 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: "#000000",
+    padding: 20,
+    borderRadius: 10,
   },
 });
