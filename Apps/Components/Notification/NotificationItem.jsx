@@ -2,23 +2,34 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function NotificationItem ({ clientData,timeReceived })  {
+export default function NotificationItem ({  clientName,
+  clientprofileImage,
+  clientPhone,
+  carBrand,
+  carModel,
+  carYear,
+  carPhoto,
+  TotalDays,
+  TotalPrice,
+  Status,
+  StartDate,
+  EndDate,})  {
   return (
     <View className='items-end'>
       <View style={styles.rightContainer}>
         <Ionicons name="time-outline" size={24} color="gray" />
-        <Text style={styles.timeText}>{timeReceived}sec</Text>
+        {/* <Text style={styles.timeText}>{timeReceived}sec</Text> */}
       </View>
       <View style={styles.notificationContainer}>
-        <Image source={{ uri: clientData.profileImage }} style={styles.profilePic} />
-        <Text style={styles.notificationText}>{clientData.name} wants to rent your car.</Text>
+        <Image source={{ uri: clientprofileImage }} style={styles.profilePic}/>
+        <Text style={styles.notificationText}>{clientName} wants to rent your car.</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={onAccept} style={[styles.button, styles.acceptButton]}>
+          {/* <TouchableOpacity onPress={onAccept} style={[styles.button, styles.acceptButton]}>
             <Text style={styles.buttonText}>Accept</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onDecline} style={[styles.button, styles.declineButton]}>
             <Text style={styles.buttonText}>Decline</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>
