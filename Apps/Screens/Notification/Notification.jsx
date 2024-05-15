@@ -6,9 +6,6 @@ export default function NotificationPage({ route }) {
   const {userData }= route.params;
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { seconds, nanoseconds } = item.createdAt;
-  const date = new Date(seconds * 1000);
-  const formattedDate = date.toLocaleString();
   console.log(userData.id)
   useEffect(() => {
     const fetchReservations = async () => {
@@ -33,7 +30,8 @@ export default function NotificationPage({ route }) {
     return (
       <View style={{ margin: 8 }}>
         <Text>Client Name: {item.clientData.name}</Text>
-        <Text>Time Received: {formattedDate}</Text>
+        <Text>ID : {item.clientData.id}</Text>
+        <Text>Car Details : {item.carData.brand} {item.carData.model} {item.carData.year} </Text>
       </View>
     );
   };
