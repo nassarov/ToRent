@@ -1,43 +1,51 @@
-import React from 'react';
-import { View, FlatList } from 'react-native';
-import NotificationItem from '../../Components/Notification/NotificationItem'; 
+import React, { useEffect, useState } from 'react';
+import { View, FlatList, Text } from 'react-native';
+import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
 
-const notifications = [
-  { id: '1', userName: 'Ali Nassar', timeReceived: '5'},
-  { id: '2', userName: 'Kosay Solh', timeReceived: '5'},
-  { id: '3', userName: 'Abdo Mohamed', timeReceived: '5'},
-  {id:'4',userName:'Ali Nass', timeReceived: '5'},
-  {id:'5',userName:'kosay Solh', timeReceived: '5'},
-  {id:'6',userName:'Mohamed Elsayed', timeReceived: '5'},
-  {id:'7',userName:'Ahmed Mohamed', timeReceived: '5'},
-  {id:'8',userName:'Mahmoud Mohamed', timeReceived: '5'},
+export default function NotificationPage({ route }) {
+  const {userData }= route.params;
+  const [reservations, setReservations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { seconds, nanoseconds } = item.createdAt;
+  const date = new Date(seconds * 1000);
+  const formattedDate = date.toLocaleString();
+  console.log(userData.id)
+  useEffect(() => {
+    const fetchReservations = async () => {
+      setLoading(true);
+      const db = getFirestore();
+      const reservationsRef = collection(db, 'Reservation');
+      const q = query(reservationsRef, where('ownerId', '==', userData.id));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const newData = [];
+        snapshot.forEach((doc) => {
+          newData.push(doc.data());
+        });
+        setReservations(newData);
+        setLoading(false);
+      });
+      return unsubscribe;
+    };
+    fetchReservations();
+  }, []);
 
-];
-
-export default function NotificationPage(){
-  const handleAccept = (notificationId) => {
-    console.log(`Accepted notification with ID ${notificationId}`);
+  const renderReservation = ({ item }) => {
+    return (
+      <View style={{ margin: 8 }}>
+        <Text>Client Name: {item.clientData.name}</Text>
+        <Text>Time Received: {formattedDate}</Text>
+      </View>
+    );
   };
-
-  const handleDecline = (notificationId) => {
-    console.log(`Declined notification with ID ${notificationId}`);
-  };
-
   return (
     <View>
       <FlatList
-      style={{marginBottom:50}}
-        data={notifications}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <NotificationItem
-            userName={item.userName}
-            onAccept={() => handleAccept(item.id)}
-            onDecline={() => handleDecline(item.id)}
-          />
-        )}
+        style={{ marginBottom: 50 }}
+        data={reservations}
+        renderItem={renderReservation}
+        keyExtractor={(item, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
-};
-
+}

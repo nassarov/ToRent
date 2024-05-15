@@ -1,28 +1,26 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-const defaultUserImageURL = 'https://w7.pngwing.com/pngs/411/956/png-transparent-customer-login-avatar-head-portrait-client-user-thumbnail.png';
 
-export default function NotificationItem ({ userName, userImage, onAccept, onDecline,timeReceived })  {
+export default function NotificationItem ({ clientData,timeReceived })  {
   return (
     <View className='items-end'>
-   <View style={styles.rightContainer}>
+      <View style={styles.rightContainer}>
         <Ionicons name="time-outline" size={24} color="gray" />
         <Text style={styles.timeText}>{timeReceived}sec</Text>
       </View>
-    <View style={styles.notificationContainer}>
-      <Image source={userImage ? { uri: userImage } : { uri: defaultUserImageURL }} style={styles.profilePic} />
-      <Text style={styles.notificationText}>{userName} wants to rent your car.</Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={onAccept} style={[styles.button, styles.acceptButton]}>
-          <Text style={styles.buttonText}>Accept</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onDecline} style={[styles.button, styles.declineButton]}>
-         {/* <Text style={styles.buttonText}>Decline</Text> */}
-          <Text className='text-[#7F5AF0]'>Decline</Text>
-        </TouchableOpacity>
+      <View style={styles.notificationContainer}>
+        <Image source={{ uri: clientData.profileImage }} style={styles.profilePic} />
+        <Text style={styles.notificationText}>{clientData.name} wants to rent your car.</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={onAccept} style={[styles.button, styles.acceptButton]}>
+            <Text style={styles.buttonText}>Accept</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onDecline} style={[styles.button, styles.declineButton]}>
+            <Text style={styles.buttonText}>Decline</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
     </View>
   );
 };
@@ -67,7 +65,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginHorizontal: 5,
     borderRadius: 5,
-    
   },
   acceptButton: {
     backgroundColor: '#7F5AF0', 

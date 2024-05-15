@@ -185,12 +185,20 @@ export default function CarRentingScreen({ route }) {
   ];
 
 // Function to update user data when a post is favorited
+// Function to update user data when a post is favorited
 const addToFavorites = async (postId) => {
   try {
     const userRef = doc(db, "users", userData.id);
     const userSnapshot = await getDoc(userRef);
     const userData = userSnapshot.data();
-    const updatedFavorites = [...userData.favorites, postId];
+
+    let updatedFavorites = [];
+    // Check if favorites array exists, if not create it
+    if (userData.favorites) {
+      updatedFavorites = [...userData.favorites, postId];
+    } else {
+      updatedFavorites = [postId];
+    }
     await updateDoc(userRef, {
       favorites: updatedFavorites
     });
@@ -209,6 +217,7 @@ const addToReservation = async () => {
     // reservation data
     const reservationData = {
       clientId: userData.id,
+      clientData:userData,
       carData: carData,
       ownerData:ownerData,
       ownerId:ownerId,
@@ -219,6 +228,7 @@ const addToReservation = async () => {
       status: "pending",
       createdAt: serverTimestamp(),
     };
+    
     await setDoc(doc(db, "Reservation", reservationId), reservationData);
     console.log("Reservation added with ID: ", reservationId);
     setLoading(false);

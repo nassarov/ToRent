@@ -123,7 +123,7 @@ const TabNavigation = ({ route }) => {
       <Tab.Screen
         name="NotificationTab"
         component={Notification}
-        initialParams={{ userData: userData }}
+        initialParams={{ userData:userData}}
         options={{
           headerShown: true,
           header: () => <CustomHeader2 text={"Notifications"} />,
