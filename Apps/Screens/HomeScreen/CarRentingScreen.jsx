@@ -35,14 +35,14 @@ import {
   getDoc,
   serverTimestamp,
   addDoc,
+  setDoc,
 } from "firebase/firestore";
 import { Card } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import FavoriteButton from "./favorite";
 
 export default function CarRentingScreen({ route }) {
-  const { userData, carData, images, ownerId, ownerData, postId } =
-    route.params;
+  const { userData, carData, images, ownerId, ownerData, postId } = route.params;
   const isOwner = userData.id === ownerId;
   const minDate = new Date(); // Today
   const maxDate = new Date(2025, 6, 3);
@@ -54,12 +54,10 @@ export default function CarRentingScreen({ route }) {
   const [loading, setLoading] = useState(false);
   console.log("OWNER ID ",ownerId)
 
-
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [selectedEndDate, setSelectedEndDate] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const [daysDifference, setDaysDifference] = useState(0);
-
 
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
@@ -97,7 +95,6 @@ export default function CarRentingScreen({ route }) {
     scrollViewRef.current.scrollToEnd({ animated: true, duration: 1000 });
   };
 
- 
   const handleDelete = () => {
     Alert.alert(
       "Confirmation",
@@ -190,7 +187,6 @@ export default function CarRentingScreen({ route }) {
 // Function to update user data when a post is favorited
 const addToFavorites = async (postId) => {
   try {
-    
     const userRef = doc(db, "users", userData.id);
     const userSnapshot = await getDoc(userRef);
     const userData = userSnapshot.data();
@@ -210,7 +206,6 @@ const addToReservation = async () => {
     setLoading(true);
     // reservation ID hiye combination of userData.id and postId
     const reservationId = userData.id + '_' + postId;
-    
     // reservation data
     const reservationData = {
       clientId: userData.id,
@@ -224,12 +219,8 @@ const addToReservation = async () => {
       status: "pending",
       createdAt: serverTimestamp(),
     };
-
-    const reservationRef = await addDoc(collection(db, "Reservation"), {
-      [reservationId]: reservationData
-    });
-
-    console.log("Reservation added with ID: ", reservationRef.id);
+    await setDoc(doc(db, "Reservation", reservationId), reservationData);
+    console.log("Reservation added with ID: ", reservationId);
     setLoading(false);
     Alert.alert(
       "Success",
@@ -238,10 +229,14 @@ const addToReservation = async () => {
     );
   } catch (error) {
     console.error("Error adding reservation: ", error);
+    Alert.alert(
+      "Failed",
+      "There is a problem requesting reservation of this car.",
+      [{ text: "OK", onPress: () =>{} }]
+    );
+    setLoading(false);
   }
 };
-
-
   return (
     <View className="flex-1">
       <ScrollView
@@ -397,11 +392,7 @@ const addToReservation = async () => {
             </>
           ) : (
             <TouchableOpacity
-              // onPress={() => {
-              //   navigation.navigate('Message', { userData: userData, ownerData: ownerData ,ownerId:ownerId});
-              // }}
               onPress={addToReservation}
-              
               style={{
                 backgroundColor: "#7F5AF0",
                 padding: 10,

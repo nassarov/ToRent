@@ -44,8 +44,6 @@ const FavoriteButton = ({ userId, postId, userData }) => {
           favorites: updatedFavorites
         });
         setIsFavorite(true);
-        // Show a confirmation message
-        // Alert.alert("Post added to favorites");
       }
     } catch (error) {
       console.error("Error updating favorites:", error);
@@ -70,5 +68,4 @@ const FavoriteButton = ({ userId, postId, userData }) => {
     </TouchableOpacity>
   );
 };
-
 export default FavoriteButton;

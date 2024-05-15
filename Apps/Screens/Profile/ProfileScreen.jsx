@@ -19,23 +19,19 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function ProfileScreen({ route }) {
   const { userData, visitorData } = route.params;
-
   const db = getFirestore(app);
   const [userPosts, setUserPosts] = useState([]);
-  const [favPosts, setFavPosts] = useState([]);
   const [loading, setLoading] = useState(true); // State for loading indicator
   const navigation = useNavigation();
 
   useEffect(() => {
+    navigation.addListener("focus", (e) => {
     const unsubscribeUserPosts = fetchData();
-    const unsubscribeFavPosts = fetchFav();
-
     // Cleanup subscriptions on unmount
     return () => {
       unsubscribeUserPosts();
-      unsubscribeFavPosts();
     };
-  }, []);
+  })}, [navigation]);
 
   const fetchData = () => {
     setUserPosts([]);
@@ -50,25 +46,7 @@ export default function ProfileScreen({ route }) {
     });
     return unsubscribe;
   };
-
-  const fetchFav = () => {
-    setFavPosts([]);
-    if (!userData.favorites || userData.favorites.length === 0) {
-      return () => {}; // Return empty unsubscribe function
-    }
-
-    const favPostsQuery = query(collection(db, "car_post"), where("carDetails.postId", "in", userData.favorites));
-    const unsubscribe = onSnapshot(favPostsQuery, (snapshot) => {
-      const newData = [];
-      snapshot.forEach((doc) => {
-        newData.push(doc.data());
-      });
-      setFavPosts(newData);
-      setLoading(false); // Set loading to false once data is fetched
-    });
-    return unsubscribe;
-  };
-
+   
   return (
     <ScrollView showsVerticalScrollIndicator={false} className='pb-5 bg-white'>
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -82,38 +60,10 @@ export default function ProfileScreen({ route }) {
               visitorData={visitorData}
               numberOfPosts={userPosts.length}
             />
-            <ListofCars userPosts={userPosts} favPosts={favPosts}  visitorData={visitorData} userData={userData}/>
+            <ListofCars userPosts={userPosts} visitorData={visitorData} userData={userData}/>
           </>
         )}
       </SafeAreaView>
     </ScrollView>
   );
 }
-
-
-/*
-                nextComponent={
-                  <View
-                    style={{ justifyContent: "center", alignItems: "center" }}
-                  >
-                    <MaterialCommunityIcons
-                      name="car-door"
-                      size={24}
-                      color="#7300e6"
-                      style={{ transform: [{ scaleX: -1 }] }}
-                    />
-                  </View>
-                }
-                previousComponent={
-                  <View
-                    style={{ justifyContent: "center", alignItems: "center" }}
-                  >
-                    <MaterialCommunityIcons
-                      name="car-door"
-                      size={24}
-                      color="#7300e6"
-                      style={{ transform: [{ scaleX: 1 }] }}
-                    />
-                  </View>
-                } 
-*/

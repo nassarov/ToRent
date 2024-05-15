@@ -34,10 +34,9 @@ export default function ProfileDetails({
 
   useEffect(() => {
     navigation.addListener("focus", (e) => {
-      setCities(userData.addresses.map((address) => address.label));
       setUserEmail(userData.email);
       setUserPhoneNumber(userData.phoneNumber);
-      handleRole();
+      setCities(userData.addresses.map((address) => address.label));
     });
   }, [navigation]);
 
@@ -107,7 +106,8 @@ export default function ProfileDetails({
                 width: 60,
                 height: 30,
                 borderRadius: 50,
-                marginRight:5,                backgroundColor: "#EFEFEF",
+                marginRight:5,               
+                 backgroundColor: "#EFEFEF",
                 justifyContent: "center",
                 alignItems: "center",
               }}
