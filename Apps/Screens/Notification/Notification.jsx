@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, Text } from 'react-native';
 import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
-
+import NotificationItem from '../../Components/Notification/NotificationItem'; 
 export default function NotificationPage({ route }) {
+
   const {userData }= route.params;
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,7 @@ export default function NotificationPage({ route }) {
           newData.push(doc.data());
         });
         setReservations(newData);
+        console.log("Data of not",newData)
         setLoading(false);
       });
       return unsubscribe;
@@ -26,23 +28,28 @@ export default function NotificationPage({ route }) {
     fetchReservations();
   }, []);
 
-  const renderReservation = ({ item }) => {
-    return (
-      <View style={{ margin: 8 }}>
-        <Text>Client Name: {item.clientData.name}</Text>
-        <Text>ID : {item.clientData.id}</Text>
-        <Text>Car Details : {item.carData.brand} {item.carData.model} {item.carData.year} </Text>
-      </View>
-    );
-  };
   return (
     <View>
       <FlatList
-        style={{ marginBottom: 50 }}
+      style={{marginBottom:50}}
         data={reservations}
-        renderItem={renderReservation}
-        keyExtractor={(item, index) => index.toString()}
-        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <NotificationItem
+            clientName={item.clientData.name}
+            clientprofileImage = {item.clientData.profileImage}
+            clientPhone = {item.clientData.phoneNumber}
+            carBrand = {item.carData.brand}
+            carModel = {item.carData.model}
+            carYear = {item.carData.year}
+            carPhoto = {item.images[0]}
+            TotalDays = {item.daysDifference}
+            TotalPrice = {item.totalPrice}
+            Status = {item.status}
+            StartDate = {item.startDate}
+            EndDate = {item.endDate}
+          />
+        )}
       />
     </View>
   );

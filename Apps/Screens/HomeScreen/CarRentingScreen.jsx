@@ -218,7 +218,6 @@ const addToReservation = async () => {
     const reservationData = {
       clientId: userData.id,
       clientData:userData,
-      carData: carData,
       ownerData:ownerData,
       ownerId:ownerId,
       startDate: selectedStartDate,
@@ -227,6 +226,7 @@ const addToReservation = async () => {
       daysDifference: daysDifference,
       status: "pending",
       createdAt: serverTimestamp(),
+      images:images
     };
     
     await setDoc(doc(db, "Reservation", reservationId), reservationData);
