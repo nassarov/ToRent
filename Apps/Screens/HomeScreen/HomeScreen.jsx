@@ -28,13 +28,16 @@ export default function HomeScreen({ route }) {
   const [filtereData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedChoice, setSelectedChoice] = useState("");
 
   const { userData } = route.params;
   useEffect(() => {
     navigation.addListener("focus", (e) => {
       fetchData();
     });
-    console.log(data);
+    data.forEach((item) => {
+      console.log(item.cars.newData[0].carDetails.carData);
+    });
   }, [navigation]);
 
   const fetchData = async () => {
@@ -81,10 +84,81 @@ export default function HomeScreen({ route }) {
   ];
 
   useEffect(() => {
-    const filtered = data.filter((item) =>
-      item.ownerInfo.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredData(filtered)
+    let filteredData = [];
+
+    switch (selectedChoice) {
+      case "brand":
+        filteredData = data.filter((item) => {
+          return item.cars.newData.some((newItem) => {
+            return newItem.carDetails.carData.brand
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
+          });
+        });
+        setFilteredData(filteredData);
+        break;
+      case "name":
+        filtered = data.filter((item) =>
+          item.ownerInfo.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredData(filteredData);
+        break;
+      case "year":
+        filteredData = data.filter((item) => {
+          return item.cars.newData.some((newItem) => {
+            return newItem.carDetails.carData.year
+              .toString()
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
+          });
+        });
+        setFilteredData(filteredData);
+        break;
+      case "location":
+        filteredData = data.filter((item) => {
+          return item.cars.newData.some((newItem) => {
+            return newItem.carDetails.carData.address.label
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
+          });
+        });
+        setFilteredData(filteredData);
+        break;
+      case "model":
+        filteredData = data.filter((item) => {
+          return item.cars.newData.some((newItem) => {
+            return newItem.carDetails.carData.model
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
+          });
+        });
+        setFilteredData(filteredData);
+        break;
+      case "price":
+        filteredData = data.filter((item) => {
+          return item.cars.newData.some((newItem) => {
+            return newItem.carDetails.carData.price
+              .toString()
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
+          });
+        });
+        setFilteredData(filteredData);
+        break;
+      case "fuel":
+        filteredData = data.filter((item) => {
+          return item.cars.newData.some((newItem) => {
+            return newItem.carDetails.carData.fuelType
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
+          });
+        });
+        setFilteredData(filteredData);
+        break;
+      default:
+        setFilteredData(data);
+        break;
+    }
   }, [searchQuery]);
 
   return (
@@ -110,7 +184,10 @@ export default function HomeScreen({ route }) {
           <FontAwesome6 name="sliders" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      <SearchChoices />
+      <SearchChoices
+        selected={selectedChoice}
+        setSelected={setSelectedChoice}
+      />
 
       <Carousel />
       {loading ? (
@@ -120,7 +197,11 @@ export default function HomeScreen({ route }) {
         </View>
       ) : (
         filtereData.map((data, index) => (
-          <View key={index} className=" mt-2 mb-2 bg-purple-100"style={styles.container} >
+          <View
+            key={index}
+            className=" mt-2 mb-2 bg-purple-100"
+            style={styles.container}
+          >
             <View className="flex-row justify-between px-1 items-center rounded-xl py-1">
               <View className="flex-row items-center ">
                 <Image

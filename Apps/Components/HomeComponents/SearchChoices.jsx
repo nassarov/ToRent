@@ -11,9 +11,11 @@ export default function SearchChoices({ selected, setSelected }) {
     { id: 5, name: "Model", value: "model" },
     { id: 6, name: "Price", value: "price" },
     { id: 7, name: "Fuel Type", value: "fuel" },
+  
   ];
   const select = (value) => {
     setSelected(value);
+    
   };
   return (
     <View style={{ flexDirection: "row" }}>
@@ -31,11 +33,12 @@ export default function SearchChoices({ selected, setSelected }) {
               backgroundColor: "#D3D3D3",
               borderRadius: 10,
               marginLeft: 10,
-              borderColor: item.value === selected.value? "#7F5AF0" : "#D3D3D3",
+              borderColor: item.value === selected ? "#7F5AF0" : "#D3D3D3",
               borderWidth:2
             }}
           >
             <Text>{item.name}</Text>
+           
           </TouchableOpacity>
         )}
         horizontal={true}
