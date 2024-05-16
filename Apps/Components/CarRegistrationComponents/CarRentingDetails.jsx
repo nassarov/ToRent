@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Modal, Button, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  Button,
+  Alert,
+} from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
   heightPercentageToDP,
@@ -16,20 +23,21 @@ export default function CarRentingDetails({
   maxDays,
   price,
   onTotalPriceChange,
-  onDaysDifferenceChange
+  onDaysDifferenceChange,
 }) {
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
   const [rangeColor, setRangeColor] = useState("white");
   const [rangeColorText, setRangeColorText] = useState("white");
-  console.log(minDays, maxDays);
-  const minDate = new Date(); // Today
+  const currentDate = new Date();
+  const minDate = `${currentDate.getFullYear()}-${
+    currentDate.getMonth() + 1
+  }-${currentDate.getDate()}`; // Today
   const maxDate = new Date(2024, 6, 11);
   console.log(minDate);
   console.log(maxDate);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [totalPrice, setTotalPrice] = useState(0); // State variable to hold the total price
-  
 
   const calculateTotalPrice = () => {
     const daysDifference = calculateDaysDifference(startDate, endDate);
@@ -69,7 +77,8 @@ export default function CarRentingDetails({
 
     if (isValid) {
       setEndDate(new Date(date.dateString));
-      calculateTotalPrice();}
+      calculateTotalPrice();
+    }
   };
 
   const getSelectedDates = () => {
@@ -142,7 +151,6 @@ export default function CarRentingDetails({
   const calculateDaysDifference = (start, end) => {
     if (!start || !end) return 0;
     return Math.round((end - start) / (1000 * 60 * 60 * 24));
-    
   };
 
   const daysDifference = calculateDaysDifference(startDate, endDate);
@@ -167,8 +175,6 @@ export default function CarRentingDetails({
     onEndDateChange(minDate);
     setTotalPrice(0); // Reset total price
   };
-  
-  
 
   return (
     <View className="bg-violet-300  rounded-lg  w-11/12  m-auto mt-2 py-2">
@@ -264,7 +270,7 @@ export default function CarRentingDetails({
               style={{ height: heightPercentageToDP(37) }}
             >
               <Calendar
-                minDate={new Date()}
+                minDate={minDate}
                 markingType={"period"}
                 markedDates={{
                   ...getDisabledDates(disabledDatesArray),

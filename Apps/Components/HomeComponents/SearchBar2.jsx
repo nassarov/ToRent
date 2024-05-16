@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { SearchBar } from "react-native-elements";
 
-const CarSearch = ({ onSearch }) => {
-  const [searchValue, setSearchValue] = useState("");
-
+const CarSearch = ({ searchQuery, setSearchQuery }) => {
   const searchFunction = (text) => {
-    setSearchValue(text);
-    onSearch(text);
+    setSearchQuery(text);
   };
 
   const handlePressOutside = () => {
@@ -22,7 +19,7 @@ const CarSearch = ({ onSearch }) => {
           lightTheme
           searchIcon={{ size: 26, color: "black" }}
           round
-          value={searchValue}
+          value={searchQuery}
           onChangeText={searchFunction}
           autoCorrect={false}
           inputStyle={{
