@@ -38,17 +38,23 @@ export default function NotificationItem({ clientName, clientprofileImage, clien
         <Ionicons name="close" size={30} color="#7F5AF0" />
       </TouchableOpacity>
       <Image source={{ uri: carPhoto }} style={styles.carPhoto} />
-      <View className='flex-row mb-4 mt-1 border-2 rounded-xl p-2 bg-[#7F5AF0] text-center'>
+      <View className='flex-row mb-4 mt-1 border-2 rounded-xl p-2 border-[#7F5AF0] bg-[#7F5AF0] text-center'>
         <Text className='text-white'>Start Date: 16/5/2024 Till </Text><Text className='text-white'>End Date: 17/5/2024</Text>
       </View>
-      <View style={styles.bottomInfoContainer} className='border-2 rounded-xl p-2 bg-[#7F5AF0] '>
-        <View style={styles.clientInfo} className='border-r-2 '>
+      <View style={styles.bottomInfoContainer} className='border-2 rounded-xl p-4 border-[#7F5AF0] bg-[#7F5AF0] '>
+        <View style={styles.clientInfo} className='border-r-2 border-white pr-5'>
+          <View className='flex-row border-b-2 border-white w-full '>
           <Ionicons name="person-circle-outline" size={20} color="white"/>
+          <Text className='text-white text-[16px] ml-2'>Client</Text>
+          </View>
           <Text className='text-white text-[16px]'>Name: {clientName}</Text>
           <Text className='text-white text-[16px]'>Phone: {clientPhone}</Text>
         </View>
         <View style={styles.carDetails}>
+        <View className='flex-row border-b-2 border-white w-full'>
           <Ionicons name="car-outline" size={20} color="white" />
+          <Text className='text-white text-[16px] ml-2'>Car</Text>
+          </View>
           <Text className='text-white text-[16px]'>{carBrand} {carModel} ({carYear})</Text>
           <Text className='text-white text-[16px]'>Total Days: {TotalDays}</Text>
           <Text className='text-white text-[16px]'>Total Price: ${TotalPrice}</Text>

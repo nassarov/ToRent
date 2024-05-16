@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, FlatList, Text } from 'react-native';
 import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import NotificationItem from '../../Components/Notification/NotificationItem'; 
+import { ActivityIndicator } from 'react-native-paper';
 export default function NotificationPage({ route }) {
 
   const {userData }= route.params;
@@ -56,29 +57,35 @@ export default function NotificationPage({ route }) {
 
   return (
     <View>
-      <FlatList
-        style={{marginBottom:50}}
-        data={reservations}
-        keyExtractor={(item) => item.reservationId}
-        renderItem={({ item }) => (
-          <NotificationItem
-            clientName= {item.clientData.name}
-            clientprofileImage = {item.clientData.profileImage}
-            clientPhone = {item.clientData.phoneNumber}
-            carBrand = {item.carData.brand}
-            carModel = {item.carData.model}
-            carYear = {item.carData.year}
-            carPhoto = {item.images[0]}
-            TotalDays = {item.daysDifference}
-            TotalPrice = {item.totalPrice}
-            Status = {item.status}
-            StartDate = {item.startDate}
-            EndDate = {item.endDate}
-            onAccept={() => handleAccept(item.reservationId)}
-            onReject={() => handleReject(item.reservationId)}
-          />
-        )}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : reservations.length === 0 ? (
+        <Text className='text-center text-gray-400 text-xl mt-5'>No New Notifications</Text>
+      ) : (
+        <FlatList
+          style={{ marginBottom: 50 }}
+          data={reservations}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <NotificationItem
+              clientName={item.clientData.name}
+              clientprofileImage={item.clientData.profileImage}
+              clientPhone={item.clientData.phoneNumber}
+              carBrand={item.carData.brand}
+              carModel={item.carData.model}
+              carYear={item.carData.year}
+              carPhoto={item.images[0]}
+              TotalDays={item.daysDifference}
+              TotalPrice={item.totalPrice}
+              Status={item.status}
+              StartDate={item.startDate}
+              EndDate={item.endDate}
+              onAccept={() => handleAccept(item.id)}
+              onReject={() => handleReject(item.id)}
+            />
+          )}
+        />
+      )}
     </View>
   );
 }
