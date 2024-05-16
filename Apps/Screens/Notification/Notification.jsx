@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, Text } from 'react-native';
-import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
+import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import NotificationItem from '../../Components/Notification/NotificationItem'; 
 export default function NotificationPage({ route }) {
 
@@ -13,7 +13,7 @@ export default function NotificationPage({ route }) {
       setLoading(true);
       const db = getFirestore();
       const reservationsRef = collection(db, 'Reservation');
-      const q = query(reservationsRef, where('ownerId', '==', userData.id));
+      const q = query(reservationsRef, where('ownerId', '==', userData.id),where('status','==','pending'));
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const newData = [];
         snapshot.forEach((doc) => {
@@ -28,15 +28,41 @@ export default function NotificationPage({ route }) {
     fetchReservations();
   }, []);
 
+  const handleAccept = async (reservationId) => {
+    const db = getFirestore();
+    const reservationRef = doc(db, 'Reservation', reservationId);
+    try {
+      await updateDoc(reservationRef, {
+        status: 'accepted',
+      });
+      console.log('Reservation accepted successfully.');
+    } catch (error) {
+      console.error('Error accepting reservation:', error);
+    }
+  };
+
+  const handleReject = async (reservationId) => {
+    const db = getFirestore();
+    const reservationRef = doc(db, 'Reservation', reservationId);
+    try {
+      await updateDoc(reservationRef, {
+        status: 'rejected',
+      });
+      console.log('Reservation rejected successfully.');
+    } catch (error) {
+      console.error('Error rejecting reservation:', error);
+    }
+  };
+
   return (
     <View>
       <FlatList
-      style={{marginBottom:50}}
+        style={{marginBottom:50}}
         data={reservations}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.reservationId}
         renderItem={({ item }) => (
           <NotificationItem
-            clientName={item.clientData.name}
+            clientName= {item.clientData.name}
             clientprofileImage = {item.clientData.profileImage}
             clientPhone = {item.clientData.phoneNumber}
             carBrand = {item.carData.brand}
@@ -48,6 +74,8 @@ export default function NotificationPage({ route }) {
             Status = {item.status}
             StartDate = {item.startDate}
             EndDate = {item.endDate}
+            onAccept={() => handleAccept(item.reservationId)}
+            onReject={() => handleReject(item.reservationId)}
           />
         )}
       />
