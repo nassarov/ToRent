@@ -216,6 +216,7 @@ const addToReservation = async () => {
     const reservationId = userData.id + '_' + postId;
     // reservation data
     const reservationData = {
+      reservationId:reservationId,
       clientId: userData.id,
       clientData:userData,
       ownerData:ownerData,
@@ -226,7 +227,8 @@ const addToReservation = async () => {
       daysDifference: daysDifference,
       status: "pending",
       createdAt: serverTimestamp(),
-      images:images
+      images:images,
+      carData:carData,
     };
     
     await setDoc(doc(db, "Reservation", reservationId), reservationData);
@@ -342,7 +344,8 @@ const addToReservation = async () => {
           maxDays={carData.maxdays}
           price={carData.price}
           onTotalPriceChange={handleTotalPriceChange}
-          onDaysDifferenceChange={updateDaysDifference} 
+          onDaysDifferenceChange={updateDaysDifference}
+          
            />
   
         </View>

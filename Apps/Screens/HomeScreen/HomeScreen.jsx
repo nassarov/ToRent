@@ -109,7 +109,7 @@ export default function HomeScreen({ route }) {
         </View>
       ) : (
         data.map((dat, index) => (
-          <View key={index} className=" mt-2 mb-2 bg-slate-200"style={styles.container} >
+          <View key={index} className=" mt-2 mb-2 bg-purple-100"style={styles.container} >
             <View className="flex-row justify-between px-1 items-center rounded-xl py-1">
               <View className="flex-row items-center ">
                 <Image
