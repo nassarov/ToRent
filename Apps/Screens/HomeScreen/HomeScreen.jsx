@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image,ActivityIndicator  } from "react-native";
+import { Text, View, StyleSheet, Image, ActivityIndicator } from "react-native";
 import Carousel from "../../Components/HomeComponents/Carousel";
 import Slider from "../../Components/HomeComponents/Slider";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -17,6 +17,7 @@ import {
   where,
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
+import SearchChoices from "../../Components/HomeComponents/SearchChoices";
 
 export default function HomeScreen({ route }) {
   const db = getFirestore(app);
@@ -24,17 +25,20 @@ export default function HomeScreen({ route }) {
   const auth = getAuth();
   const slide = true;
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false); 
+  const [filtereData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { userData } = route.params;
   useEffect(() => {
     navigation.addListener("focus", (e) => {
       fetchData();
     });
+    console.log(data);
   }, [navigation]);
 
   const fetchData = async () => {
-    setLoading(true); 
+    setLoading(true);
     setData([]);
     const queryUserData = await getDocs(
       query(collection(db, "users"), where("role", "==", "1"))
@@ -62,10 +66,10 @@ export default function HomeScreen({ route }) {
           { ownerInfo: doc1.data(), cars: { newData } },
         ];
         setData(companyData);
-        
+        setFilteredData(companyData);
       }
     });
-    setLoading(false); 
+    setLoading(false);
   };
 
   const navigation = useNavigation();
@@ -76,10 +80,12 @@ export default function HomeScreen({ route }) {
     require("../../../assets/HomeSlider/s1.png"),
   ];
 
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-    setShowSearchResults(true);
-  };
+  useEffect(() => {
+    const filter0ed = data.filter((item) =>
+      item.ownerInfo.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredData(filtered)
+  }, [searchQuery]);
 
   return (
     <ScrollView
@@ -93,7 +99,10 @@ export default function HomeScreen({ route }) {
       </View>
 
       <View className="flex-row justify-between px-1 items-center">
-        <SearchBarCar />
+        <SearchBarCar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
         <TouchableOpacity
           onPress={() => navigation.navigate("Filter")}
           className="mr-2 mt-1"
@@ -101,34 +110,42 @@ export default function HomeScreen({ route }) {
           <FontAwesome6 name="sliders" size={24} color="black" />
         </TouchableOpacity>
       </View>
+      <SearchChoices />
+
       <Carousel />
-      {loading ? ( 
+      {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#7F5AF0" />
           <Text style={styles.loadingText}>Getting Latest Cars...</Text>
         </View>
       ) : (
-        data.map((dat, index) => (
-          <View key={index} className=" mt-2 mb-2 bg-slate-200"style={styles.container} >
+        filtereData.map((data, index) => (
+          <View
+            key={index}
+            className=" mt-2 mb-2 bg-slate-200"
+            style={styles.container}
+          >
             <View className="flex-row justify-between px-1 items-center rounded-xl py-1">
               <View className="flex-row items-center ">
                 <Image
                   className="rounded-full w-10 h-10 mr-3"
-                  source={{ uri: dat.ownerInfo.profileImage }}
+                  source={{ uri: data.ownerInfo.profileImage }}
                 />
-                <Text className="font-bold text-[17px]">{dat.ownerInfo.name}</Text>
+                <Text className="font-bold text-[17px]">
+                  {data.ownerInfo.name}
+                </Text>
               </View>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("ProfileScreen", {
-                    userData: dat.ownerInfo,
+                    userData: data.ownerInfo,
                   });
                 }}
               >
                 <Text className="text-violet-600 text-xs">See More</Text>
               </TouchableOpacity>
             </View>
-            <Slider cars={dat.cars.newData} slideway={true} />
+            <Slider cars={data.cars.newData} slideway={true} />
           </View>
         ))
       )}
@@ -138,7 +155,7 @@ export default function HomeScreen({ route }) {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius:20,
+    borderRadius: 20,
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
@@ -152,7 +169,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop:50,
+    marginTop: 50,
   },
   loadingText: {
     marginTop: 10,
