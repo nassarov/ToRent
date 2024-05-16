@@ -81,7 +81,7 @@ export default function HomeScreen({ route }) {
   ];
 
   useEffect(() => {
-    const filter0ed = data.filter((item) =>
+    const filtered = data.filter((item) =>
       item.ownerInfo.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filtered)
@@ -119,7 +119,7 @@ export default function HomeScreen({ route }) {
           <Text style={styles.loadingText}>Getting Latest Cars...</Text>
         </View>
       ) : (
-        data.map((dat, index) => (
+        filtereData.map((data, index) => (
           <View key={index} className=" mt-2 mb-2 bg-purple-100"style={styles.container} >
             <View className="flex-row justify-between px-1 items-center rounded-xl py-1">
               <View className="flex-row items-center ">
