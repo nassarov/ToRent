@@ -12,6 +12,7 @@ import CarTextInput from "../Screens/CarRegister/CarTextInput";
 import ProfileScreen from "../Screens/Profile/ProfileScreen";
 import Trips from "../Screens/Trips/Trips";
 import Message from "../Screens/Message/Messages";
+import FilterResult from "../Screens/FilterResult/FilterResult";
 const Stack = createStackNavigator();
 export default function HomeScreenNavigation({ route }) {
   const { userData } = route.params;
@@ -56,6 +57,11 @@ export default function HomeScreenNavigation({ route }) {
         component={ProfileScreen}
         options={{ headerShown: false }}
         initialParams={{ visitorData: userData }}
+      />
+         <Stack.Screen
+        name="FilterResult"
+        component={FilterResult}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Message"
