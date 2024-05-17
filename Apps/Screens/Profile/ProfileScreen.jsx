@@ -31,7 +31,7 @@ export default function ProfileScreen({ route }) {
     return () => {
       unsubscribeUserPosts();
     };
-  })}, [navigation]);
+  })}, [navigation,userData]);
 
   const fetchData = () => {
     setUserPosts([]);

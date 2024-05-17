@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
@@ -16,7 +16,7 @@ import CustomHeader2 from "../Components/CustomHeader2";
 import ProfileScreen from "../Screens/Profile/ProfileScreen";
 import Notification from "../Screens/Notification/Notification";
 import Trips from "../Screens/Trips/Trips";
-import CustomHeader3 from "../Components/CustomHeader3";
+import { Badge } from 'react-native-elements';
 
 const Tab = createBottomTabNavigator();
 
@@ -47,6 +47,8 @@ const CustomTabButton = ({ children, onPress }) => {
 
 const TabNavigation = ({ route }) => {
   const { userData } = route.params;
+  const [newNotifications, setNewNotifications] = useState(false);
+
   const insets = useSafeAreaInsets(); // Use safe area insets for better compatibility with iOS devices
   return (
     <Tab.Navigator
@@ -89,7 +91,8 @@ const TabNavigation = ({ route }) => {
         component={Trips}
         initialParams={{ userData: userData }}
         options={{
-          headerShown: false,
+          headerShown: true,
+          header: () => <CustomHeader2 text={" Trips"} />,
           tabBarIcon: ({ focused }) => (
             <FontAwesome5
               name="car"
@@ -121,21 +124,25 @@ const TabNavigation = ({ route }) => {
         />
       )}
       <Tab.Screen
-        name="NotificationTab"
-        component={Notification}
-        initialParams={{ userData:userData}}
-        options={{
-          headerShown: true,
-          header: () => <CustomHeader2 text={"Notifications"} />,
-          tabBarIcon: ({ focused }) => (
+      name="NotificationTab"
+      component={Notification}
+      initialParams={{ userData:userData, setNewNotifications }}
+      options={{
+        headerShown: true,
+        header: () => <CustomHeader2 text={"Notifications"} />,
+        tabBarIcon: ({ focused }) => (
+          <View>
             <Fontisto
               name="bell"
               size={24}
               color={focused ? "#7F5AF0" : "#A4A4A4"}
             />
-          ),
-        }}
-      />
+            {newNotifications && <Badge status="error" containerStyle={{ position: 'absolute', top: -4, right: -4 }} />}
+          </View>
+        ),
+      }}
+    />
+
       <Tab.Screen
         name="ProfileTab"
         component={ProfileScreen}

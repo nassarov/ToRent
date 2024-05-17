@@ -19,10 +19,11 @@ export default function PostCard({
   const navigation = useNavigation();
   const customWidth = horizontal ? widthPercentageToDP(50) :widthPercentageToDP(45) ;
   const customHeight = horizontal ? widthPercentageToDP(50) :widthPercentageToDP(50) ;
+  
   return (
     <TouchableOpacity
-  activeOpacity={0.8}
-  style={{
+    activeOpacity={0.8}
+    style={{
     width: customWidth,
     height: customHeight,
     borderRadius: 10,

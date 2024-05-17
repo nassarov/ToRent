@@ -12,7 +12,7 @@ export default function NotificationItem({ clientName, clientprofileImage, clien
   return (
     <View className='items-end'>
       <View style={styles.rightContainer}>
-        <Ionicons name="time-outline" size={24} color="gray" />
+        <Ionicons name="time-outline" size={24} color="gray"/>
       </View>
       <TouchableOpacity style={styles.notificationContainer} onPress={handleViewDetails}>
         <Image source={{ uri: clientprofileImage }} style={styles.profilePic} />
@@ -20,7 +20,6 @@ export default function NotificationItem({ clientName, clientprofileImage, clien
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.notbutton ]} onPress={handleViewDetails}>
             <Ionicons name="information-circle-outline" size={20} color="#FFF" />
-            {/* <Text style={styles.buttonText}>View Details</Text> */}
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -43,21 +42,21 @@ export default function NotificationItem({ clientName, clientprofileImage, clien
       </View>
       <View style={styles.bottomInfoContainer} className='border-2 rounded-xl p-4 border-[#7F5AF0] bg-[#7F5AF0] '>
         <View style={styles.clientInfo} className='border-r-2 border-white pr-5'>
-          <View className='flex-row border-b-2 border-white w-full '>
+          <View className='flex-row border-b-2 border-white w-full justify-center mb-2'>
           <Ionicons name="person-circle-outline" size={20} color="white"/>
-          <Text className='text-white text-[16px] ml-2'>Client</Text>
+          <Text className='text-white text-[18px] ml-2'>Client</Text>
           </View>
-          <Text className='text-white text-[16px]'>Name: {clientName}</Text>
-          <Text className='text-white text-[16px]'>Phone: {clientPhone}</Text>
+          <Text className='text-white text-[16px]'>- Name: {clientName}</Text>
+          <Text className='text-white text-[16px] mt-1'>- Phone: {clientPhone}</Text>
         </View>
         <View style={styles.carDetails}>
-        <View className='flex-row border-b-2 border-white w-full'>
+        <View className='flex-row border-b-2 border-white w-full justify-center mb-2'>
           <Ionicons name="car-outline" size={20} color="white" />
-          <Text className='text-white text-[16px] ml-2'>Car</Text>
+          <Text className='text-white text-[18px] ml-2'>Car</Text>
           </View>
-          <Text className='text-white text-[16px]'>{carBrand} {carModel} ({carYear})</Text>
-          <Text className='text-white text-[16px]'>Total Days: {TotalDays}</Text>
-          <Text className='text-white text-[16px]'>Total Price: ${TotalPrice}</Text>
+          <Text className='text-white text-[16px]'>- {carBrand} {carModel} ({carYear})</Text>
+          <Text className='text-white text-[16px] mt-1'>- Total Days: {TotalDays}</Text>
+          <Text className='text-white text-[16px] mt-1'>- Total Price: ${TotalPrice}</Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -153,6 +152,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#E0E0E0',
     borderRadius: 20,
     padding: 15,
+    paddingLeft:7,
+    paddingRight:7,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {

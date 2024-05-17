@@ -123,6 +123,7 @@ export default function CarRentingScreen({ route }) {
   useEffect(() => {
     setSelectedStartDate(minDate);
     setSelectedEndDate(maxDate);
+    
   }, []);
 
   const details = [
@@ -185,7 +186,6 @@ export default function CarRentingScreen({ route }) {
   ];
 
 // Function to update user data when a post is favorited
-// Function to update user data when a post is favorited
 const addToFavorites = async (postId) => {
   try {
     const userRef = doc(db, "users", userData.id);
@@ -207,7 +207,6 @@ const addToFavorites = async (postId) => {
     Alert.alert("Error", "Failed to update favorites. Please try again later.");
   }
 };
-
 
 const addToReservation = async () => {
   try {

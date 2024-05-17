@@ -32,9 +32,7 @@ export default function HomeScreen({ route }) {
 
   const { userData } = route.params;
   useEffect(() => {
-    navigation.addListener("focus", (e) => {
       fetchData();
-    });
     data.forEach((item) => {
       console.log(item.cars.newData[0].carDetails.carData);
     });

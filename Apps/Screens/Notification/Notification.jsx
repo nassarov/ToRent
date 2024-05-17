@@ -5,30 +5,35 @@ import NotificationItem from '../../Components/Notification/NotificationItem';
 import { ActivityIndicator } from 'react-native-paper';
 export default function NotificationPage({ route }) {
 
-  const {userData }= route.params;
+  const {userData, setNewNotifications }= route.params;
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
   console.log(userData.id)
-  useEffect(() => {
-    const fetchReservations = async () => {
-      setLoading(true);
-      const db = getFirestore();
-      const reservationsRef = collection(db, 'Reservation');
-      const q = query(reservationsRef, where('ownerId', '==', userData.id),where('status','==','pending'));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const newData = [];
-        snapshot.forEach((doc) => {
-          newData.push(doc.data());
-        });
-        setReservations(newData);
-        console.log("Data of not",newData)
-        setLoading(false);
-      });
-      return unsubscribe;
-    };
-    fetchReservations();
-  }, []);
 
+  useEffect(() => {
+  const fetchReservations = async () => {
+    setLoading(true);
+    const db = getFirestore();
+    const reservationsRef = collection(db, 'Reservation');
+    const q = query(reservationsRef, where('ownerId', '==', userData.id),where('status','==','pending'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const newData = [];
+      snapshot.forEach((doc) => {
+        newData.push(doc.data());
+      });
+      setReservations(newData);
+      console.log("Data of not",newData)
+      setLoading(false);
+      if (newData.length > 0) {
+        setNewNotifications(true);
+      } else {
+        setNewNotifications(false);
+      }
+    });
+    return unsubscribe;
+  };
+  fetchReservations();
+}, []);
   const handleAccept = async (reservationId) => {
     const db = getFirestore();
     const reservationRef = doc(db, 'Reservation', reservationId);
@@ -65,7 +70,7 @@ export default function NotificationPage({ route }) {
         <FlatList
           style={{ marginBottom: 50 }}
           data={reservations}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.reservationId}
           renderItem={({ item }) => (
             <NotificationItem
               clientName={item.clientData.name}
@@ -80,8 +85,8 @@ export default function NotificationPage({ route }) {
               Status={item.status}
               StartDate={item.startDate}
               EndDate={item.endDate}
-              onAccept={() => handleAccept(item.id)}
-              onReject={() => handleReject(item.id)}
+              onAccept={() => handleAccept(item.reservationId)}
+              onReject={() => handleReject(item.reservationId)}
             />
           )}
         />
