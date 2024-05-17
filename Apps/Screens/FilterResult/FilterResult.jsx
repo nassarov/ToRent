@@ -34,9 +34,15 @@ export default function FilterResult({ route }) {
       console.log("Fetched Data:", newData);
       // Filter the fetched data based on matching at least one value in carData
       const filteredItems = newData.filter(item => {
-        return Object.entries(carData).some(([key, value]) => item.carDetails.carData[key] === value);
+        return Object.entries(carData).some(([key, value]) => {
+          if (key === 'address') {
+            const address = item.carDetails?.carData?.address;
+            return address && address.label === value;
+          }
+          return item.carDetails?.carData[key] === value;
+        });
       });
-
+      console.log("FILL",filteredItems)
       setFilteredData(filteredItems);
     } catch (error) {
       console.error("Error fetching data: ", error);
