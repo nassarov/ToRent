@@ -51,7 +51,9 @@ export default function CarRentingScreen({ route }) {
   const db = getFirestore();
   const navigation = useNavigation();
   const locationLink = carData.address.value;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);  
+  const [reservationStatus, setReservationStatus] = useState(null);
+
   console.log("OWNER ID ",ownerId)
 
   const [selectedStartDate, setSelectedStartDate] = useState("");
@@ -248,6 +250,40 @@ const addToReservation = async () => {
     setLoading(false);
   }
 };
+useEffect(() => {
+  const fetchReservationStatus = async () => {
+    try {
+      const reservationRef = doc(db, "Reservation", `${userData.id}_${postId}`);
+      const reservationDoc = await getDoc(reservationRef);
+      if (reservationDoc.exists()) {
+        const reservationData = reservationDoc.data();
+        setReservationStatus(reservationData.status);
+      } else {
+        // If reservation does not exist, set status to null
+        setReservationStatus(null);
+      }
+    } catch (error) {
+      console.error("Error fetching reservation status: ", error);
+    }
+  };
+
+  fetchReservationStatus();
+}, [db, postId, userData.id]);
+
+  let buttonText = "Request Rent";
+  let buttonDisabled = false;
+  let message = "";
+
+  if (reservationStatus === "pending") {
+    buttonText = "Awaiting Owner Response";
+    buttonDisabled = true;
+    message = "Your request is pending approval from the owner.";
+  } else if (reservationStatus === "accepted") {
+    buttonText = "Enjoy your Trip";
+    buttonDisabled = true;
+    message = "Your reservation has been accepted. Enjoy your trip!";
+  }
+
   return (
     <View className="flex-1">
       <ScrollView
@@ -404,23 +440,16 @@ const addToReservation = async () => {
             </>
           ) : (
             <TouchableOpacity
-              onPress={addToReservation}
-              style={{
-                backgroundColor: "#7F5AF0",
-                padding: 10,
-                borderRadius: 10,
-                marginTop: 10,
-                width: widthPercentageToDP(40),
-                height: heightPercentageToDP(7),
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {/* Button content */}
-              <Text style={{ color: "white", fontWeight: "bold" }}>
-                Request Rent
-              </Text>
-            </TouchableOpacity>
+            onPress={addToReservation}
+            disabled={buttonDisabled}
+            style={[
+              styles.button,
+              buttonDisabled && styles.disabledButton,
+            ]}
+          >
+            <Text style={styles.buttonText}>{buttonText}</Text>
+          </TouchableOpacity>
+    
           )}
           <Modal visible={loading} transparent animationType="fade">
           <View style={styles.modalBackground}>
@@ -457,7 +486,7 @@ const addToReservation = async () => {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 20, // Adjust the value as needed for the desired roundness
+    borderRadius: 20, 
     backgroundColor: "#FFFFFF",
     padding: 6,
     margin: 2,
@@ -468,7 +497,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 8, // Android shadow elevation
+    elevation: 8, 
   },
   profileContainer: {
     flexDirection: "row",
@@ -478,8 +507,8 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 50,
     height: 50,
-    borderRadius: 25, // Assuming you want a circular profile image
-    marginRight: 10, // Adjust as needed for spacing between image and text
+    borderRadius: 25, 
+    marginRight: 10, 
   },
   userName: {
     fontSize: 16,
@@ -495,5 +524,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     padding: 20,
     borderRadius: 10,
+  },
+  button: {
+    backgroundColor: "#7F5AF0",
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 10,
+    width: 200,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  disabledButton: {
+    backgroundColor: "gray",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });

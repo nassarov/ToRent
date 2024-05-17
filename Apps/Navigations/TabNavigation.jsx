@@ -49,7 +49,6 @@ const TabNavigation = ({ route }) => {
   const { userData } = route.params;
   const [newNotifications, setNewNotifications] = useState(false);
 
-  const insets = useSafeAreaInsets(); // Use safe area insets for better compatibility with iOS devices
   return (
     <Tab.Navigator
       screenOptions={{
