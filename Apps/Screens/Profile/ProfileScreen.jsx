@@ -64,6 +64,7 @@ export default function ProfileScreen({ route }) {
           </>
         )}
       </SafeAreaView>
+      <View className='mb-[55px]'></View>
     </ScrollView>
   );
 }

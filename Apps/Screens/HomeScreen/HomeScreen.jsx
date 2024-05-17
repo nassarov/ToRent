@@ -163,7 +163,7 @@ export default function HomeScreen({ route }) {
 
   return (
     <ScrollView
-      className="mt-[38px] pt-3 flex-1 mb-[55px]"
+      className="mt-[38px] pt-3 flex-1 "
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
@@ -184,11 +184,10 @@ export default function HomeScreen({ route }) {
           <FontAwesome6 name="sliders" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      <SearchChoices
+      <SearchChoices 
         selected={selectedChoice}
         setSelected={setSelectedChoice}
       />
-
       <Carousel />
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -219,13 +218,14 @@ export default function HomeScreen({ route }) {
                   });
                 }}
               >
-                <Text className="text-violet-600 text-xs">See More</Text>
+                <Text className="text-violet-600 text-[13px] mr-1">See More</Text>
               </TouchableOpacity>
             </View>
             <Slider cars={data.cars.newData} slideway={true} />
           </View>
         ))
       )}
+      <View className='mb-[55px]'></View>
     </ScrollView>
   );
 }

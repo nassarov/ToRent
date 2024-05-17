@@ -63,7 +63,7 @@ const TabNavigation = ({ route }) => {
           backgroundColor: "#DADADA",
           borderRadius: 15,
           height: 50,
-          paddingBottom: Platform.OS === "ios" ? 0 : 5, // Adding padding bottom for iOS
+          paddingBottom: Platform.OS === "ios" ? 0 : 5, // Adding padding bottom for 
           ...styles.shadow,
         },
         tabBarActiveTintColor: "#7F5AF0",

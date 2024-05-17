@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Linking } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar, Title, Caption } from "react-native-paper";
@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import styles from "../ProfileComponents/profileStyle";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 export default function ProfileDetails({
   userData,
   numberOfPosts,
@@ -30,13 +31,13 @@ export default function ProfileDetails({
   };
   useEffect(() => {
     handleRole();
+    setCities(userData.addresses.map((address) => address.label));
   }, []);
 
   useEffect(() => {
     navigation.addListener("focus", (e) => {
       setUserEmail(userData.email);
       setUserPhoneNumber(userData.phoneNumber);
-      setCities(userData.addresses.map((address) => address.label));
     });
   }, [navigation]);
 
@@ -88,7 +89,6 @@ export default function ProfileDetails({
       <Text style={{ color: "black", marginTop: 4 }}>
         {userData.phoneNumber}
       </Text>
-
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Icon
           name="map-marker-radius"
@@ -159,20 +159,28 @@ export default function ProfileDetails({
           </Text>
         </TouchableOpacity>
         {userData.id !== visitorData.id && (
-    <TouchableOpacity onPress={() => {/* handle message action */}}>
-      <Text
-        style={{
-          backgroundColor: "#E1E1E1",
-          width: 150,
-          paddingHorizontal: 10,
-          paddingVertical: 5,
-          borderRadius: 5,
-          textAlign: "center",
-          color: "black",
-        }}
-      >
-        Message
-      </Text>
+    <TouchableOpacity onPress={() => {
+      const message = `Hello,${userData.name} I am interested in your car.`;
+      const phoneNumber = userData.phoneNumber;
+      const url = `whatsapp://send?text=${encodeURIComponent(message)}&phone=${phoneNumber}`;
+      Linking.openURL(url);
+    }}>
+      
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text
+          style={{
+            backgroundColor: "#E1E1E1",
+            width: 150,
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 5,
+            textAlign: "center",
+            color: "black",
+            marginLeft: 10,
+          }}> 
+          <Icon name="whatsapp" size={18} color="green"/> Message
+        </Text>
+      </View>
     </TouchableOpacity>
   )}
       </View>

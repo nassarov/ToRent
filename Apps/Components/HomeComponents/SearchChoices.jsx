@@ -18,7 +18,7 @@ export default function SearchChoices({ selected, setSelected }) {
     
   };
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={{ flexDirection: "row"}}>
       <FlatList
         showsHorizontalScrollIndicator={false}
         data={searchItem}
@@ -29,6 +29,7 @@ export default function SearchChoices({ selected, setSelected }) {
             }}
             key={item.id}
             style={{
+              marginBottom:5,
               padding: 8,
               backgroundColor: "#D3D3D3",
               borderRadius: 10,
