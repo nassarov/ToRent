@@ -13,6 +13,7 @@ import ProfileScreen from "../Screens/Profile/ProfileScreen";
 import Trips from "../Screens/Trips/Trips";
 import Message from "../Screens/Message/Messages";
 import FilterResult from "../Screens/FilterResult/FilterResult";
+import showRoom from "../Screens/HomeScreen/showRoom";
 const Stack = createStackNavigator();
 export default function HomeScreenNavigation({ route }) {
   const { userData } = route.params;
@@ -33,6 +34,11 @@ export default function HomeScreenNavigation({ route }) {
       <Stack.Screen
         name="Filter"
         component={Filter}
+        options={{ header: () => <CustomHeader2 /> }}
+      />
+      <Stack.Screen
+        name="Explore"
+        component={showRoom}
         options={{ header: () => <CustomHeader2 /> }}
       />
       <Stack.Screen

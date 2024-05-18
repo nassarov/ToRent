@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet, Image, ActivityIndicator, Dimensions } from "react-native";
 import Carousel from "../../Components/HomeComponents/Carousel";
 import Slider from "../../Components/HomeComponents/Slider";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import SearchBarCar from "../../Components/HomeComponents/SearchBar2";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome6 } from "@expo/vector-icons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { getAuth, signOut } from "firebase/auth";
 import {
   collection,
@@ -29,6 +29,7 @@ export default function HomeScreen({ route }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState("");
+  const screenWidth = Dimensions.get("window").width ;
 
   const { userData } = route.params;
   useEffect(() => {
@@ -83,7 +84,6 @@ export default function HomeScreen({ route }) {
 
   useEffect(() => {
     let filteredData = [];
-
     switch (selectedChoice) {
       case "brand":
         filteredData = data.filter((item) => {
@@ -163,14 +163,19 @@ export default function HomeScreen({ route }) {
     <ScrollView
       className="mt-[38px] pt-3 flex-1 "
       keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    >
+      showsVerticalScrollIndicator={false}>
+    
+      <View className='flex-row justify-between'>
       <View className="flex-row mb-2 ">
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
         <Text className="text-xl"> Your Favorite Car</Text>
       </View>
-
-      <View className="flex-row justify-between px-1 items-center">
+      <TouchableOpacity onPress={() => navigation.navigate("Explore")} className='mr-4'>
+      <MaterialCommunityIcons name="car-side" size={35} color="black"/> 
+      <Text>Explore</Text>
+      </TouchableOpacity>
+    </View>
+      {/* <View className="flex-row justify-between px-1 items-center">
         <SearchBarCar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -185,8 +190,10 @@ export default function HomeScreen({ route }) {
       <SearchChoices 
         selected={selectedChoice}
         setSelected={setSelectedChoice}
-      />
+      /> */}
+      
       <Carousel />
+      <Text>Top Car Renting Companies</Text>
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#7F5AF0" />
