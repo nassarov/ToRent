@@ -250,6 +250,7 @@ const addToReservation = async () => {
     setLoading(false);
   }
 };
+const [ended,setEnded]=useState(false);
 useEffect(() => {
   const fetchReservationStatus = async () => {
     try {
@@ -257,6 +258,14 @@ useEffect(() => {
       const reservationDoc = await getDoc(reservationRef);
       if (reservationDoc.exists()) {
         const reservationData = reservationDoc.data();
+        const endDateInSeconds = reservationData.endDate.seconds;
+        if (Date.now() < endDateInSeconds * 1000) {
+          console.log(endDateInSeconds * 1000);
+          setEnded(false)
+        }
+        else{
+          setEnded(true)
+        }
         setReservationStatus(reservationData.status);
       } else {
         // If reservation does not exist, set status to null
@@ -278,12 +287,15 @@ useEffect(() => {
     buttonText = "Awaiting Owner Response";
     buttonDisabled = true;
     message = "Your request is pending approval from the owner.";
-  } else if (reservationStatus === "accepted") {
+  } else if (reservationStatus === "accepted" && ended===false) {
     buttonText = "Enjoy your Trip";
     buttonDisabled = true;
     message = "Your reservation has been accepted. Enjoy your trip!";
+  } else if (reservationStatus === "accepted" && ended===true) {
+    buttonText = "ReRequest To Rent";
+    buttonDisabled = false;
+    message = "You can ReRent this car";
   }
-
   return (
     <View className="flex-1">
       <ScrollView
@@ -380,7 +392,6 @@ useEffect(() => {
           price={carData.price}
           onTotalPriceChange={handleTotalPriceChange}
           onDaysDifferenceChange={updateDaysDifference}
-          
            />
   
         </View>
