@@ -35,13 +35,18 @@ export default function ClientTripsScreen({route}) {
 
   return (
     <View style={{ flex: 1, padding: 4 }}>
+      {reservations.length === 0 ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 18, color: 'gray' }}>No Clients Have Reserved a Trip Yet</Text>
+        </View>
+      ) : (
       <FlatList
         data={reservations}
         numColumns={2}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 16 }}
         renderItem={({ item }) => (
-          <View style={{ flex: 1, margin: 8 }}>
+          <View style={{ flex: 1, margin: 2 }}>
             <PostCard
               car={item.carData}
               imageUrls={item.images}
@@ -55,6 +60,7 @@ export default function ClientTripsScreen({route}) {
         keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
       />
+    )}
     </View>
   );
 }

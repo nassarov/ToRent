@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, ActivityIndicator } from 'react-native';
+import { View, FlatList, ActivityIndicator, Text } from 'react-native';
 import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
 import PostCard from '../../Components/HomeComponents/PostCard';
 
-export default function OnGoinTrips({ route }) {
+export default function OnGoingTrips({ route }) {
   const { userData } = route.params;
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,6 +40,11 @@ export default function OnGoinTrips({ route }) {
 
   return (
     <View style={{ flex: 1, padding: 4 }}>
+      {reservations.length === 0 ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 18, color: 'gray' }}>No Ongoing Trips</Text>
+        </View>
+      ) : (
       <FlatList
         data={reservations}
         numColumns={2}
@@ -60,6 +65,7 @@ export default function OnGoinTrips({ route }) {
         keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
       />
+    )}
     </View>
   );
 }

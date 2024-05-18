@@ -31,7 +31,9 @@ export default function ProfileDetails({
   };
   useEffect(() => {
     handleRole();
+    if (UserRole === "1") {
     setCities(userData.addresses.map((address) => address.label));
+  }
   }, []);
 
   useEffect(() => {
@@ -89,16 +91,18 @@ export default function ProfileDetails({
       <Text style={{ color: "black", marginTop: 4 }}>
         {userData.phoneNumber}
       </Text>
+      {userData.role ==='1' &&(
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Icon
           name="map-marker-radius"
           color="#777777"
           size={20}
           style={{ paddingRight: 10 }}
-        />
+        /> 
+        
         <View
-          style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}
-        >
+          style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}>
+         
           {cities.map((label, index) => (
             <View
               key={index}
@@ -116,7 +120,7 @@ export default function ProfileDetails({
             </View>
           ))}
         </View>
-      </View>
+      </View>)}
       <View
         style={{
           flexDirection: "row",
