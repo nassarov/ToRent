@@ -53,6 +53,7 @@ export default function CarRentingScreen({ route }) {
   const locationLink = carData.address.value;
   const [loading, setLoading] = useState(false);  
   const [reservationStatus, setReservationStatus] = useState(null);
+  const [loadingStatus, setLoadingStatus] = useState(true);
 
   console.log("OWNER ID ",ownerId)
 
@@ -125,7 +126,6 @@ export default function CarRentingScreen({ route }) {
   useEffect(() => {
     setSelectedStartDate(minDate);
     setSelectedEndDate(maxDate);
-    
   }, []);
 
   const details = [
@@ -251,51 +251,54 @@ const addToReservation = async () => {
   }
 };
 const [ended,setEnded]=useState(false);
-useEffect(() => {
-  const fetchReservationStatus = async () => {
-    try {
-      const reservationRef = doc(db, "Reservation", `${userData.id}_${postId}`);
-      const reservationDoc = await getDoc(reservationRef);
-      if (reservationDoc.exists()) {
-        const reservationData = reservationDoc.data();
-        const endDateInSeconds = reservationData.endDate.seconds;
-        if (Date.now() < endDateInSeconds * 1000) {
-          console.log(endDateInSeconds * 1000);
-          setEnded(false)
-        }
-        else{
-          setEnded(true)
-        }
-        setReservationStatus(reservationData.status);
-      } else {
-        // If reservation does not exist, set status to null
-        setReservationStatus(null);
+
+
+const fetchReservationStatus = async () => {
+  try {
+    const reservationRef = doc(db, "Reservation", `${userData.id}_${postId}`);
+    const reservationDoc = await getDoc(reservationRef);
+    if (reservationDoc.exists()) {
+      const reservationData = reservationDoc.data();
+      const endDateInSeconds = reservationData.endDate.seconds;
+      if (Date.now() < endDateInSeconds * 1000) {
+        console.log(endDateInSeconds * 1000);
+        setEnded(false)
       }
-    } catch (error) {
-      console.error("Error fetching reservation status: ", error);
+      else{
+        setEnded(true)
+      }
+      setReservationStatus(reservationData.status);
+      console.log(reservationData.status)
+    } else {
+      // If reservation does not exist, set status to null
+      setReservationStatus(null);
     }
+  } catch (error) {
+    console.error("Error fetching reservation status: ", error);
+  }
+};
+useEffect(() => {
+  const fetchStatus = async () => {
+    await fetchReservationStatus();
+    setLoadingStatus(false);
   };
-
-  fetchReservationStatus();
-}, [db, postId, userData.id]);
-
+  
+  fetchStatus();
+}, []);
   let buttonText = "Request Rent";
   let buttonDisabled = false;
-  let message = "";
 
   if (reservationStatus === "pending") {
     buttonText = "Awaiting Owner Response";
     buttonDisabled = true;
-    message = "Your request is pending approval from the owner.";
   } else if (reservationStatus === "accepted" && ended===false) {
     buttonText = "Enjoy your Trip";
     buttonDisabled = true;
-    message = "Your reservation has been accepted. Enjoy your trip!";
   } else if (reservationStatus === "accepted" && ended===true) {
     buttonText = "ReRequest To Rent";
     buttonDisabled = false;
-    message = "You can ReRent this car";
   }
+  
   return (
     <View className="flex-1">
       <ScrollView
@@ -458,7 +461,11 @@ useEffect(() => {
               buttonDisabled && styles.disabledButton,
             ]}
           >
-            <Text style={styles.buttonText}>{buttonText}</Text>
+           {loadingStatus ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Text style={styles.buttonText}>{buttonText}</Text>
+            )}
           </TouchableOpacity>
     
           )}

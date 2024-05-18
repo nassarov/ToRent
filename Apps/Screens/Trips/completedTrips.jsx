@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, ActivityIndicator } from 'react-native';
+import { View, FlatList, ActivityIndicator, Text } from 'react-native';
 import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
 import PostCard from '../../Components/HomeComponents/PostCard';
 
@@ -39,27 +39,33 @@ export default function CompletedTrips({route}) {
     
       return (
         <View style={{ flex: 1, padding: 4 }}>
-          <FlatList
-            data={reservations}
-            numColumns={2}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 16 }}
-            renderItem={({ item }) => (
-              <View style={{ flex: 1, margin: 2 }}>
-                <PostCard
-                  car={item.carData}
-                  imageUrls={item.images}
-                  ownerId={item.ownerId}
-                  ownerData={item.ownerData || {}}
-                  horizontal={false}
-                  postId={item.reservationId}
-                />
-              </View>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
-      );
-    }
-    
+        {reservations.length === 0 ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ fontSize: 18, color: 'gray' }}>No Completed Trips</Text>
+          </View>
+        ) : (
+        <FlatList
+          data={reservations}
+          numColumns={2}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 16 }}
+          renderItem={({ item }) => (
+            <View style={{ flex: 1, margin: 2 }}>
+              <PostCard
+                car={item.carData}
+                imageUrls={item.images}
+                ownerId={item.ownerId}
+                ownerData={item.ownerData || {}}
+                horizontal={false}
+                postId={item.reservationId}
+              />
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+      </View>
+    );
+  }
+  
