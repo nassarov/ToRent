@@ -64,7 +64,7 @@ export default function CarRentingDetails({
     const querySnapshot = await getDocs(
       query(
         collection(db, "Reservation"),
-        where("postId", "==", postId, where("status", "==", "accepted"))
+        where("postId", "==", postId), where("status", "==", "accepted")
       )
     );
     let disabledDates = [];
