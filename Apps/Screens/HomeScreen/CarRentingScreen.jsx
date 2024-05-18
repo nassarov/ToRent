@@ -43,6 +43,7 @@ import FavoriteButton from "./favorite";
 
 export default function CarRentingScreen({ route }) {
   const { userData, carData, images, ownerId, ownerData, postId } = route.params;
+
   const isOwner = userData.id === ownerId;
   const minDate = new Date(); // Today
   const maxDate = new Date(2025, 6, 3);
@@ -54,7 +55,6 @@ export default function CarRentingScreen({ route }) {
   const [loading, setLoading] = useState(false);  
   const [reservationStatus, setReservationStatus] = useState(null);
 
-  console.log("OWNER ID ",ownerId)
 
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [selectedEndDate, setSelectedEndDate] = useState("");
@@ -111,7 +111,6 @@ export default function CarRentingScreen({ route }) {
           text: "Yes",
           onPress: async () => {
             const postRef = doc(db, "car_post", postId);
-            console.log(postId);
             deleteDoc(postRef).then(() => {
               navigation.goBack();
             });
@@ -215,6 +214,7 @@ const addToReservation = async () => {
     setLoading(true);
     // reservation ID hiye combination of userData.id and postId
     const reservationId = userData.id + '_' + postId;
+  
     // reservation data
     const reservationData = {
       reservationId:reservationId,
@@ -230,6 +230,7 @@ const addToReservation = async () => {
       createdAt: serverTimestamp(),
       images:images,
       carData:carData,
+      postId:postId
     };
     
     await setDoc(doc(db, "Reservation", reservationId), reservationData);
@@ -380,6 +381,7 @@ useEffect(() => {
           price={carData.price}
           onTotalPriceChange={handleTotalPriceChange}
           onDaysDifferenceChange={updateDaysDifference}
+          postId={postId}
           
            />
   

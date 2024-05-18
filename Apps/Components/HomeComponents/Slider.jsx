@@ -40,6 +40,7 @@ export default function Slider({ cars, slideway }) {
 
   const renderItem = ({ item, index }) => {
     const ownerData = ownersData[item.ownerId] || {};
+   
     return (
       <PostCard
         car={item.carDetails.carData}

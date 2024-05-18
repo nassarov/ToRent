@@ -96,7 +96,7 @@ export default function HomeScreen({ route }) {
         setFilteredData(filteredData);
         break;
       case "name":
-        filtered = data.filter((item) =>
+        filteredData = data.filter((item) =>
           item.ownerInfo.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setFilteredData(filteredData);
