@@ -36,6 +36,7 @@ export default function CarRentingDetails({
 }) {
   const db = getFirestore(app);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
+  const [daysDifference, setdaysDifference] = useState(0); // State variable to control calendar visibility
   const [rangeColor, setRangeColor] = useState("white");
   const [rangeColorText, setRangeColorText] = useState("white");
   const currentDate = new Date();
@@ -43,8 +44,8 @@ export default function CarRentingDetails({
     currentDate.getMonth() + 1
   }-${currentDate.getDate()}`; // Today
   const maxDate = new Date(2024, 6, 11);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const [disabledDatesArray, setDisbaledDatesArray] = useState([]);
   // State variable to hold the total price
@@ -60,11 +61,11 @@ export default function CarRentingDetails({
     onDaysDifferenceChange(daysDifference);
   };
   const fetchDisabledDates = async () => {
-    console.log(postId);
     const querySnapshot = await getDocs(
       query(
         collection(db, "Reservation"),
-        where("postId", "==", postId), where("status", "==", "accepted")
+        where("postId", "==", postId),
+        where("status", "==", "accepted")
       )
     );
     let disabledDates = [];
@@ -193,11 +194,17 @@ export default function CarRentingDetails({
   };
 
   const calculateDaysDifference = (start, end) => {
-    if (!start || !end) return 0;
-    return Math.round((end - start) / (1000 * 60 * 60 * 24));
+    console.error(end == "");
+    if (start != "" && end != "") {
+      return Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
+    } else if (start != "") {
+      console.log("raaaaaaaaaaaaaaaaaaaaaaaaaaaah");
+      return 1;
+    } else {
+      return 0;
+    }
   };
 
-  const daysDifference = calculateDaysDifference(startDate, endDate);
   const formatedStartDate = startDate
     ? `${startDate.getDate()}/${
         startDate.getMonth() + 1
@@ -208,15 +215,20 @@ export default function CarRentingDetails({
     : "";
 
   const handleApply = () => {
+    setdaysDifference(calculateDaysDifference(startDate, endDate));
     onStartDateChange(startDate);
     onEndDateChange(endDate);
     setIsCalendarVisible(false);
     calculateTotalPrice();
+    onDaysDifferenceChange(daysDifference);
+    onTotalPriceChange(totalPrice);
   };
 
   const handleClear = () => {
-    onStartDateChange(minDate);
-    onEndDateChange(minDate);
+    onDaysDifferenceChange("");
+    onTotalPriceChange("");
+    setStartDate("");
+    setEndDate("");
     setTotalPrice(0); // Reset total price
   };
 
@@ -239,7 +251,9 @@ export default function CarRentingDetails({
           <Text className="font-bold mb-2 text-white">Drop-off date</Text>
           <View className="flex-row rounded-lg bg-violet-600 p-2 items-center">
             <FontAwesome5 name="calendar" size={20} color="white" />
-            <Text className="text-white ml-2">{formatedEndDate}</Text>
+            <Text className="text-white ml-2">
+              {formatedEndDate ? formatedEndDate : formatedStartDate}
+            </Text>
           </View>
         </View>
       </View>
@@ -252,17 +266,13 @@ export default function CarRentingDetails({
         {/* Total time */}
         <View className="flex-row justify-between border-b-[1px] border-white mb-2">
           <Text className="text-white">Total time</Text>
-          <Text className="text-white">
-            {formatedStartDate && formatedEndDate
-              ? daysDifference + " days"
-              : "0 days"}
-          </Text>
+          <Text className="text-white">{daysDifference + " days"}</Text>
         </View>
         <View className="flex-row items-center justify-between">
           <View>
             <Text className="text-xl font-bold text-white">
-              Total Price:{" "}
-              {formatedStartDate && formatedEndDate ? totalPrice : "0"}$
+              Total Price:
+              {totalPrice}$
             </Text>
           </View>
           {/* Clear */}
@@ -298,7 +308,7 @@ export default function CarRentingDetails({
           <View
             style={{
               width: "100%",
-              height: heightPercentageToDP(50),
+              height: heightPercentageToDP(60),
               backgroundColor: "#FFFFFF",
               borderRadius: 10,
             }}
@@ -309,10 +319,7 @@ export default function CarRentingDetails({
             </Text>
 
             {/* CalendarPicker component */}
-            <View
-              className="border-2 border-violet-600 rounded-lg p-2 m-1 "
-              style={{ height: heightPercentageToDP(37) }}
-            >
+            <View className="border-2 border-violet-600 rounded-lg p-2 m-1 ">
               <Calendar
                 minDate={minDate}
                 markingType={"period"}
