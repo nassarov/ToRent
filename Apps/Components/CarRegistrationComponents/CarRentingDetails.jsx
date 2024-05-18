@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,14 @@ import {
 import CalendarPicker from "react-native-calendar-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons/";
 import { Calendar } from "react-native-calendars";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
+import { app } from "../../../firebaseConfig";
 
 export default function CarRentingDetails({
   onStartDateChange,
@@ -24,7 +32,9 @@ export default function CarRentingDetails({
   price,
   onTotalPriceChange,
   onDaysDifferenceChange,
+  postId,
 }) {
+  const db = getFirestore(app);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
   const [rangeColor, setRangeColor] = useState("white");
   const [rangeColorText, setRangeColorText] = useState("white");
@@ -33,11 +43,14 @@ export default function CarRentingDetails({
     currentDate.getMonth() + 1
   }-${currentDate.getDate()}`; // Today
   const maxDate = new Date(2024, 6, 11);
-  console.log(minDate);
-  console.log(maxDate);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [totalPrice, setTotalPrice] = useState(0); // State variable to hold the total price
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [disabledDatesArray, setDisbaledDatesArray] = useState([]);
+  // State variable to hold the total price
+  useEffect(() => {
+    fetchDisabledDates();
+  }, []);
 
   const calculateTotalPrice = () => {
     const daysDifference = calculateDaysDifference(startDate, endDate);
@@ -46,10 +59,41 @@ export default function CarRentingDetails({
     onTotalPriceChange(totalPrice); // Update total price in parent component
     onDaysDifferenceChange(daysDifference);
   };
-  const disabledDatesArray = [
-    { startDate: "2024-5-12", endDate: "2024-5-15" },
-    { startDate: "2024-5-20", endDate: "2024-5-25" },
-  ];
+  const fetchDisabledDates = async () => {
+    console.log(postId);
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, "Reservation"),
+        where("postId", "==", postId, where("status", "==", "accepted"))
+      )
+    );
+    let disabledDates = [];
+    let startYear;
+    let startMonth;
+    let startDay;
+    let endYear;
+    let endMonth;
+    let endDay;
+
+    querySnapshot.forEach((element) => {
+      const startDate = new Date(element.data().startDate.seconds * 1000);
+      const endDate = new Date(element.data().endDate.seconds * 1000); // Convert seconds to milliseconds
+      startYear = startDate.getFullYear();
+      startMonth = String(startDate.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
+      startDay = String(startDate.getDate()).padStart(2, "0");
+      endYear = endDate.getFullYear();
+      endMonth = String(endDate.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
+      endDay = String(endDate.getDate()).padStart(2, "0");
+      disabledDates = [
+        ...disabledDates,
+        {
+          startDate: `${startYear}-${startMonth}-${startDay}`,
+          endDate: `${endYear}-${endMonth}-${endDay}`,
+        },
+      ];
+    });
+    setDisbaledDatesArray(disabledDates);
+  };
 
   const handleDateSelection = (date) => {
     const disabledDates = getDisabledDates(disabledDatesArray);
