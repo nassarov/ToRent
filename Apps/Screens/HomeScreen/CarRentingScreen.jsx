@@ -1,4 +1,14 @@
-import { View, Text, Image, Dimensions, Linking, Alert ,StyleSheet,Modal,ActivityIndicator} from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Dimensions,
+  Linking,
+  Alert,
+  StyleSheet,
+  Modal,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
@@ -16,7 +26,8 @@ import {
   FontAwesome5,
   FontAwesome,
   Ionicons,
-  FontAwesome6,MaterialIcons 
+  FontAwesome6,
+  MaterialIcons,
 } from "@expo/vector-icons/";
 import CalendarPicker from "react-native-calendar-picker";
 import PictureSwitching from "../../Components/HomeComponents/PictureSwitching";
@@ -42,7 +53,8 @@ import { useNavigation } from "@react-navigation/native";
 import FavoriteButton from "./favorite";
 
 export default function CarRentingScreen({ route }) {
-  const { userData, carData, images, ownerId, ownerData, postId } = route.params;
+  const { userData, carData, images, ownerId, ownerData, postId } =
+    route.params;
 
   const isOwner = userData.id === ownerId;
   const minDate = new Date(); // Today
@@ -52,10 +64,9 @@ export default function CarRentingScreen({ route }) {
   const db = getFirestore();
   const navigation = useNavigation();
   const locationLink = carData.address.value;
-  const [loading, setLoading] = useState(false);  
+  const [loading, setLoading] = useState(false);
   const [reservationStatus, setReservationStatus] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
-
 
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [selectedEndDate, setSelectedEndDate] = useState("");
@@ -186,120 +197,129 @@ export default function CarRentingScreen({ route }) {
     },
   ];
 
-// Function to update user data when a post is favorited
-const addToFavorites = async (postId) => {
-  try {
-    const userRef = doc(db, "users", userData.id);
-    const userSnapshot = await getDoc(userRef);
-    const userData = userSnapshot.data();
+  // Function to update user data when a post is favorited
+  const addToFavorites = async (postId) => {
+    try {
+      const userRef = doc(db, "users", userData.id);
+      const userSnapshot = await getDoc(userRef);
+      const userData = userSnapshot.data();
 
-    let updatedFavorites = [];
-    // Check if favorites array exists, if not create it
-    if (userData.favorites) {
-      updatedFavorites = [...userData.favorites, postId];
-    } else {
-      updatedFavorites = [postId];
-    }
-    await updateDoc(userRef, {
-      favorites: updatedFavorites
-    });
-  } catch (error) {
-    console.error("Error updating favorites:", error);
-    Alert.alert("Error", "Failed to update favorites. Please try again later.");
-  }
-};
-
-const addToReservation = async () => {
-  try {
-    setLoading(true);
-    // reservation ID hiye combination of userData.id and postId
-    const reservationId = userData.id + '_' + postId;
-  
-    // reservation data
-    const reservationData = {
-      reservationId:reservationId,
-      clientId: userData.id,
-      clientData:userData,
-      ownerData:ownerData,
-      ownerId:ownerId,
-      startDate: selectedStartDate,
-      endDate: selectedEndDate,
-      totalPrice: totalPrice,
-      daysDifference: daysDifference,
-      status: "pending",
-      createdAt: serverTimestamp(),
-      images:images,
-      carData:carData,
-      postId:postId
-    };
-    
-    await setDoc(doc(db, "Reservation", reservationId), reservationData);
-    console.log("Reservation added with ID: ", reservationId);
-    setLoading(false);
-    Alert.alert(
-      "Success",
-      "Request sent successfully. Please wait for the owner's response.",
-      [{ text: "OK", onPress: (navigation.replace('TabNavigation'))  }]
-    );
-  } catch (error) {
-    console.error("Error adding reservation: ", error);
-    Alert.alert(
-      "Failed",
-      "There is a problem requesting reservation of this car.",
-      [{ text: "OK", onPress: () =>{} }]
-    );
-    setLoading(false);
-  }
-};
-const [ended,setEnded]=useState(false);
-
-
-const fetchReservationStatus = async () => {
-  try {
-    const reservationRef = doc(db, "Reservation", `${userData.id}_${postId}`);
-    const reservationDoc = await getDoc(reservationRef);
-    if (reservationDoc.exists()) {
-      const reservationData = reservationDoc.data();
-      const endDateInSeconds = reservationData.endDate.seconds;
-      if (Date.now() < endDateInSeconds * 1000) {
-        console.log(endDateInSeconds * 1000);
-        setEnded(false)
+      let updatedFavorites = [];
+      // Check if favorites array exists, if not create it
+      if (userData.favorites) {
+        updatedFavorites = [...userData.favorites, postId];
+      } else {
+        updatedFavorites = [postId];
       }
-      else{
-        setEnded(true)
-      }
-      setReservationStatus(reservationData.status);
-      console.log(reservationData.status)
-    } else {
-      // If reservation does not exist, set status to null
-      setReservationStatus(null);
+      await updateDoc(userRef, {
+        favorites: updatedFavorites,
+      });
+    } catch (error) {
+      console.error("Error updating favorites:", error);
+      Alert.alert(
+        "Error",
+        "Failed to update favorites. Please try again later."
+      );
     }
-  } catch (error) {
-    console.error("Error fetching reservation status: ", error);
-  }
-};
-useEffect(() => {
-  const fetchStatus = async () => {
-    await fetchReservationStatus();
-    setLoadingStatus(false);
   };
-  
-  fetchStatus();
-}, []);
+
+  const addToReservation = async () => {
+    try {
+      if (
+        selectedStartDate &&
+        daysDifference >= carData.mindays &&
+        daysDifference <= carData.maxdays
+      ) {
+        setLoading(true);
+        // reservation ID hiye combination of userData.id and postId
+        const reservationId = userData.id + "_" + postId;
+
+        // reservation data
+        const reservationData = {
+          reservationId: reservationId,
+          clientId: userData.id,
+          clientData: userData,
+          ownerData: ownerData,
+          ownerId: ownerId,
+          startDate: selectedStartDate,
+          endDate: selectedEndDate ? selectedEndDate : selectedStartDate,
+          totalPrice: totalPrice,
+          daysDifference: daysDifference,
+          status: "pending",
+          createdAt: serverTimestamp(),
+          images: images,
+          carData: carData,
+          postId: postId,
+        };
+
+        await setDoc(doc(db, "Reservation", reservationId), reservationData);
+        console.log("Reservation added with ID: ", reservationId);
+        setLoading(false);
+        Alert.alert(
+          "Success",
+          "Request sent successfully. Please wait for the owner's response.",
+          [{ text: "OK", onPress: navigation.replace("TabNavigation") }]
+        );
+      } else {
+        Alert.alert("Reservation date", `Please choose the date of reservation and make sure its between ${carData.mindays} and ${carData.maxdays}`);
+      }
+    } catch (error) {
+      console.error("Error adding reservation: ", error);
+      Alert.alert(
+        "Failed",
+        "There is a problem requesting reservation of this car.",
+        [{ text: "OK", onPress: () => {} }]
+      );
+      setLoading(false);
+    }
+  };
+  const [ended, setEnded] = useState(false);
+
+  const fetchReservationStatus = async () => {
+    try {
+      const reservationRef = doc(db, "Reservation", `${userData.id}_${postId}`);
+      const reservationDoc = await getDoc(reservationRef);
+      if (reservationDoc.exists()) {
+        const reservationData = reservationDoc.data();
+        const endDateInSeconds = reservationData.endDate.seconds;
+        if (Date.now() < endDateInSeconds * 1000) {
+          console.log(endDateInSeconds * 1000);
+          setEnded(false);
+        } else {
+          setEnded(true);
+        }
+        setReservationStatus(reservationData.status);
+        console.log(reservationData.status);
+      } else {
+        // If reservation does not exist, set status to null
+        setReservationStatus(null);
+      }
+    } catch (error) {
+      console.error("Error fetching reservation status: ", error);
+    }
+  };
+  useEffect(() => {
+    const fetchStatus = async () => {
+      await fetchReservationStatus();
+      setLoadingStatus(false);
+    };
+
+    fetchStatus();
+  }, []);
   let buttonText = "Request Rent";
   let buttonDisabled = false;
 
   if (reservationStatus === "pending") {
     buttonText = "Awaiting Owner Response";
     buttonDisabled = true;
-  } else if (reservationStatus === "accepted" && ended===false) {
+  } else if (reservationStatus === "accepted" && ended === false) {
     buttonText = "Enjoy your Trip";
     buttonDisabled = true;
-  } else if (reservationStatus === "accepted" && ended===true) {
+  } else if (reservationStatus === "accepted" && ended === true) {
     buttonText = "ReRequest To Rent";
     buttonDisabled = false;
   }
-  
+
   return (
     <View className="flex-1">
       <ScrollView
@@ -315,27 +335,33 @@ useEffect(() => {
         <View style={styles.container}>
           <PictureSwitching images={images} />
         </View>
-        
+
         <View style={styles.container}>
           {/* Car Owner Data */}
-          <View className='flex-row justify-between items-center' >
-            <View style={styles.profileContainer} >
-            <Image
-              source={{ uri: ownerData.profileImage }}
-              style={styles.profileImage}
-            />
-            <View>
-              <Text style={styles.userName}>{ownerData.name}</Text>
-              <Text>{carData.address.label}</Text>
-            </View> 
+          <View className="flex-row justify-between items-center">
+            <View style={styles.profileContainer}>
+              <Image
+                source={{ uri: ownerData.profileImage }}
+                style={styles.profileImage}
+              />
+              <View>
+                <Text style={styles.userName}>{ownerData.name}</Text>
+                <Text>{carData.address.label}</Text>
+              </View>
             </View>
-           {!isOwner && (
-            <View className='items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2'>
-            <FavoriteButton userId={userData.id} postId={postId} userData={userData} addToFavorites={addToFavorites} />
-            </View>)}
+            {!isOwner && (
+              <View className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2">
+                <FavoriteButton
+                  userId={userData.id}
+                  postId={postId}
+                  userData={userData}
+                  addToFavorites={addToFavorites}
+                />
+              </View>
+            )}
             {/* FavoriteButton */}
           </View>
-       
+
           {/* Grid */}
           <View>
             <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
@@ -387,19 +413,17 @@ useEffect(() => {
             Car Pick-up and Drop-off Dates
           </Text>
           <CarRentingDetails
-          startDate={selectedStartDate}
-          endDate={selectedEndDate}
-          onStartDateChange={handleStartDateChange}
-          onEndDateChange={handleEndDateChange}
-          minDays={carData.mindays}
-          maxDays={carData.maxdays}
-          price={carData.price}
-          onTotalPriceChange={handleTotalPriceChange}
-          onDaysDifferenceChange={updateDaysDifference}
-          postId={postId}
-
-           />
-  
+            startDate={selectedStartDate}
+            endDate={selectedEndDate}
+            onStartDateChange={handleStartDateChange}
+            onEndDateChange={handleEndDateChange}
+            minDays={carData.mindays}
+            maxDays={carData.maxdays}
+            price={carData.price}
+            onTotalPriceChange={handleTotalPriceChange}
+            onDaysDifferenceChange={updateDaysDifference}
+            postId={postId}
+          />
         </View>
         {/* TouchableOpacity fixed at center bottom */}
         <View
@@ -457,28 +481,24 @@ useEffect(() => {
             </>
           ) : (
             <TouchableOpacity
-            onPress={addToReservation}
-            disabled={buttonDisabled}
-            style={[
-              styles.button,
-              buttonDisabled && styles.disabledButton,
-            ]}
-          >
-           {loadingStatus ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
-            ) : (
-              <Text style={styles.buttonText}>{buttonText}</Text>
-            )}
-          </TouchableOpacity>
-    
+              onPress={addToReservation}
+              disabled={buttonDisabled}
+              style={[styles.button, buttonDisabled && styles.disabledButton]}
+            >
+              {loadingStatus ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              ) : (
+                <Text style={styles.buttonText}>{buttonText}</Text>
+              )}
+            </TouchableOpacity>
           )}
           <Modal visible={loading} transparent animationType="fade">
-          <View style={styles.modalBackground}>
-            <View style={styles.activityIndicatorWrapper}>
-              <ActivityIndicator size="large" color="#FFFFFF" />
+            <View style={styles.modalBackground}>
+              <View style={styles.activityIndicatorWrapper}>
+                <ActivityIndicator size="large" color="#FFFFFF" />
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
         </View>
       </ScrollView>
       {buttonVisible && (
@@ -507,7 +527,7 @@ useEffect(() => {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 20, 
+    borderRadius: 20,
     backgroundColor: "#FFFFFF",
     padding: 6,
     margin: 2,
@@ -518,7 +538,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 8, 
+    elevation: 8,
   },
   profileContainer: {
     flexDirection: "row",
@@ -528,8 +548,8 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 50,
     height: 50,
-    borderRadius: 25, 
-    marginRight: 10, 
+    borderRadius: 25,
+    marginRight: 10,
   },
   userName: {
     fontSize: 16,
