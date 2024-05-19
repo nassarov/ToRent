@@ -39,7 +39,8 @@ export default function HomeScreenNavigation({ route }) {
       <Stack.Screen
         name="Explore"
         component={showRoom}
-        options={{ header: () => <CustomHeader2 /> }}
+        options={{ header: () => <CustomHeader2 text={"Explore"}/> }}
+        initialParams={{ userData: userData }}
       />
       <Stack.Screen
         name="PickImagesScreen"
@@ -67,7 +68,7 @@ export default function HomeScreenNavigation({ route }) {
          <Stack.Screen
         name="FilterResult"
         component={FilterResult}
-        options={{ headerShown: false }}
+        options={{ header: () => <CustomHeader2 /> }}
       />
       <Stack.Screen
         name="Message"

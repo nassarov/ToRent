@@ -15,7 +15,6 @@ export default function SearchChoices({ selected, setSelected }) {
   ];
   const select = (value) => {
     setSelected(value);
-    
   };
   return (
     <View style={{ flexDirection: "row"}}>
@@ -39,7 +38,6 @@ export default function SearchChoices({ selected, setSelected }) {
             }}
           >
             <Text>{item.name}</Text>
-           
           </TouchableOpacity>
         )}
         horizontal={true}

@@ -4,6 +4,7 @@ import Carousel from "../../Components/HomeComponents/Carousel";
 import Slider from "../../Components/HomeComponents/Slider";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import SearchBarCar from "../../Components/HomeComponents/SearchBar2";
+import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { getAuth, signOut } from "firebase/auth";
@@ -170,9 +171,9 @@ export default function HomeScreen({ route }) {
         <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
         <Text className="text-xl"> Your Favorite Car</Text>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Explore")} className='mr-4'>
-      <MaterialCommunityIcons name="car-side" size={35} color="black"/> 
-      <Text>Explore</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Explore")} className='mr-2 mb-3 items-center justify-center'>
+      <FontAwesome5 name="search" size={25} color="#7F5AF0" /> 
+      <Text className='text-[#7F5AF0]'>Explore</Text>
       </TouchableOpacity>
     </View>
       {/* <View className="flex-row justify-between px-1 items-center">

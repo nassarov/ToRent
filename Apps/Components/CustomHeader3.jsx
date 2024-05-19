@@ -6,12 +6,11 @@ import { useNavigation } from "@react-navigation/native";
 import Constants from 'expo-constants';
 import { MaterialIcons } from '@expo/vector-icons';
 export default function CustomHeader3({text}) {
-  const navigation = useNavigation();
-
-  return (
+ const navigation = useNavigation();
+return (
     <View style={{paddingTop:Constants.statusBarHeight}}>
       <View className="flex-row p-3  items-center ">
-        <Text className=' text-xl ml-2 font-bold'>{text}</Text>
+        <Text className='text-xl ml-2 font-bold'>{text}</Text>
       </View>
     </View>
   );
