@@ -62,22 +62,20 @@ export default function Filter() {
   const [selectedGearType, setSelectedGearType] = useState(null);
   const [selectedFuelType, setSelectedFuelType] = useState(null);
   const [selectedYear, setSelectedYear] = useState("");
-
   const [filteredBrands, setFilteredBrands] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const [filteredTypes, setFilteredTypes] = useState([]);
   const [filteredModels, setFilteredModels] = useState([]);
   const [filteredColors, setFilteredColors] = useState([]);
   const [colorOptions, setColorOptions] = useState([]);
   const [carBrands, setCarBrands] = useState([]);
   const [gearTypeOptions, setGearTypeOptions] = useState([]);
+  const [carType,setCarType]= useState([]);
   const [fuelTypeOptions, setFuelTypeOptions] = useState([]);
   const [filteredYear, setFilteredYear] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [addressModalVisible, setAddressModalVisible] = useState(false);
   const [lebaneseCities, setLebaneseCities] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const navigation = useNavigation();
 
   // hide bottom tab bar
@@ -132,11 +130,11 @@ export default function Filter() {
 
   const clearAllSelections = () => {
     setSelectedBrand(null);
-    setSelectedType(null);
     setSelectedColor(null);
     setSelectedModel(null);
     setSelectedFuelType(null);
     setSelectedGearType(null);
+    setCarType(null);
     setSelectedYear(null);
     setSelectedAddress(null);
   };
@@ -149,36 +147,7 @@ export default function Filter() {
     >
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.carListContainer}>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              data={carBrands}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={[
-                    styles.brandItem,
-                    selectedBrand &&
-                    selectedBrand.label === item.label && {
-                      borderColor: "#7F5AF0",
-                      borderWidth: 2,
-                      borderRadius: 10,
-                    }, // Adjust borderWidth as needed
-                  ]}
-                  onPress={() => handleBrandSelect(item)}
-                >
-                  {carBrands && (
-                    <Image source={{ uri: item.image }} style={styles.image} />
-                  )}
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item, index) => index}
-              contentContainerStyle={styles.flatListContent}
-            />
-          </View>
-          {loading ? (
-            <ActivityIndicator size="large" color="#0000ff" />
-          ) : (
+          
             <AddressDropdownModal
               title={"Address"}
               userData={lebaneseCities}
@@ -187,7 +156,7 @@ export default function Filter() {
               modalVisible={addressModalVisible}
               setModalVisible={setAddressModalVisible}
             />
-          )}
+          
           <DropdownModal
             title={"Brand"}
             data={carBrands}
@@ -218,20 +187,21 @@ export default function Filter() {
             setFilteredItems={setFilteredModels}
             depends={true}
           />
-
           <DropdownModal
-            title={"Types"}
-            data={selectedBrand?.types}
+            title={"Car Type"}
+            data={carType}
+            setData={setCarType}
             selectedItem={selectedType}
             setSelectedItem={setSelectedType}
             modalVisible={typeModalVisible}
             setModalVisible={setTypeModalVisible}
             searchInput={searchInput}
             setSearchInput={setSearchInput}
-            filteredItems={filteredTypes}
-            setFilteredItems={setFilteredTypes}
-            depends={true}
+            filteredItems={carType}
+            setFilteredItems={setCarType}
+            collectionName={"Car_Type"}
           />
+           
           <DropdownModal
             title={"Color"}
             data={colorOptions}
