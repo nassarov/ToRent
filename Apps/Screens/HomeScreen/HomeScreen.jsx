@@ -176,23 +176,6 @@ export default function HomeScreen({ route }) {
       <Text className='text-[#7F5AF0]'>Explore</Text>
       </TouchableOpacity>
     </View>
-      {/* <View className="flex-row justify-between px-1 items-center">
-        <SearchBarCar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Filter")}
-          className="mr-2 mt-1"
-        >
-          <FontAwesome6 name="sliders" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-      <SearchChoices 
-        selected={selectedChoice}
-        setSelected={setSelectedChoice}
-      /> */}
-      
       <Carousel />
       <Text>Top Car Renting Companies</Text>
       {loading ? (
