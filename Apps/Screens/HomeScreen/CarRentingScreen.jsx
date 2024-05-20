@@ -67,7 +67,6 @@ export default function CarRentingScreen({ route }) {
   const [loading, setLoading] = useState(false);
   const [reservationStatus, setReservationStatus] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
-
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [selectedEndDate, setSelectedEndDate] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
@@ -83,8 +82,8 @@ export default function CarRentingScreen({ route }) {
   };
 
   // Function to update total price
-  const handleTotalPriceChange = (price) => {
-    setTotalPrice(price);
+  const handleTotalPriceChange = (totalPrice) => {
+    setTotalPrice(totalPrice);
   };
   const updateDaysDifference = (difference) => {
     setDaysDifference(difference);
@@ -224,6 +223,7 @@ export default function CarRentingScreen({ route }) {
   };
 
   const addToReservation = async () => {
+    console.log(daysDifference)
     try {
       if (
         selectedStartDate &&
@@ -243,7 +243,7 @@ export default function CarRentingScreen({ route }) {
           ownerId: ownerId,
           startDate: selectedStartDate,
           endDate: selectedEndDate ? selectedEndDate : selectedStartDate,
-          totalPrice: totalPrice,
+          totalPrice: daysDifference*totalPrice,
           daysDifference: daysDifference,
           status: "pending",
           createdAt: serverTimestamp(),
