@@ -49,26 +49,27 @@ export default function OnBoardScreen({ navigation }) {
   const slides = [
     {
       id: 1,
-      title: "Discover best cars in your city",
+      title: "Explore Top Car Rentals in Lebanon",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "Discover the best car rental options in your city. From luxury to economy, find the perfect ride for your needs with just a few taps.",
       image: require("./../../assets/OnBoard/s1.webp"),
     },
     {
       id: 2,
-      title: "Choose the car that you like",
+      title: "Select Your Ideal Car",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "Browse through a wide variety of cars and choose the one that suits your style and budget.",
       image: require("./../../assets/OnBoard/s2.jpg"),
     },
     {
       id: 3,
-      title: "Rent the car whenever you want",
+      title: "Rent Easily Anytime",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "Rent a car quickly and conveniently whenever you need it. Flexible booking options and instant confirmations ensure a hassle-free experience.",
       image: require("./../../assets/OnBoard/s3.jpg"),
     },
   ];
+  
 
   if (!showHomePage) {
     return (
