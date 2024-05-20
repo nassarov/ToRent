@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,8 +9,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Modal,
 } from "react-native";
-import React, { useState } from "react";
 import { Formik } from "formik";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
@@ -24,25 +25,28 @@ import {
 } from "firebase/auth";
 import { doc, getFirestore, getDoc } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
+import { Image } from "react-native";
 
 export default function LoginScreen() {
   StatusBar.setBarStyle("dark-content", true);
 
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isCheckingCredentials, setIsCheckingCredentials] = useState(false); // State to track if credentials are being checked
+  const [isCheckingCredentials, setIsCheckingCredentials] = useState(false);
   const navigation = useNavigation();
   const db = getFirestore(app);
 
-  // Function to toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Inside your handleSubmit function
   const handleSubmit = async (values) => {
-    setIsCheckingCredentials(true); // Set isCheckingCredentials to true when checking credentials
+    const { email, password } = values;
+    if (!email || !password) {
+      Alert.alert("Alert", "Please provide both email and password.");
+      return;
+    }
+
+    setIsCheckingCredentials(true);
     try {
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(
@@ -51,77 +55,66 @@ export default function LoginScreen() {
         password
       );
       const user = userCredential.user;
-      // Fetch user role from Firestore
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnapshot = await getDoc(userDocRef);
       const userData = userDocSnapshot.data();
-      // Assuming role is stored in the user document
-      // User is signed in, navigate to Home screen and pass user role
       navigation.replace("HomeScreenNavigation", { userData });
     } catch (error) {
       console.log("Error signing in:", error.message);
-      if ( error.code === "auth/invalid-email") {
-        Alert.alert("Alert", "Please Enter a Valid Email.");
-      } else if (error.code ==="auth/invalid-credential"){
-        Alert.alert("Alert", "Please Check Your Credentials.");
+      if (error.code === "auth/invalid-email") {
+        Alert.alert("Alert", "Please enter a valid email.");
+      } else if (error.code === "auth/invalid-credential") {
+        Alert.alert("Alert", "Please check your credentials.");
       }
     } finally {
-      setIsCheckingCredentials(false); // Reset isCheckingCredentials to false after checking credentials
+      setIsCheckingCredentials(false);
     }
   };
 
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
-      onSubmit={(values) => {
-        handleSubmit(values);
-        // You can add your form submission logic here
-      }}
+      onSubmit={handleSubmit}
       validate={(values) => {
         const errors = {};
-
-        if (!email) {
+        if (!values.email) {
           errors.email = "Required";
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+        } else if (
+          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+        ) {
           errors.email = "Invalid email address";
         }
-        if (password.length == 0) {
-          errors.password = 'Required';
-        if (password.length === 0) {
+        if (!values.password) {
           errors.password = "Required";
         }
-
         return errors;
-      }}}
+      }}
     >
-      {({ handleChange, handleBlur, values, errors }) => (
+      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={styles.container}>
             <StatusBar backgroundColor={"#F6F6F6"} translucent={true} />
-            {/* Input Fields */}
             <View>
-              {/* Email */}
               <View style={{ height: heightPercentageToDP(12) }}>
                 <TextInput
                   placeholder="Email"
                   style={styles.input}
-                  onChangeText={(text) => setEmail(text)}
+                  onChangeText={handleChange("email")}
                   onBlur={handleBlur("email")}
-                  value={email}
+                  value={values.email}
                 />
                 {errors.email && (
                   <Text style={styles.errorText}>{errors.email}</Text>
                 )}
               </View>
-              {/* Password with Eye Icon */}
               <View style={{ height: heightPercentageToDP(12) }}>
                 <View style={styles.passwordContainer}>
                   <TextInput
                     placeholder="Password"
                     style={styles.input}
-                    onChangeText={(text) => setPassword(text)}
+                    onChangeText={handleChange("password")}
                     onBlur={handleBlur("password")}
-                    value={password}
+                    value={values.password}
                     secureTextEntry={!showPassword}
                   />
                   <TouchableOpacity
@@ -139,16 +132,14 @@ export default function LoginScreen() {
                   <Text style={styles.errorText}>{errors.password}</Text>
                 )}
               </View>
-
-              {/*  Login Button */}
               <View className="items-center">
                 <TouchableOpacity
                   style={[
                     styles.loginButton,
                     isCheckingCredentials && { opacity: 0.5 },
-                  ]} // Disable button opacity when isCheckingCredentials is true
+                  ]}
                   onPress={handleSubmit}
-                  disabled={isCheckingCredentials} // Disable button when isCheckingCredentials is true
+                  disabled={isCheckingCredentials}
                 >
                   <Text style={styles.loginButtonText}>
                     {isCheckingCredentials ? "Logging In..." : "Login"}
@@ -161,7 +152,6 @@ export default function LoginScreen() {
                     Forgot Your Password?
                   </Text>
                 </TouchableOpacity>
-
                 <View className="flex-row justify-center mt-10">
                   <Text className="text-center">Don't Have an Account?</Text>
                   <TouchableOpacity
@@ -172,12 +162,22 @@ export default function LoginScreen() {
                 </View>
               </View>
             </View>
+            {/* Add a modal that displays*/}
+            <Modal visible={isCheckingCredentials} transparent={true}>
+              <View style={styles.modalContainer}>
+              <Image
+              source={require('../../../assets/torent-icon.gif')}
+              style={{width: 300, height: 300}}
+            />
+            <Text className='text-[#7F5AF0] text-xl font-bold'>Logging You In...</Text>
+              </View>
+            </Modal>
           </View>
         </TouchableWithoutFeedback>
       )}
     </Formik>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -224,5 +224,12 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 12,
     marginLeft: 15,
+  },
+  modalContainer: {
+    flex: 1,
+    height:"100%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white', // Semi-transparent background
   },
 });

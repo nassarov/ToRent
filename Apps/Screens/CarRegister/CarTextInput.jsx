@@ -12,6 +12,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from "@react-navigation/native";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 
 export default function CarTextInput({route}) {
@@ -148,7 +149,7 @@ export default function CarTextInput({route}) {
           />
         </View>
 
-        <View>
+        <View className='mb-[-30]'>
           <Text style={styles.dropdownTitle}>Description<MaterialIcons name="description" size={24} color="#7F5AF0" /></Text>
           <TextInput
             style={[styles.input, styles.descriptionInput]}
@@ -158,16 +159,16 @@ export default function CarTextInput({route}) {
             onChangeText={handleDescriptionChange}
           />
         </View>
-
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity onPress={clearAllSelections}>
-            <Text style={styles.clearAllText}>Clear All</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.applyButton} onPress={onApply}>
-            <Text style={styles.applyButtonText}>Apply</Text>
-          </TouchableOpacity>
-        </View>
       </View>
+      <View style={styles.bottomContainer} className="bg-slate-300 ">
+        <TouchableOpacity onPress={clearAllSelections}>
+          <Text style={styles.clearAllText}>Clear All</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.ApplyButton} onPress={() => onApply()}>
+          <Text style={styles.ApplyButtonText}>Apply</Text>
+        </TouchableOpacity>
+      </View>
+      
     </ScrollView>
   );
 }
@@ -200,21 +201,26 @@ const styles = StyleSheet.create({
     marginTop: 50,
     paddingHorizontal: 15,
     alignItems: "center",
+    height: heightPercentageToDP(13),
+    position: "relative",
+    bottom: 0,
+    width: "100%",
   },
   clearAllText: {
     color: "#7F5AF0",
     fontSize: 16,
     fontWeight: "600",
   },
-  applyButton: {
+  ApplyButton: {
     backgroundColor: "#7F5AF0",
     borderRadius: 8,
     paddingHorizontal: 24,
-    paddingVertical: 12,
     justifyContent: "center",
     alignItems: "center",
+    width: heightPercentageToDP(16),
+    height: widthPercentageToDP(13),
   },
-  applyButtonText: {
+  ApplyButtonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",

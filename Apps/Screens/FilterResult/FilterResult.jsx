@@ -91,9 +91,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    marginTop:-50
   },
   resultsText: {
-    fontSize: 20,
+    fontSize: 23,
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",

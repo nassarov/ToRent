@@ -114,7 +114,8 @@ export default function Filter() {
   };
 
   const onApply = async () => {
-    const carData = {
+    // Combine all selected filters into one object
+    const filters = {
       brand: selectedBrand ? selectedBrand.value : null,
       model: selectedModel ? selectedModel.value : null,
       type: selectedType ? selectedType.value : null,
@@ -124,8 +125,21 @@ export default function Filter() {
       year: selectedYear ? selectedYear.value : null,
       address: selectedAddress ? selectedAddress.value : null,
     };
-
-    navigation.push("FilterResult", { carData: carData });
+  
+    setLoading(true);
+    // Fetch data based on the combined filters
+    try {
+      // Your data fetching logic here
+      // Example: Fetch data from a database using the combined filters
+      const filter = await fetchDataWithFilters(filters);
+      // Pass the filtered data to the next screen or update state as needed
+      navigation.push("FilterResult", { carData: carData, filter: filter });
+      console.log("Filtered Data:", filter);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Handle error appropriately
+    }
+    setLoading(false);
   };
 
   const clearAllSelections = () => {

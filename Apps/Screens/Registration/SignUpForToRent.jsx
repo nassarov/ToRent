@@ -24,6 +24,7 @@ import {
   getFirestore,
 } from "firebase/firestore";
 import { Alert } from "react-native";
+import { Image } from "react-native";
 
 const auth = getAuth();
 const db = getFirestore(); // Assuming you've already initialized Firestore

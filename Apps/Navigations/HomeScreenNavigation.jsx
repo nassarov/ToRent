@@ -46,11 +46,15 @@ export default function HomeScreenNavigation({ route }) {
         name="PickImagesScreen"
         component={PickImagesScreen}
         initialParams={{ userData: userData }}
+        options={{ header: () => <CustomHeader2 text={"Choose Images"}/> }}
+
       />
       <Stack.Screen
         name="CarTextInput"
         component={CarTextInput}
         initialParams={{ userData: userData }}
+        options={{ header: () => <CustomHeader2 text={"More Details"}/> }}
+
       />
 
       <Stack.Screen

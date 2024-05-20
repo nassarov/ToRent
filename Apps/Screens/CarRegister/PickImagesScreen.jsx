@@ -24,6 +24,7 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
+import { Image } from "react-native";
 
 export default function PickImagesScreen({ route }) {
   const [frontImage, setFrontImage] = useState(null);
@@ -276,8 +277,11 @@ export default function PickImagesScreen({ route }) {
                 justifyContent: "center",
               }}
             >
-              <ActivityIndicator size="large" color="#7F5AF0" />
-              <Text style={{ color: "#7F5DF0", marginTop: 10 }}>
+            <Image
+              source={require('../../../assets/torent-icon.gif')}
+              style={{width: 100, height: 100}}
+            /> 
+            <Text style={{ color: "#7F5DF0", marginTop: 10 }}>
                 Adding car to database ...
               </Text>
             </View>
