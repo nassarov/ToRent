@@ -257,24 +257,21 @@ export default function CarRentingDetails({
           </View>
         </View>
       </View>
-      <View className="p-2">
+      <View className="p-2 ">
         {/* Price */}
         <View className="flex-row justify-between border-b-[1px] border-white mb-2">
-          <Text className="text-white">Minimum Days To Rent</Text>
-          <Text className="text-white">{minDays}</Text>
+          <Text className="text-white font-bold">Minimum Days: ({minDays})</Text>
+          <Text className="text-white font-bold">Maximum Days:({maxDays})</Text>
         </View>
-        <View className="flex-row justify-between border-b-[1px] border-white mb-2">
-          <Text className="text-white">Maximum Days To Rent</Text>
-          <Text className="text-white">{maxDays}</Text>
-        </View>
-        <View className="flex-row justify-between border-b-[1px] border-white mb-2">
-          <Text className="text-white">Price</Text>
-          <Text className="text-white">{price}$/day</Text>
-        </View>
+        
         {/* Total time */}
         <View className="flex-row justify-between border-b-[1px] border-white mb-2">
-          <Text className="text-white">Total time</Text>
-          <Text className="text-white">{daysDifference + " days"}</Text>
+          <Text className="text-white font-bold">Total time</Text>
+          <Text className="text-white font-bold">{daysDifference + " days"}</Text>
+        </View>
+        <View className="flex-row justify-between border-b-[1px] border-white mb-2">
+          <Text className="text-white font-bold text-xl">Price</Text>
+          <Text className="text-white font-bold text-xl">{price}$/day</Text>
         </View>
         <View className="flex-row items-center justify-between">
           <View>
