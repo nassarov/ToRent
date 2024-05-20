@@ -11,11 +11,13 @@ const FavoriteButton = ({ userId, postId, userData }) => {
   useEffect(() => {
     const checkIfFavorite = async () => {
       try {
+        setLoading(true); 
         const userRef = doc(db, "users", userId);
         const userSnapshot = await getDoc(userRef);
         const userData = userSnapshot.data();
         // Check if postId is in favorites
         setIsFavorite(userData?.favorites?.includes(postId) || false);
+        setLoading(false); 
       } catch (error) {
         console.error("Error checking favorites:", error);
       }

@@ -349,6 +349,7 @@ export default function CarRentingScreen({ route }) {
                 <Text>{carData.address.label}</Text>
               </View>
             </View>
+             {/* FavoriteButton */}
             {!isOwner && (
               <View className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2">
                 <FavoriteButton
@@ -359,7 +360,7 @@ export default function CarRentingScreen({ route }) {
                 />
               </View>
             )}
-            {/* FavoriteButton */}
+           
           </View>
 
           {/* Grid */}
