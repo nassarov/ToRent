@@ -84,7 +84,7 @@ export default function CarRentingScreen({ route }) {
 
   // Function to update total price
   const handleTotalPriceChange = (price) => {
-    setTotalPrice(price);
+    setTotalPrice(price*daysDifference);
   };
   const updateDaysDifference = (difference) => {
     setDaysDifference(difference);

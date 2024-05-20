@@ -9,7 +9,7 @@ export default function NotificationItem({ clientName, clientprofileImage, clien
     setModalVisible(true);
   };
   const start= new Date(StartDate.seconds * 1000);
-  const end = new Date(EndDate.seconds * 1000); 
+  const end = new Date(EndDate.seconds * 1000);
   return (
     <View className='items-end'>
       <View style={styles.rightContainer}>
