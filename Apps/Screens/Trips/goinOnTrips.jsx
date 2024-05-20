@@ -31,7 +31,9 @@ export default function OnGoingTrips({ route }) {
       });
       return unsubscribe;
     };
-    fetchReservations();
+    if (userData.role !== undefined) {
+
+    fetchReservations();}
   }, [userData.id]);
 
   if (loading) {

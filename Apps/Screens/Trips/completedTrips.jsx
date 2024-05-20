@@ -30,7 +30,9 @@ export default function CompletedTrips({route}) {
           });
           return unsubscribe;
         };
-        fetchReservations();
+        if (userData.role !== undefined) {
+
+        fetchReservations();}
       }, [userData.id]);
     
       if (loading) {

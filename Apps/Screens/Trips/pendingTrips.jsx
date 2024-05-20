@@ -27,7 +27,9 @@ export default function PendingTrips({ route }) {
       });
       return unsubscribe;
     };
-    fetchReservations();
+    if (userData.role !== undefined) {
+
+    fetchReservations();}
   }, [userData.id]);
 
   if (loading) {
