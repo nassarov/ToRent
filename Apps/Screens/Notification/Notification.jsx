@@ -3,12 +3,35 @@ import { View, FlatList, Text } from 'react-native';
 import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import NotificationItem from '../../Components/Notification/NotificationItem'; 
 import { ActivityIndicator } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { Alert } from 'react-native';
 export default function NotificationPage({ route }) {
 
   const {userData, setNewNotifications }= route.params;
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
   console.log(userData.id)
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    if (userData[0].role === '2') {
+      Alert.alert(
+        'Sign Up Required',
+        'Please sign up first to access this feature.',
+        [
+          { text: 'OK', onPress: () => navigation.navigate('SignUpForRent') }, 
+        ],
+        { cancelable: false }
+      );
+    }
+  }, [userData.role, navigation]);
+
+  if (userData[0].role === '2') {
+    return null;
+  }
+
+
+
 
   useEffect(() => {
   const fetchReservations = async () => {

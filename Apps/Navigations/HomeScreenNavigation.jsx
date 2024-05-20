@@ -14,6 +14,7 @@ import Trips from "../Screens/Trips/Trips";
 import Message from "../Screens/Message/Messages";
 import FilterResult from "../Screens/FilterResult/FilterResult";
 import showRoom from "../Screens/HomeScreen/showRoom";
+import SignUpForToRent from "../Screens/Registration/SignUpForToRent";
 const Stack = createStackNavigator();
 export default function HomeScreenNavigation({ route }) {
   const { userData } = route.params;
@@ -56,6 +57,13 @@ export default function HomeScreenNavigation({ route }) {
         options={{ header: () => <CustomHeader2 text={"More Details"}/> }}
 
       />
+        <Stack.Screen
+        name="SignUpForRent"
+        component={SignUpForToRent}
+        options={{ headerShown: false }}
+
+      />
+
 
       <Stack.Screen
         name="EditProfile"
