@@ -177,7 +177,7 @@ export default function HomeScreen({ route }) {
       </TouchableOpacity>
     </View>
       <Carousel />
-      <Text>Top Car Renting Companies</Text>
+      <Text style={{fontWeight:"bold"}}>Top <Text style={{color:"#7F5AF0"}}>Car</Text> Renting Companies</Text>
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#7F5AF0" />
