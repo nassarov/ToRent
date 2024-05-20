@@ -362,7 +362,6 @@ export default function CarRentingScreen({ route }) {
             )}
            
           </View>
-
           {/* Grid */}
           <View>
             <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">

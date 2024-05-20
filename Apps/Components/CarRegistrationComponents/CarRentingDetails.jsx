@@ -260,6 +260,14 @@ export default function CarRentingDetails({
       <View className="p-2">
         {/* Price */}
         <View className="flex-row justify-between border-b-[1px] border-white mb-2">
+          <Text className="text-white">Minimum Days To Rent</Text>
+          <Text className="text-white">{minDays}</Text>
+        </View>
+        <View className="flex-row justify-between border-b-[1px] border-white mb-2">
+          <Text className="text-white">Maximum Days To Rent</Text>
+          <Text className="text-white">{maxDays}</Text>
+        </View>
+        <View className="flex-row justify-between border-b-[1px] border-white mb-2">
           <Text className="text-white">Price</Text>
           <Text className="text-white">{price}$/day</Text>
         </View>
