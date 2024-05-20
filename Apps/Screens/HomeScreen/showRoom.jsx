@@ -21,6 +21,9 @@ export default function ShowRoom() {
   const [selectedChoice, setSelectedChoice] = useState("");
   const navigation = useNavigation();
 
+  // Update your component to include a state for sorting
+  const [sortOption, setSortOption] = useState(null); // Initially no sorting
+
   useEffect(() => {
     fetchData();
   }, []);

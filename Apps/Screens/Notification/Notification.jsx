@@ -5,12 +5,11 @@ import NotificationItem from '../../Components/Notification/NotificationItem';
 import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
-export default function NotificationPage({ route }) {
 
-  const {userData, setNewNotifications }= route.params;
+export default function NotificationPage({ route }) {
+  const { userData, setNewNotifications } = route.params;
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(userData.id)
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -27,30 +26,31 @@ export default function NotificationPage({ route }) {
   }, [userData, navigation]);
 
   useEffect(() => {
-  const fetchReservations = async () => {
-    setLoading(true);
-    const db = getFirestore();
-    const reservationsRef = collection(db, 'Reservation');
-    const q = query(reservationsRef, where('ownerId', '==', userData.id),where('status','==','pending'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const newData = [];
-      snapshot.forEach((doc) => {
-        newData.push(doc.data());
+    const fetchReservations = async () => {
+      setLoading(true);
+      const db = getFirestore();
+      const reservationsRef = collection(db, 'Reservation');
+      const q = query(reservationsRef, where('ownerId', '==', userData.id),where('status','==','pending'));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const newData = [];
+        snapshot.forEach((doc) => {
+          newData.push(doc.data());
+        });
+        setReservations(newData);
+        setLoading(false);
+        if (newData.length > 0) {
+          setNewNotifications(true);
+        } else {
+          setNewNotifications(false);
+        }
       });
-      setReservations(newData);
-      console.log("Data of not",newData)
-      setLoading(false);
-      if (newData.length > 0) {
-        setNewNotifications(true);
-      } else {
-        setNewNotifications(false);
-      }
-    });
-    return unsubscribe;
-  };
-  if (userData.role !== undefined) {
-  fetchReservations();}
-}, []);
+      return unsubscribe;
+    };
+    if (userData.role !== undefined) {
+      fetchReservations();
+    }
+  }, []);
+
   const handleAccept = async (reservationId) => {
     const db = getFirestore();
     const reservationRef = doc(db, 'Reservation', reservationId);
@@ -77,6 +77,9 @@ export default function NotificationPage({ route }) {
     }
   };
 
+  // Sort reservations by createdAt time
+  const sortedReservations = reservations.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+
   return (
     <View>
       {loading ? (
@@ -86,7 +89,7 @@ export default function NotificationPage({ route }) {
       ) : (
         <FlatList
           style={{ marginBottom: 50 }}
-          data={reservations}
+          data={sortedReservations}
           keyExtractor={(item) => item.reservationId}
           renderItem={({ item }) => (
             <NotificationItem
@@ -102,6 +105,7 @@ export default function NotificationPage({ route }) {
               Status={item.status}
               StartDate={item.startDate}
               EndDate={item.endDate}
+              createdAt={item.createdAt}
               onAccept={() => handleAccept(item.reservationId)}
               onReject={() => handleReject(item.reservationId)}
             />

@@ -1,82 +1,117 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function NotificationItem({ clientName, clientprofileImage, clientPhone, carBrand, carModel, carYear, carPhoto, TotalDays, TotalPrice, Status, StartDate, EndDate ,onReject,onAccept }) {
+export default function NotificationItem({ clientName, clientprofileImage, clientPhone, carBrand, carModel, carYear, carPhoto, TotalDays, TotalPrice, Status, StartDate, EndDate, onReject, onAccept, createdAt }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [timeDifference, setTimeDifference] = useState('');
+
+  useEffect(() => {
+    const calculateTimeDifference = () => {
+      const now = new Date();
+      const created = new Date(createdAt.seconds * 1000);
+      const differenceInSeconds = Math.floor((now - created) / 1000);
+
+      if (differenceInSeconds < 60) {
+        return `now`;
+      } else if (differenceInSeconds < 3600) {
+        return `${Math.floor(differenceInSeconds / 60)} min ago`;
+      } else if (differenceInSeconds < 86400) {
+        return `${Math.floor(differenceInSeconds / 3600)} hours ago`;
+      } else {
+        return `${Math.floor(differenceInSeconds / 86400)} days ago`;
+      }
+    };
+
+    const updateDifference = () => {
+      setTimeDifference(calculateTimeDifference());
+    };
+
+    // Calculate time difference initially
+    updateDifference();
+
+    // Update time difference every minute
+    const intervalId = setInterval(updateDifference, 60000);
+
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [createdAt]);
 
   const handleViewDetails = () => {
     setModalVisible(true);
   };
-  const start= new Date(StartDate.seconds * 1000);
+
+  const start = new Date(StartDate.seconds * 1000);
   const end = new Date(EndDate.seconds * 1000);
+
   return (
     <View className='items-end'>
       <View style={styles.rightContainer}>
-        <Ionicons name="time-outline" size={24} color="gray"/>
+        <Text>{timeDifference}</Text>
+        <Ionicons name="time-outline" size={24} color="gray" />
       </View>
+
       <TouchableOpacity style={styles.notificationContainer} onPress={handleViewDetails}>
         <Image source={{ uri: clientprofileImage }} style={styles.profilePic} />
         <Text style={styles.notificationText}>{clientName} wants to rent {carBrand}-{carModel}</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.notbutton ]} onPress={handleViewDetails}>
+          <TouchableOpacity style={[styles.notbutton]} onPress={handleViewDetails}>
             <Ionicons name="information-circle-outline" size={20} color="#FFF" />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
       <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => {
-        setModalVisible(false);
-      }}
-    >
-  <View style={styles.centeredView}>
-    <View style={styles.modalView}>
-      <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-        <Ionicons name="close" size={30} color="#7F5AF0" />
-      </TouchableOpacity>
-      <Image source={{ uri: carPhoto }} style={styles.carPhoto} />
-      <View className='flex-row mb-4 mt-1 border-2 rounded-xl p-2 border-[#7F5AF0] bg-[#7F5AF0] text-center'>
-        <Text className='text-white'>Start Date: {`${start.getFullYear()}-${start.getMonth()+1}-${start.getDate()}`} Till </Text><Text className='text-white'>End Date: {`${end.getFullYear()}-${end.getMonth()+1}-${end.getDate()}`}</Text>
-      </View>
-      <View style={styles.bottomInfoContainer} className='border-2 rounded-xl p-4 border-[#7F5AF0] bg-[#7F5AF0] '>
-        <View style={styles.clientInfo} className='border-r-2 border-white pr-5'>
-          <View className='flex-row border-b-2 border-white w-full justify-center mb-2'>
-          <Ionicons name="person-circle-outline" size={20} color="white"/>
-          <Text className='text-white text-[18px] ml-2'>Client</Text>
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Ionicons name="close" size={30} color="#7F5AF0" />
+            </TouchableOpacity>
+            <Image source={{ uri: carPhoto }} style={styles.carPhoto} />
+            <View className='flex-row mb-4 mt-1 border-2 rounded-xl p-2 border-[#7F5AF0] bg-[#7F5AF0] text-center'>
+              <Text className='text-white'>Start Date: {`${start.getFullYear()}-${start.getMonth() + 1}-${start.getDate()}`} Till </Text><Text className='text-white'>End Date: {`${end.getFullYear()}-${end.getMonth() + 1}-${end.getDate()}`}</Text>
+            </View>
+            <View style={styles.bottomInfoContainer} className='border-2 rounded-xl p-4 border-[#7F5AF0] bg-[#7F5AF0] '>
+              <View style={styles.clientInfo} className='border-r-2 border-white pr-5'>
+                <View className='flex-row border-b-2 border-white w-full justify-center mb-2'>
+                  <Ionicons name="person-circle-outline" size={20} color="white" />
+                  <Text className='text-white text-[18px] ml-2'>Client</Text>
+                </View>
+                <Text className='text-white text-[16px]'>- Name: {clientName}</Text>
+                <Text className='text-white text-[16px] mt-1'>- Phone: {clientPhone}</Text>
+              </View>
+              <View style={styles.carDetails}>
+                <View className='flex-row border-b-2 border-white w-full justify-center mb-2'>
+                  <Ionicons name="car-outline" size={20} color="white" />
+                  <Text className='text-white text-[18px] ml-2'>Car</Text>
+                </View>
+                <Text className='text-white text-[16px]'>- {carBrand} {carModel} ({carYear})</Text>
+                <Text className='text-white text-[16px] mt-1'>- Total Days: {TotalDays}</Text>
+                <Text className='text-white text-[16px] mt-1'>- Total Price: ${TotalPrice}</Text>
+              </View>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={[styles.button, styles.acceptButton]} onPress={onAccept}>
+                <Ionicons name="checkmark-circle-outline" size={20} color="#FFF" />
+                <Text style={styles.buttonText}>Accept</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, styles.rejectButton]} onPress={onReject}>
+                <Ionicons name="close-circle-outline" size={20} color="#FFF" />
+                <Text style={styles.buttonText}>Reject</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <Text className='text-white text-[16px]'>- Name: {clientName}</Text>
-          <Text className='text-white text-[16px] mt-1'>- Phone: {clientPhone}</Text>
         </View>
-        <View style={styles.carDetails}>
-        <View className='flex-row border-b-2 border-white w-full justify-center mb-2'>
-          <Ionicons name="car-outline" size={20} color="white" />
-          <Text className='text-white text-[18px] ml-2'>Car</Text>
-          </View>
-          <Text className='text-white text-[16px]'>- {carBrand} {carModel} ({carYear})</Text>
-          <Text className='text-white text-[16px] mt-1'>- Total Days: {TotalDays}</Text>
-          <Text className='text-white text-[16px] mt-1'>- Total Price: ${TotalPrice}</Text>
-        </View>
-      </View>
-      <View style={styles.buttonContainer}>
-      <TouchableOpacity style={[styles.button, styles.acceptButton]} onPress={onAccept}>
-        <Ionicons name="checkmark-circle-outline" size={20} color="#FFF" />
-        <Text style={styles.buttonText}>Accept</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.rejectButton]} onPress={onReject}>
-        <Ionicons name="close-circle-outline" size={20} color="#FFF" />
-        <Text style={styles.buttonText}>Reject</Text>
-      </TouchableOpacity>
-    </View>
-    </View>
-  </View>
-</Modal>
+      </Modal>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   notificationContainer: {
     backgroundColor: '#FFF',
