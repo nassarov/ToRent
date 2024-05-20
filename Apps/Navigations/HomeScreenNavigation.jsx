@@ -64,7 +64,6 @@ export default function HomeScreenNavigation({ route }) {
 
       />
 
-
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}

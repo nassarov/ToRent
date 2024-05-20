@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Text, ActivityIndicator, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserProfile from "../../Components/ProfileComponents/UserProfile";
@@ -16,7 +16,7 @@ import ProfileHeader from "../../Components/ProfileComponents/ProfileHeader";
 import ProfileDetails from "../../Components/ProfileComponents/ProfileDetails";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { Alert } from 'react-native';
+
 export default function ProfileScreen({ route }) {
   const { userData, visitorData } = route.params;
   const db = getFirestore(app);
@@ -24,15 +24,32 @@ export default function ProfileScreen({ route }) {
   const [loading, setLoading] = useState(true); // State for loading indicator
   const navigation = useNavigation();
   
+  useEffect(() => {
+    if (userData.role === undefined) {
+      Alert.alert(
+        'Alert',
+        'You need to create an account to use this page.',
+        [
+          { text: 'OK', onPress: () => navigation.replace('SignUpForRent') } 
+        ],
+        { cancelable: false }
+      );
+    }
+  }, [userData, navigation]);
 
   useEffect(() => {
-    navigation.addListener("focus", (e) => {
-    const unsubscribeUserPosts = fetchData();
-    // Cleanup subscriptions on unmount
-    return () => {
-      unsubscribeUserPosts();
-    };
-  })}, [navigation,userData]);
+    const unsubscribe = navigation.addListener("focus", (e) => {
+      if (userData.role !== undefined) {
+        const unsubscribeUserPosts = fetchData();
+        // Cleanup subscriptions on unmount
+        return () => {
+          unsubscribeUserPosts();
+        };
+      }
+    });
+    // Clean up the listener when component unmounts
+    return unsubscribe;
+  }, [navigation, userData]);
 
   const fetchData = () => {
     setUserPosts([]);

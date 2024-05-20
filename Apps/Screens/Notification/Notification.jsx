@@ -13,6 +13,18 @@ export default function NotificationPage({ route }) {
   console.log(userData.id)
   const navigation = useNavigation();
 
+  useEffect(() => {
+    if (userData.role === undefined) {
+      Alert.alert(
+        'Alert',
+        'You need to create an account to use this page.',
+        [
+          { text: 'OK', onPress: () => navigation.replace('SignUpForRent') } 
+        ],
+        { cancelable: false }
+      );
+    }
+  }, [userData, navigation]);
 
   useEffect(() => {
   const fetchReservations = async () => {
@@ -36,7 +48,8 @@ export default function NotificationPage({ route }) {
     });
     return unsubscribe;
   };
-  fetchReservations();
+  if (userData.role !== undefined) {
+  fetchReservations();}
 }, []);
   const handleAccept = async (reservationId) => {
     const db = getFirestore();

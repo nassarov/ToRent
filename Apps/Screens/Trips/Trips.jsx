@@ -10,8 +10,20 @@ const Tab = createMaterialTopTabNavigator();
 export default function Trips({ route }) {
   const { userData } = route.params;
   const navigation = useNavigation();
-console.log(userData.role)
-  
+
+  useEffect(() => {
+    if (userData.role === undefined) {
+      Alert.alert(
+        'Alert',
+        'You need to create an account to use this page.',
+        [
+          { text: 'OK', onPress: () => navigation.replace('SignUpForRent') } 
+        ],
+        { cancelable: false }
+      );
+    }
+  }, [userData, navigation]);
+
   return (
     <Tab.Navigator
       screenOptions={{
