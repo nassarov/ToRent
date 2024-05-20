@@ -194,7 +194,6 @@ export default function CarRentingDetails({
   };
 
   const calculateDaysDifference = (start, end) => {
-    console.error(end == "");
     if (start != "" && end != "") {
       return Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
     } else if (start != "") {
@@ -215,12 +214,12 @@ export default function CarRentingDetails({
     : "";
 
   const handleApply = () => {
-    setdaysDifference(calculateDaysDifference(startDate, endDate));
     onStartDateChange(startDate);
     onEndDateChange(endDate);
     setIsCalendarVisible(false);
     calculateTotalPrice();
-    onDaysDifferenceChange(daysDifference);
+    setdaysDifference(calculateDaysDifference(startDate, endDate))
+    onDaysDifferenceChange(calculateDaysDifference(startDate, endDate));
     onTotalPriceChange(totalPrice);
   };
 

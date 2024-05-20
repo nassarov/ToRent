@@ -224,6 +224,7 @@ export default function CarRentingScreen({ route }) {
   };
 
   const addToReservation = async () => {
+    console.log(daysDifference)
     try {
       if (
         selectedStartDate &&

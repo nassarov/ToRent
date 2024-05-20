@@ -8,7 +8,8 @@ export default function NotificationItem({ clientName, clientprofileImage, clien
   const handleViewDetails = () => {
     setModalVisible(true);
   };
-
+  const start= new Date(StartDate.seconds * 1000);
+  const end = new Date(EndDate.seconds * 1000); 
   return (
     <View className='items-end'>
       <View style={styles.rightContainer}>
@@ -38,7 +39,7 @@ export default function NotificationItem({ clientName, clientprofileImage, clien
       </TouchableOpacity>
       <Image source={{ uri: carPhoto }} style={styles.carPhoto} />
       <View className='flex-row mb-4 mt-1 border-2 rounded-xl p-2 border-[#7F5AF0] bg-[#7F5AF0] text-center'>
-        <Text className='text-white'>Start Date: 16/5/2024 Till </Text><Text className='text-white'>End Date: 17/5/2024</Text>
+        <Text className='text-white'>Start Date: {`${start.getFullYear()}-${start.getMonth()+1}-${start.getDate()}`} Till </Text><Text className='text-white'>End Date: {`${end.getFullYear()}-${end.getMonth()+1}-${end.getDate()}`}</Text>
       </View>
       <View style={styles.bottomInfoContainer} className='border-2 rounded-xl p-4 border-[#7F5AF0] bg-[#7F5AF0] '>
         <View style={styles.clientInfo} className='border-r-2 border-white pr-5'>
