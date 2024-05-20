@@ -23,22 +23,7 @@ export default function ProfileScreen({ route }) {
   const [userPosts, setUserPosts] = useState([]);
   const [loading, setLoading] = useState(true); // State for loading indicator
   const navigation = useNavigation();
-  useEffect(() => {
-    if (userData[0].role === '2') {
-      Alert.alert(
-        'Sign Up Required',
-        'Please sign up first to access this feature.',
-        [
-          { text: 'OK', onPress: () => navigation.navigate('SignUpForRent') }, 
-        ],
-        { cancelable: false }
-      );
-    }
-  }, [userData.role, navigation]);
-
-  if (userData[0].role === '2') {
-    return null;
-  }
+  
 
   useEffect(() => {
     navigation.addListener("focus", (e) => {
