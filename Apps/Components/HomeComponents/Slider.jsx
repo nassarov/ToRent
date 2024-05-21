@@ -7,36 +7,32 @@ import {
   collection,
   query,
   where,
-  getDocs,
+  onSnapshot,
 } from "firebase/firestore";
 
 export default function Slider({ cars, slideway }) {
   const [ownersData, setOwnersData] = useState({});
-  useEffect(() => {
-    // Fetch owner data for all cars
-    const fetchOwnersData = async () => {
-      const db = getFirestore();
-      const ownersData = {};
-      await Promise.all(
-        cars.map(async (item) => {
-          const ownerId = item.ownerId;
-          const q = query(collection(db, "users"), where("id", "==", ownerId));
-          const querySnapshot = await getDocs(q);
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            ownersData[ownerId] = {
-              email: data.email,
-              name: data.name,
-              profileImage: data.profileImage,
-            };
-          });
-        })
-      );
-      setOwnersData(ownersData);
-    };
 
-    fetchOwnersData();
-  }, [cars]); // Run the effect when cars change
+  useEffect(() => {
+    const db = getFirestore();
+
+    // Subscribe to changes in the owners collection
+    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
+      const newOwnersData = {};
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        newOwnersData[data.id] = {
+          email: data.email,
+          name: data.name,
+          profileImage: data.profileImage,
+        };
+      });
+      setOwnersData(newOwnersData);
+    });
+
+    // Clean up subscription when component unmounts
+    return () => unsubscribe();
+  }, []); // Run once when component mounts
 
   const renderItem = ({ item, index }) => {
     const ownerData = ownersData[item.ownerId] || {};

@@ -9,6 +9,7 @@ import {
   collection,
   getDocs,
   getFirestore,
+  onSnapshot,
   query,
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
@@ -25,22 +26,24 @@ export default function ShowRoom() {
   const [sortOption, setSortOption] = useState(null); // Initially no sorting
 
   useEffect(() => {
+    const fetchData = async () => {
+      const q = query(collection(db, "car_post"));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const carPosts = [];
+        querySnapshot.forEach((doc) => {
+          carPosts.push(doc.data());
+        });
+        setData(carPosts);
+        setFilteredData(carPosts);
+      }, (error) => {
+        console.error("Error fetching car posts: ", error);
+      });
+
+      return () => unsubscribe();
+    };
+
     fetchData();
   }, []);
-
-  const fetchData = async () => {
-    try {
-      const queryPostData = await getDocs(query(collection(db, "car_post")));
-      let carPosts = [];
-      queryPostData.forEach((doc) => {
-        carPosts.push(doc.data());
-      });
-      setData(carPosts);
-      setFilteredData(carPosts);
-    } catch (error) {
-      console.error("Error fetching car posts: ", error);
-    }
-  };
 
   useEffect(() => {
     let filteredData = [];

@@ -62,13 +62,12 @@ export default function HomeScreenNavigation({ route }) {
         component={CarTextInput}
         initialParams={{ userData: userData }}
         options={{ header: () => <CustomHeader2 text={"More Details"}/> }}
-
       />
+      
         <Stack.Screen
         name="SignUpForRent"
         component={SignUpForToRent}
         options={{ headerShown: false }}
-
       />
 
       <Stack.Screen

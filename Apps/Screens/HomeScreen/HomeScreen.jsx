@@ -16,6 +16,7 @@ import {
   limit,
   query,
   where,
+  onSnapshot, // Import onSnapshot
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 import SearchChoices from "../../Components/HomeComponents/SearchChoices";
@@ -26,19 +27,24 @@ export default function HomeScreen({ route }) {
   const auth = getAuth();
   const slide = true;
   const [data, setData] = useState([]);
-  const [filtereData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState("");
   const screenWidth = Dimensions.get("window").width ;
 
   const { userData } = route.params;
+
   useEffect(() => {
-      fetchData();
-    data.forEach((item) => {
-      console.log(item.cars.newData[0].carDetails.carData);
+    // Subscribe to real-time updates on the 'car_post' collection
+    const unsubscribe = onSnapshot(collection(db, "car_post"), (snapshot) => {
+      fetchData(); // Refetch data when there are updates
     });
-  }, [navigation]);
+
+    return () => {
+      unsubscribe(); // Clean up subscription when component unmounts
+    };
+  }, []); // Run once when component mounts
 
   const fetchData = async () => {
     setLoading(true);
@@ -65,7 +71,6 @@ export default function HomeScreen({ route }) {
       if (newData.length !== 0) {
         companyData = [
           ...companyData,
-
           { ownerInfo: doc1.data(), cars: { newData } },
         ];
         setData(companyData);
@@ -90,15 +95,15 @@ export default function HomeScreen({ route }) {
       showsVerticalScrollIndicator={false}>
     
       <View className='flex-row justify-between'>
-      <View className="flex-row mb-2 ">
-        <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
-        <Text className="text-xl"> Your Favorite Car</Text>
+        <View className="flex-row mb-2 ">
+          <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
+          <Text className="text-xl"> Your Favorite Car</Text>
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate("Explore")} className='mr-2 mb-3 items-center justify-center'>
+          <FontAwesome5 name="search" size={25} color="#7F5AF0" /> 
+          <Text className='text-[#7F5AF0]'>Explore</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Explore")} className='mr-2 mb-3 items-center justify-center'>
-      <FontAwesome5 name="search" size={25} color="#7F5AF0" /> 
-      <Text className='text-[#7F5AF0]'>Explore</Text>
-      </TouchableOpacity>
-    </View>
       <Carousel />
       <Text className="font-bold text-lg">Top <Text className="font-bold text-lg text-[#7F5AF0]">Car</Text> Renting Companies</Text>
       {loading ? (
@@ -107,7 +112,7 @@ export default function HomeScreen({ route }) {
           <Text style={styles.loadingText}>Getting Latest Cars...</Text>
         </View>
       ) : (
-        filtereData.map((data, index) => (
+        filteredData.map((data, index) => (
           <View
             key={index}
             className=" mt-2 mb-2 bg-purple-100"

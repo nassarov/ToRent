@@ -18,7 +18,7 @@ import {
   import CustomHeader2 from "../../Components/CustomHeader2";
   
   export default function EditCarRegistrationScreen({ route }) {
-    const { carData, postId } = route.params;
+    const { carData, postId, userData } = route.params;
     const db = getFirestore();
     const navigation = useNavigation();
   
@@ -65,7 +65,7 @@ import {
         });
         setLoading(false);
         Alert.alert("Success", "Car details updated successfully.", [
-          { text: "OK", onPress: () => navigation.goBack() },
+          { text: "OK", onPress: () => navigation.replace("ProfileScreen",{ userData: userData }) },
         ]);
       } catch (error) {
         setLoading(false);

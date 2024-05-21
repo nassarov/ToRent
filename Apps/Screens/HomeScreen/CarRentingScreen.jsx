@@ -439,7 +439,7 @@ export default function CarRentingScreen({ route }) {
             <>
               <TouchableOpacity 
                 onPress={() => {
-                  navigation.navigate("EditCarRegistrationScreen", { postId, carData });
+                  navigation.navigate("EditCarRegistrationScreen", { postId, carData,userData });
                 }}
                 style={{
                   backgroundColor: "#7F5AF0",
