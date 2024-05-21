@@ -44,7 +44,6 @@ export default function ShowRoom() {
 
   useEffect(() => {
     let filteredData = [];
-
     if (searchQuery === "") {
       setFilteredData(data);
       return;

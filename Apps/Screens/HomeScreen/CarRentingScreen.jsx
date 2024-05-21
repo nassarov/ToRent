@@ -55,7 +55,6 @@ import FavoriteButton from "./favorite";
 export default function CarRentingScreen({ route }) {
   const { userData, carData, images, ownerId, ownerData, postId } =
     route.params;
-
   const isOwner = userData.id === ownerId;
   const minDate = new Date(); // Today
   const maxDate = new Date(2025, 6, 3);
@@ -438,9 +437,9 @@ export default function CarRentingScreen({ route }) {
         >
           {isOwner ? (
             <>
-              <TouchableOpacity
+              <TouchableOpacity 
                 onPress={() => {
-                  /* Your onPress function */
+                  navigation.navigate("EditCarRegistrationScreen", { postId, carData });
                 }}
                 style={{
                   backgroundColor: "#7F5AF0",

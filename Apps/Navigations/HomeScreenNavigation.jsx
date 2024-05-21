@@ -15,6 +15,7 @@ import Message from "../Screens/Message/Messages";
 import FilterResult from "../Screens/FilterResult/FilterResult";
 import showRoom from "../Screens/HomeScreen/showRoom";
 import SignUpForToRent from "../Screens/Registration/SignUpForToRent";
+import EditCarRegistrationScreen from "../Screens/HomeScreen/EditCarRegistrationScreen";
 const Stack = createStackNavigator();
 export default function HomeScreenNavigation({ route }) {
   const { userData } = route.params;
@@ -23,6 +24,12 @@ export default function HomeScreenNavigation({ route }) {
       <Stack.Screen
         name="CarRentingScreen"
         component={CarRentingScreen}
+        options={{ headerShown: false }}
+        initialParams={{ userData: userData}}
+      />
+      <Stack.Screen
+        name="EditCarRegistrationScreen"
+        component={EditCarRegistrationScreen}
         options={{ headerShown: false }}
         initialParams={{ userData: userData}}
       />
