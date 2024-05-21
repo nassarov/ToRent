@@ -44,7 +44,7 @@ export default function HomeScreen({ route }) {
     return () => {
       unsubscribe(); // Clean up subscription when component unmounts
     };
-  }, []); // Run once when component mounts
+  }, [navigation]); // Run once when component mounts
 
   const fetchData = async () => {
     setLoading(true);

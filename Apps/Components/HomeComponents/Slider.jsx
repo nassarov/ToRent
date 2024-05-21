@@ -9,13 +9,13 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Slider({ cars, slideway }) {
   const [ownersData, setOwnersData] = useState({});
-
+  const navigation = useNavigation();
   useEffect(() => {
     const db = getFirestore();
-
     // Subscribe to changes in the owners collection
     const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
       const newOwnersData = {};

@@ -1,20 +1,45 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
+import { getFirestore, doc, getDoc } from 'firebase/firestore'; // Import necessary Firestore functions
 
 export default function PostCard({
   car,
   imageUrls,
   ownerId,
-  ownerData,
   horizontal,
   postId
 }) {
+  const [ownerData, setOwnerData] = useState(null); 
   const navigation = useNavigation();
   const customWidth = horizontal ? widthPercentageToDP(50) : widthPercentageToDP(45);
   const customHeight = horizontal ? widthPercentageToDP(50) : widthPercentageToDP(50);
+  const db = getFirestore();
+
+   // Fetch owner data on component mount
+   useEffect(() => {
+    const fetchOwnerData = async () => {
+      try {
+        const userDocRef = doc(db, 'users', ownerId);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          // Set ownerData state with the retrieved data
+          setOwnerData(userDocSnap.data());
+        } else {
+          console.log('No such document!');
+        }
+      } catch (error) {
+        console.error('Error fetching owner data:', error);
+      }
+    };
+
+    if (ownerId) {
+      fetchOwnerData(); // Call fetchOwnerData function if ownerId is available
+    }
+  }, [ownerId]);
+
 
   return (
     <TouchableOpacity
