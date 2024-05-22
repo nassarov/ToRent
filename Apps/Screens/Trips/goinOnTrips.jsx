@@ -60,7 +60,7 @@ export default function OnGoingTrips({ route }) {
               ownerId={item.ownerId}
               ownerData={item.ownerData || {}}
               horizontal={false}
-              postId={item.reservationId}
+              postId={item.postId}
             />
           </View>
         )}

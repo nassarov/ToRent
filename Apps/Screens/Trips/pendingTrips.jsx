@@ -56,7 +56,7 @@ export default function PendingTrips({ route }) {
                 ownerId={item.ownerId}
                 ownerData={item.ownerData || {}}
                 horizontal={false}
-                postId={item.reservationId}
+                postId={item.postId}
               />
             </View>
           )}

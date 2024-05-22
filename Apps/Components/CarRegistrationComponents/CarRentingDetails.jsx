@@ -34,6 +34,7 @@ export default function CarRentingDetails({
   onDaysDifferenceChange,
   postId,
 }) {
+  console.log(postId)
   const db = getFirestore(app);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
   const [daysDifference, setdaysDifference] = useState(0); // State variable to control calendar visibility

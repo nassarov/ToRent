@@ -59,7 +59,7 @@ export default function CompletedTrips({route}) {
                 ownerId={item.ownerId}
                 ownerData={item.ownerData || {}}
                 horizontal={false}
-                postId={item.reservationId}
+                postId={item.postId}
               />
             </View>
           )}
