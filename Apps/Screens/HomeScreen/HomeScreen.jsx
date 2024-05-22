@@ -40,9 +40,13 @@ export default function HomeScreen({ route }) {
     const unsubscribe = onSnapshot(collection(db, "car_post"), (snapshot) => {
       fetchData(); // Refetch data when there are updates
     });
+    const unsubscribe2 = onSnapshot(collection(db, "users"), (snapshot) => {
+      fetchData(); // Refetch data when there are updates
+    });
 
     return () => {
-      unsubscribe(); // Clean up subscription when component unmounts
+      unsubscribe();
+      unsubscribe2(); // Clean up subscription when component unmounts
     };
   }, [navigation]); // Run once when component mounts
 
