@@ -350,6 +350,21 @@ export default function CarRentingScreen({ route }) {
             </TouchableOpacity>
              {/* FavoriteButton */}
             {!isOwner && (
+              <View className='flex-row'>
+                <TouchableOpacity className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2" 
+                onPress={() => {
+                  const firstImageUrl = images[0];
+                console.log("First image URL:", firstImageUrl);
+                  const message = `$Hello, ${ownerData.name} this is ${userData.name} I am interested in your car ${carData.brand}-${carData.model}(${carData.year})\n\n ${firstImageUrl}.`;
+                  const phoneNumber = ownerData.phoneNumber;
+                  const url = `whatsapp://send?text=${encodeURIComponent(
+                    message
+                  )}&phone=${phoneNumber}`;
+                  Linking.openURL(url);
+                }}
+                >
+                <FontAwesome name="whatsapp" size={26} color="#7F5AF0" />
+                </TouchableOpacity>
               <View className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2">
                 <FavoriteButton
                   userId={userData.id}
@@ -357,6 +372,8 @@ export default function CarRentingScreen({ route }) {
                   userData={userData}
                   addToFavorites={addToFavorites}
                 />
+              </View>
+              
               </View>
             )}
            

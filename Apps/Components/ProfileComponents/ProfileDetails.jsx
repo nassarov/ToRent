@@ -1,4 +1,4 @@
-import { View, Text, Linking } from "react-native";
+import { View, Text, Linking, Share } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar, Title, Caption } from "react-native-paper";
@@ -13,13 +13,11 @@ export default function ProfileDetails({
   visitorData,
 }) {
   const navigation = useNavigation();
-  const profileimage = userData.profileImage;
+  const profileImage = userData.profileImage;
   const [userEmail, setUserEmail] = useState("");
   const [cities, setCities] = useState([]);
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
-  console.log();
   const UserRole = userData.role;
-
   const [role, setRole] = useState("");
 
   const handleRole = () => {
@@ -29,11 +27,12 @@ export default function ProfileDetails({
       setRole("Client");
     }
   };
+
   useEffect(() => {
     handleRole();
     if (UserRole === "1") {
-    setCities(userData.addresses.map((address) => address.label));
-  }
+      setCities(userData.addresses.map((address) => address.label));
+    }
   }, []);
 
   useEffect(() => {
@@ -42,6 +41,32 @@ export default function ProfileDetails({
       setUserPhoneNumber(userData.phoneNumber);
     });
   }, [navigation]);
+
+  const handleShareProfile = async () => {
+    try {
+      let message = `Check out ${userData.name}'s profile on ToRent app:\n\nEmail: ${userData.email}\nPhone: ${userData.phoneNumber}`;
+      if (UserRole === "1" && cities.length > 0) {
+        message += `\nCities: ${cities.join(", ")}`;
+      }
+  
+      const result = await Share.share({
+        message: message,
+      });
+  
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // Shared with activity type of result.activityType
+        } else {
+          // Shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // Dismissed
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  
 
   return (
     <View style={{ paddingHorizontal: 15 }}>
@@ -54,7 +79,7 @@ export default function ProfileDetails({
       >
         <Avatar.Image
           source={{
-            uri: profileimage,
+            uri: profileImage,
           }}
           size={80}
           style={{
@@ -91,36 +116,36 @@ export default function ProfileDetails({
       <Text style={{ color: "black", marginTop: 4 }}>
         {userData.phoneNumber}
       </Text>
-      {userData.role ==='1' &&(
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Icon
-          name="map-marker-radius"
-          color="#777777"
-          size={20}
-          style={{ paddingRight: 10 }}
-        /> 
-        
-        <View
-          style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}>
-         
-          {cities.map((label, index) => (
-            <View
-              key={index}
-              style={{
-                width: 60,
-                height: 30,
-                borderRadius: 50,
-                marginRight:5,               
-                 backgroundColor: "#EFEFEF",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: "#040404" }}>{label}</Text>
-            </View>
-          ))}
+      {userData.role === "1" && (
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Icon
+            name="map-marker-radius"
+            color="#777777"
+            size={20}
+            style={{ paddingRight: 10 }}
+          />
+          <View
+            style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}
+          >
+            {cities.map((label, index) => (
+              <View
+                key={index}
+                style={{
+                  width: 60,
+                  height: 30,
+                  borderRadius: 50,
+                  marginRight: 5,
+                  backgroundColor: "#EFEFEF",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: "#040404" }}>{label}</Text>
+              </View>
+            ))}
+          </View>
         </View>
-      </View>)}
+      )}
       <View
         style={{
           flexDirection: "row",
@@ -147,7 +172,7 @@ export default function ProfileDetails({
             </Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleShareProfile}>
           <Text
             style={{
               backgroundColor: "#E1E1E1",
@@ -163,30 +188,34 @@ export default function ProfileDetails({
           </Text>
         </TouchableOpacity>
         {userData.id !== visitorData.id && (
-    <TouchableOpacity onPress={() => {
-      const message = `Hello,${userData.name} I am interested in your car.`;
-      const phoneNumber = userData.phoneNumber;
-      const url = `whatsapp://send?text=${encodeURIComponent(message)}&phone=${phoneNumber}`;
-      Linking.openURL(url);
-    }}>
-      
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text
-          style={{
-            backgroundColor: "#E1E1E1",
-            width: 150,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            borderRadius: 5,
-            textAlign: "center",
-            color: "black",
-            marginLeft: 10,
-          }}> 
-          <Icon name="whatsapp" size={18} color="green"/> Message
-        </Text>
-      </View>
-    </TouchableOpacity>
-  )}
+          <TouchableOpacity
+            onPress={() => {
+              const message = `Hello, ${userData.name} I am interested in your car.`;
+              const phoneNumber = userData.phoneNumber;
+              const url = `whatsapp://send?text=${encodeURIComponent(
+                message
+              )}&phone=${phoneNumber}`;
+              Linking.openURL(url);
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text
+                style={{
+                  backgroundColor: "#E1E1E1",
+                  width: 150,
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  borderRadius: 5,
+                  textAlign: "center",
+                  color: "black",
+                  marginLeft: 10,
+                }}
+              >
+                <Icon name="whatsapp" size={18} color="green" /> Message
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
