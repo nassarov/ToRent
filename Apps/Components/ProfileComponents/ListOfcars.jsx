@@ -1,78 +1,77 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, Dimensions, ActivityIndicator } from "react-native";
-import styles from "../../Components/ProfileComponents/profileStyle";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { View, ActivityIndicator, StyleSheet, FlatList, Text } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { useNavigation } from "@react-navigation/native";
 import PostCard from "../../Components/HomeComponents/PostCard";
-import { collection, query, where, onSnapshot, getFirestore, getDoc, doc } from "firebase/firestore";
+import { onSnapshot, getFirestore, doc, collection, query, where } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
-const windowWidth = Dimensions.get('window').width;
+const Tab = createMaterialTopTabNavigator();
 
-export default function ListOfcars({ userPosts, visitorData, userData }) {
-  const [selected, setSelected] = useState(1);
+export default function ListOfCars({ userPosts, visitorData, userData }) {
+  const navigation = useNavigation();
   const [favPosts, setFavPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (selected === 2 && userData.id === visitorData.id) {
-      fetchFavPosts();
+    if (userData.id === visitorData.id) {
+      const unsubscribe = fetchFavPosts();
+      return unsubscribe;
     }
-  }, [selected, userData.favorites]);
+  }, [userData]);
 
-  const fetchFavPosts = async () => {
+  const fetchFavPosts = () => {
     setLoading(true);
     const db = getFirestore(app);
-    const favPostsQuery = query(collection(db, "car_post"), where("carDetails.postId", "in", userData.favorites));
-
-    const unsubscribe = onSnapshot(favPostsQuery, (snapshot) => {
-      const newData = [];
-      snapshot.forEach((doc) => {
-        newData.push(doc.data());
-      });
-      setFavPosts(newData);
-      setLoading(false);
+    const userDocRef = doc(db, "users", userData.id);
+  
+    const unsubscribe = onSnapshot(userDocRef, (snapshot) => {
+      const updatedUserData = snapshot.data();
+      if (updatedUserData && updatedUserData.favorites && updatedUserData.favorites.length > 0) {
+        const favPostsQuery = query(collection(db, "car_post"), where("carDetails.postId", "in", updatedUserData.favorites));
+        const favPostsUnsubscribe = onSnapshot(favPostsQuery, (snapshot) => {
+          const newData = [];
+          snapshot.forEach((doc) => {
+            newData.push(doc.data());
+          });
+          setFavPosts(newData);
+          setLoading(false);
+        });
+        return favPostsUnsubscribe;
+      } else {
+        // If userData.favorites is empty or undefined, set favPosts to an empty array
+        setFavPosts([]);
+        setLoading(false);
+      }
     });
-
+  
     return unsubscribe;
   };
-
+  
   return (
-    <View style={{ marginTop: 10 }}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15 }}>
-        <TouchableOpacity
-          style={{ width: 98, padding: 15, borderBottomWidth: selected === 1 ? 2 : 0, borderColor: selected === 1 ? "black" : "transparent" }}
-          onPress={() => setSelected(1)}
-        >
-          <MaterialCommunityIcons
-            name="view-grid-outline"
-            size={24}
-            color={selected === 1 ? "black" : "#6B6B6B"}
-            style={{ alignSelf: "center" }}
-          />
-        </TouchableOpacity>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({ 
+        tabBarIndicatorStyle: { backgroundColor: '#7F5AF0' },
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+          if (route.name === 'YourPosts') {
+            iconName = 'view-grid-outline';
+          } else if (route.name === 'Favorites') {
+            iconName = 'bookmark-multiple';
+          }
 
-        <TouchableOpacity
-          style={{ width: 98, padding: 15, borderBottomWidth: selected === 2 ? 2 : 0, borderColor: selected === 2 ? "black" : "transparent" }}
-          onPress={() => setSelected(2)}
-        >
-          <MaterialIcons
-            name="bookmarks"
-            size={24}
-            color={selected === 2 ? "black" : "#6B6B6B"}
-            style={{ alignSelf: "center" }}
-          />
-        </TouchableOpacity>
-      </View>
-
-      {selected === 1 ? (
-        userPosts.length > 0 ? (
+          return <MaterialCommunityIcons name={iconName} size={23} color={color} />;
+        },
+        tabBarLabel: () => null 
+      })}
+    >
+      <Tab.Screen name="YourPosts">
+        {() => (
           <FlatList
+            scrollEnabled={false}
             data={userPosts}
             numColumns={2}
-            showsHorizontalScrollIndicator={false}
-            scrollEnabled={false}
-            contentContainerStyle={style.container}
             renderItem={({ item }) => (
               <View style={{ flex: 1 }}>
                 <View style={{ margin: 8 }}>
@@ -90,21 +89,18 @@ export default function ListOfcars({ userPosts, visitorData, userData }) {
             keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
           />
-        ) : (
-          <Text className='text-center text-xl mt-4'>No posts are added</Text>
-        )
-      ) : (
-        <View style={{ flex: 1 }}>
-          {userData.id === visitorData.id ? ( // Display favPosts only if visitor is viewing their own profile
-            loading ? (
+        )}
+      </Tab.Screen>
+      <Tab.Screen name="Favorites">
+        {() => (
+          <View>
+            {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : favPosts.length > 0 ? (
               <FlatList
+                scrollEnabled={false}
                 data={favPosts}
                 numColumns={2}
-                showsHorizontalScrollIndicator={false}
-                scrollEnabled={false}
-                contentContainerStyle={style.container}
                 renderItem={({ item }) => (
                   <View style={{ flex: 1 }}>
                     <View style={{ margin: 8 }}>
@@ -123,14 +119,14 @@ export default function ListOfcars({ userPosts, visitorData, userData }) {
                 showsVerticalScrollIndicator={false}
               />
             ) : (
-              <Text className='text-center text-xl mt-4'>No favorite posts yet</Text>
-            )
-          ) : (
-            <Text className='text-center text-xl mt-4'>This profile favorite posts are private</Text>
-          )}
-        </View>
-      )}
-    </View>
+              <View style={{ alignItems: 'center', marginTop: 20 }}>
+                <Text style={{ fontSize: 20 }}>No favorite posts yet</Text>
+              </View>
+            )}
+          </View>
+        )}
+      </Tab.Screen>
+    </Tab.Navigator>
   );
 }
 
