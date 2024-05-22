@@ -13,13 +13,14 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
   const navigation = useNavigation();
   const [favPosts, setFavPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const isProfileOwner = userData.id === visitorData.id;
 
   useEffect(() => {
-    if (userData.id === visitorData.id) {
+    if (isProfileOwner) {
       const unsubscribe = fetchFavPosts();
       return unsubscribe;
     }
-  }, [userData]);
+  }, [userData, isProfileOwner]);
 
   const fetchFavPosts = () => {
     setLoading(true);
@@ -48,7 +49,7 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
   
     return unsubscribe;
   };
-  
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({ 
@@ -73,7 +74,7 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
             data={userPosts}
             numColumns={2}
             renderItem={({ item }) => (
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1 ,backgroundColor:'white'}}>
                 <View style={{ margin: 8 }}>
                   <PostCard
                     car={item.carDetails.carData}
@@ -96,31 +97,37 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
           <View>
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
-            ) : favPosts.length > 0 ? (
-              <FlatList
-                scrollEnabled={false}
-                data={favPosts}
-                numColumns={2}
-                renderItem={({ item }) => (
-                  <View style={{ flex: 1 }}>
-                    <View style={{ margin: 8 }}>
-                      <PostCard
-                        car={item.carDetails.carData}
-                        imageUrls={item.carDetails.imageUrls}
-                        ownerId={item.ownerId}
-                        ownerData={item.ownerData || {}}
-                        horizontal={false}
-                        postId={item.carDetails.postId}
-                      />
+            ) : isProfileOwner ? (
+              favPosts.length > 0 ? (
+                <FlatList
+                  scrollEnabled={false}
+                  data={favPosts}
+                  numColumns={2}
+                  renderItem={({ item }) => (
+                    <View style={{ flex: 1 ,backgroundColor:'white'}}>
+                      <View style={{ margin: 8 }}>
+                        <PostCard
+                          car={item.carDetails.carData}
+                          imageUrls={item.carDetails.imageUrls}
+                          ownerId={item.ownerId}
+                          ownerData={item.ownerData || {}}
+                          horizontal={false}
+                          postId={item.carDetails.postId}
+                        />
+                      </View>
                     </View>
-                  </View>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-                showsVerticalScrollIndicator={false}
-              />
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                  showsVerticalScrollIndicator={false}
+                />
+              ) : (
+                <View style={{ alignItems: 'center', marginTop: 20 }}>
+                  <Text style={{ fontSize: 20 }}>No favorite posts yet</Text>
+                </View>
+              )
             ) : (
               <View style={{ alignItems: 'center', marginTop: 20 }}>
-                <Text style={{ fontSize: 20 }}>No favorite posts yet</Text>
+                <Text style={{ fontSize: 20 }}>This profile's favorite posts are private</Text>
               </View>
             )}
           </View>
@@ -130,10 +137,3 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
   );
 }
 
-const style = StyleSheet.create({
-  container: {
-    marginBottom: 50,
-    paddingHorizontal: 4,
-    paddingTop: 4,
-  },
-});
