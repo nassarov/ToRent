@@ -29,6 +29,7 @@ import {
       carseat: carData.carseat,
       price: carData.price,
       year: carData.year,
+      type:carData.type,
       gearType: carData.gearType,
       fuelType: carData.fuelType,
       description: carData.description,
@@ -65,6 +66,7 @@ import {
           },
         });
         setLoading(false);
+        console.log("TYPE",formData.type)
         Alert.alert("Success", "Car details updated successfully.", [
           { text: "OK", onPress: () => navigation.replace("ProfileScreen",{ userData: userData }) },
         ]);
