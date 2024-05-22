@@ -355,7 +355,7 @@ export default function CarRentingScreen({ route }) {
                 onPress={() => {
                   const firstImageUrl = images[0];
                 console.log("First image URL:", firstImageUrl);
-                  const message = `$Hello, ${ownerData.name} this is ${userData.name} I am interested in your car ${carData.brand}-${carData.model}(${carData.year})\n\n ${firstImageUrl}.`;
+                  const message = `Hello, ${ownerData.name} this is ${userData.name} I am interested in your car ${carData.brand}-${carData.model}(${carData.year})\n\n ${firstImageUrl}.`;
                   const phoneNumber = ownerData.phoneNumber;
                   const url = `whatsapp://send?text=${encodeURIComponent(
                     message
