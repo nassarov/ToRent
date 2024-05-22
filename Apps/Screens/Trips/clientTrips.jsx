@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
 import PostCard from '../../Components/HomeComponents/PostCard';
+import PostCardTrips from '../../Components/HomeComponents/PostCard2';
 
 export default function ClientTripsScreen({route}) {
   const {userData} = route.params;
@@ -22,6 +23,7 @@ export default function ClientTripsScreen({route}) {
           newData.push(reservationData);
         });
         setReservations(newData);
+        console.log("RRRR",reservations[0])
         setLoading(false);
       });
       return unsubscribe;
@@ -47,13 +49,14 @@ export default function ClientTripsScreen({route}) {
         contentContainerStyle={{ paddingBottom: 16 }}
         renderItem={({ item }) => (
           <View style={{ flex: 1, margin: 2 }}>
-            <PostCard
+            <PostCardTrips
               car={item.carData}
               imageUrls={item.images}
               ownerId={item.ownerId}
               ownerData={item.ownerData || {}}
               horizontal={false}
               postId={item.postId}
+              reservationData={item}
             />
           </View>
         )}

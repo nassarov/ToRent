@@ -319,6 +319,38 @@ export default function CarRentingScreen({ route }) {
     buttonDisabled = false;
   }
 
+  // Function to cancel reservation
+  const cancelReservation = async () => {
+    Alert.alert(
+      "Cancel Reservation",
+      "Are you sure you want to cancel your reservation?",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("No pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              const reservationId = userData.id + "_" + postId;
+              const reservationRef = doc(db, "Reservation", reservationId);
+              await deleteDoc(reservationRef);
+              setReservationStatus(null);
+              Alert.alert("Reservation Cancelled", "Your reservation has been cancelled.");
+            } catch (error) {
+              console.error("Error cancelling reservation: ", error);
+              Alert.alert("Error", "Failed to cancel reservation. Please try again later.");
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+
   return (
     <View className="flex-1">
       <ScrollView
@@ -507,6 +539,15 @@ export default function CarRentingScreen({ route }) {
                 <Text style={styles.buttonText}>{buttonText}</Text>
               )}
             </TouchableOpacity>
+            
+          )}
+
+        {!isOwner && reservationStatus === "pending" && (
+            <View className='justify-center items-center'>
+              <TouchableOpacity onPress={cancelReservation} >
+                <Text className='text-[#7F5AF0] font-bold'>Cancel Reservation</Text>
+              </TouchableOpacity>
+            </View>
           )}
           <Modal visible={loading} transparent animationType="fade">
             <View style={styles.modalBackground}>
