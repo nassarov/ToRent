@@ -160,8 +160,9 @@ export default function DropdownModal({
                     ""
                   )}
 
-                  <Text style={styles.optionText}>{item.label}</Text>
-                </TouchableOpacity>
+      <Text style={item === selectedItem ? styles.selectedItemText : styles.optionText}>
+              {item.label}</Text>  
+                    </TouchableOpacity>
               )}
               keyExtractor={(item, index) => item.value}
             />
@@ -172,6 +173,10 @@ export default function DropdownModal({
   );
 }
 const styles = StyleSheet.create({
+  selectedItemText: {
+    color: '#7F5AF0', // Change this color to your desired color
+    fontWeight: 'bold', // You can also apply other text styles here
+  },
   image: {
     width: "100%",
     height: "100%",

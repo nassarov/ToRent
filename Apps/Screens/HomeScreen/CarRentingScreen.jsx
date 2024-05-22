@@ -140,7 +140,7 @@ export default function CarRentingScreen({ route }) {
     {
       id: 1,
       attribute: "Model-Type",
-      value: carData.model + " (" + carData.type + ")",
+      value: carData.model + " (" +carData.type + ")",
       icon: <FontAwesome5 name="car" size={24} color="#7F5AF0" />,
     },
     {
