@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import Icon from "react-native-vector-icons/Ionicons";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import {
   heightPercentageToDP,
   widthPercentageToDP,
@@ -58,7 +58,15 @@ export default function LoginScreen() {
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnapshot = await getDoc(userDocRef);
       const userData = userDocSnapshot.data();
-      navigation.replace("HomeScreenNavigation", { userData });
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {name:"HomeScreenNavigation", params:{ userData } },
+        
+          ],
+        })
+      );
     } catch (error) {
       console.log("Error signing in:", error.message);
       if (error.code === "auth/invalid-email") {
