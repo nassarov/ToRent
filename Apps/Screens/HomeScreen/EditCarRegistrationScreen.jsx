@@ -35,6 +35,8 @@ import {
       description: carData.description,
       addressLabel: carData.address.label,
       addressLink: carData.address.value,
+      maxdays:carData.maxdays,
+      mindays:carData.mindays
     });
   
     const [loading, setLoading] = useState(false);
@@ -59,6 +61,8 @@ import {
             gearType: formData.gearType,
             fuelType: formData.fuelType,
             description: formData.description,
+            maxdays:formData.maxdays,
+            mindays:formData.mindays,
             address: {
               label: formData.addressLabel,
               value: formData.addressLink,
@@ -108,14 +112,6 @@ import {
             onChangeText={(text) => handleInputChange("color", text)}
           />
   
-          <Text style={styles.label}>Number of Seats</Text>
-          <TextInput
-            style={styles.input}
-            value={formData.carseat.toString()}
-            keyboardType="numeric"
-            onChangeText={(text) => handleInputChange("carseat", text)}
-          />
-  
           <Text style={styles.label}>Price per Day ($)</Text>
           <TextInput
             style={styles.input}
@@ -131,6 +127,28 @@ import {
             keyboardType="numeric"
             onChangeText={(text) => handleInputChange("year", text)}
           />
+           <Text style={styles.label}>Number of Seats</Text>
+          <TextInput
+            style={styles.input}
+            value={formData.carseat.toString()}
+            keyboardType="numeric"
+            onChangeText={(text) => handleInputChange("carseat", text)}
+          />
+         <Text style={styles.label}>Min Days</Text>
+          <TextInput
+            style={styles.input}
+            value={formData.mindays}
+            keyboardType="numeric"
+            onChangeText={(text) => handleInputChange("mindays", text)}
+          />
+         <Text style={styles.label}>Max Days</Text>
+          <TextInput
+            style={styles.input}
+            value={formData.maxdays}
+            keyboardType="numeric"
+            onChangeText={(text) => handleInputChange("maxdays", text)}
+          />
+  
   
           <Text style={styles.label}>Gear Type</Text>
           <TextInput
