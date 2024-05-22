@@ -80,6 +80,7 @@ export default function SignUpScreen({ route }) {
         role: values.role,
         id: user.uid,
         profileImage:"https://firebasestorage.googleapis.com/v0/b/test-b60fa.appspot.com/o/profile_Images%2FDPI.jpg?alt=media&token=22e74a22-5874-48b5-83f3-8a1dbea2b62f",
+        favorites:[]
       });
 
      
