@@ -338,7 +338,7 @@ export default function CarRentingScreen({ route }) {
         <View style={styles.container}>
           {/* Car Owner Data */}
           <View className="flex-row justify-between items-center">
-            <View style={styles.profileContainer}>
+            <TouchableOpacity style={styles.profileContainer} onPress={() => navigation.replace("ProfileScreen",{ visitorData: userData ,userData:ownerData}) }>
               <Image
                 source={{ uri: ownerData.profileImage }}
                 style={styles.profileImage}
@@ -347,7 +347,7 @@ export default function CarRentingScreen({ route }) {
                 <Text style={styles.userName}>{ownerData.name}</Text>
                 <Text>{carData.address.label}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
              {/* FavoriteButton */}
             {!isOwner && (
               <View className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2">

@@ -54,6 +54,7 @@ import {
             carseat: formData.carseat,
             price: formData.price,
             year: formData.year,
+            type:formData.type,
             gearType: formData.gearType,
             fuelType: formData.fuelType,
             description: formData.description,
@@ -90,6 +91,12 @@ import {
             style={styles.input}
             value={formData.brand}
             onChangeText={(text) => handleInputChange("brand", text)}
+          />
+          <Text style={styles.label}>Type</Text>
+          <TextInput
+            style={styles.input}
+            value={formData.type}
+            onChangeText={(text) => handleInputChange("type", text)}
           />
   
           <Text style={styles.label}>Color</Text>
