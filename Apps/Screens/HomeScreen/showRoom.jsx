@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
-import SearchChoices from '../../Components/HomeComponents/SearchChoices';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
+import SearchChoices from "../../Components/HomeComponents/SearchChoices";
 import SearchBarCar from "../../Components/HomeComponents/SearchBar2";
-import { FontAwesome6 } from '@expo/vector-icons';
+import { FontAwesome6 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import PostCard from '../../Components/HomeComponents/PostCard';
+import PostCard from "../../Components/HomeComponents/PostCard";
 import {
   collection,
   getDocs,
@@ -21,34 +27,41 @@ export default function ShowRoom() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedChoice, setSelectedChoice] = useState("");
   const navigation = useNavigation();
-
-  // Update your component to include a state for sorting
-  const [sortOption, setSortOption] = useState(null); // Initially no sorting
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1); // Track current page
+  const pageSize = 10; // Number of items to fetch per page
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const q = query(collection(db, "car_post"));
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const carPosts = [];
-        querySnapshot.forEach((doc) => {
-          carPosts.push(doc.data());
-        });
-        setData(carPosts);
-        setFilteredData(carPosts);
-      }, (error) => {
-        console.error("Error fetching car posts: ", error);
-      });
+      const unsubscribe = onSnapshot(
+        q,
+        (querySnapshot) => {
+          const carPosts = [];
+          querySnapshot.forEach((doc) => {
+            carPosts.push(doc.data());
+          });
+          setData(carPosts);
+          setFilteredData(carPosts.slice(0, page * pageSize)); // Update filtered data with the current page
+          setLoading(false);
+        },
+        (error) => {
+          console.error("Error fetching car posts: ", error);
+          setLoading(false);
+        }
+      );
 
       return () => unsubscribe();
     };
 
     fetchData();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     let filteredData = [];
     if (searchQuery === "") {
-      setFilteredData(data);
+      setFilteredData(data.slice(0, page * pageSize)); // Update filtered data with the current page
       return;
     }
 
@@ -60,10 +73,18 @@ export default function ShowRoom() {
         return (
           carData.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
           ownerName.includes(searchQuery.toLowerCase()) ||
-          carData.year.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
-          carData.address.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          carData.year
+            .toString()
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          carData.address.label
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
           carData.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          carData.price.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+          carData.price
+            .toString()
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
           carData.fuelType.toLowerCase().includes(searchQuery.toLowerCase())
         );
       });
@@ -78,7 +99,9 @@ export default function ShowRoom() {
           break;
         case "name":
           filteredData = data.filter((item) =>
-            item.ownerData?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+            item.ownerData?.name
+              ?.toLowerCase()
+              .includes(searchQuery.toLowerCase())
           );
           break;
         case "year":
@@ -123,8 +146,12 @@ export default function ShowRoom() {
           break;
       }
     }
-    setFilteredData(filteredData);
-  }, [searchQuery, selectedChoice, data]);
+    setFilteredData(filteredData.slice(0, page * pageSize)); // Update filtered data with the current page
+  }, [searchQuery, selectedChoice, data, page]);
+
+  const handleLoadMore = () => {
+    setPage(page + 1); // Load next page
+  };
 
   return (
     <View style={styles.container}>
@@ -163,6 +190,12 @@ export default function ShowRoom() {
         )}
         keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
+        onEndReached={handleLoadMore} // Load more data when end is reached
+        onEndReachedThreshold={0.1} // Load more data when the end is within 10% of the list length
+        ListFooterComponent={() =>
+          // Show loading indicator at the end of the list
+          loading ? <ActivityIndicator size="large" color="#0000ff" /> : null
+        }
       />
     </View>
   );
@@ -171,12 +204,12 @@ export default function ShowRoom() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 0
+    paddingTop: 0,
   },
   searchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   filterButton: {
     marginRight: 10,
