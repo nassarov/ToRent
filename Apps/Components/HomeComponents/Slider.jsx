@@ -11,31 +11,33 @@ import {
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Slider({ cars, slideway }) {
-  const [ownersData, setOwnersData] = useState({});
+export default function Slider({ cars, slideway,ownerData }) {
+  // const [ownersData, setOwnersData] = useState({});
   const navigation = useNavigation();
-  useEffect(() => {
-    const db = getFirestore();
-    // Subscribe to changes in the owners collection
-    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
-      const newOwnersData = {};
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        newOwnersData[data.id] = {
-          email: data.email,
-          name: data.name,
-          profileImage: data.profileImage,
-        };
-      });
-      setOwnersData(newOwnersData);
-    });
+  // useEffect(() => {
+  //   const db = getFirestore();
+  //   // Subscribe to changes in the owners collection
+  //   const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
+  //     const newOwnersData = {};
+  //     snapshot.forEach((doc) => {
+  //       const data = doc.data();
+  //       newOwnersData[data.id] = {
+  //         email: data.email,
+  //         name: data.name,
+  //         profileImage: data.profileImage,
+  //         role:data.role,
+  //         id:data.id
+  //       };
+  //     });
+  //     setOwnersData(newOwnersData);
+  //   });
 
-    // Clean up subscription when component unmounts
-    return () => unsubscribe();
-  }, []); // Run once when component mounts
+  //   // Clean up subscription when component unmounts
+  //   return () => unsubscribe();
+  // }, []); // Run once when component mounts
 
   const renderItem = ({ item, index }) => {
-    const ownerData = ownersData[item.ownerId] || {};
+    // const ownerData = ownersData[item.ownerId] || {};
    
     return (
       <PostCard

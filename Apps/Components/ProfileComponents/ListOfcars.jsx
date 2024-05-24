@@ -80,7 +80,7 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
                     car={item.carDetails.carData}
                     imageUrls={item.carDetails.imageUrls}
                     ownerId={item.ownerId}
-                    ownerData={item.ownerData || {}}
+                    ownerData={userData}
                     horizontal={false}
                     postId={item.carDetails.postId}
                   />

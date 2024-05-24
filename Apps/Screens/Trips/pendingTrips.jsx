@@ -7,7 +7,6 @@ export default function PendingTrips({ route }) {
   const { userData } = route.params;
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchReservations = async () => {
       setLoading(true);
@@ -30,6 +29,7 @@ export default function PendingTrips({ route }) {
     if (userData.role !== undefined) {
 
     fetchReservations();}
+    console.log(reservations);
   }, [userData.id]);
 
   if (loading) {
@@ -54,7 +54,7 @@ export default function PendingTrips({ route }) {
                 car={item.carData}
                 imageUrls={item.images}
                 ownerId={item.ownerId}
-                ownerData={item.ownerData || {}}
+                ownerData={item.ownerData}
                 horizontal={false}
                 postId={item.postId}
               />
