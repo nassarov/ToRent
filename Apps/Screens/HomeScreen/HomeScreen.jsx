@@ -20,6 +20,7 @@ import {
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 import SearchChoices from "../../Components/HomeComponents/SearchChoices";
+import { StatusBar } from "expo-status-bar";
 
 export default function HomeScreen({ route }) {
   const db = getFirestore(app);
@@ -97,7 +98,7 @@ export default function HomeScreen({ route }) {
       className="mt-[38px] pt-3 flex-1 "
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}>
-    
+      <StatusBar backgroundColor={"#F6F6F6"} translucent={true} />
       <View className='flex-row justify-between'>
         <View className="flex-row mb-2 ">
           <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>

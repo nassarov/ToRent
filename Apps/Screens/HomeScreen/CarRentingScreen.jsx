@@ -140,7 +140,7 @@ export default function CarRentingScreen({ route }) {
     {
       id: 1,
       attribute: "Model-Type",
-      value: carData.model + " (" +carData.type + ")",
+      value: carData.model + " (" + carData.type + ")",
       icon: <FontAwesome5 name="car" size={24} color="#7F5AF0" />,
     },
     {
@@ -222,7 +222,7 @@ export default function CarRentingScreen({ route }) {
   };
 
   const addToReservation = async () => {
-    console.log(daysDifference)
+    console.log(daysDifference);
     try {
       if (
         selectedStartDate &&
@@ -242,13 +242,14 @@ export default function CarRentingScreen({ route }) {
           ownerId: ownerId,
           startDate: selectedStartDate,
           endDate: selectedEndDate ? selectedEndDate : selectedStartDate,
-          totalPrice: daysDifference*totalPrice,
+          totalPrice: daysDifference * totalPrice,
           daysDifference: daysDifference,
           status: "pending",
           createdAt: serverTimestamp(),
           images: images,
           carData: carData,
           postId: postId,
+          deleted: false,
         };
 
         await setDoc(doc(db, "Reservation", reservationId), reservationData);
@@ -260,7 +261,10 @@ export default function CarRentingScreen({ route }) {
           [{ text: "OK", onPress: navigation.replace("TabNavigation") }]
         );
       } else {
-        Alert.alert("Reservation date", `Please choose the date of reservation and make sure its between ${carData.mindays} and ${carData.maxdays}`);
+        Alert.alert(
+          "Reservation date",
+          `Please choose the date of reservation and make sure its between ${carData.mindays} and ${carData.maxdays}`
+        );
       }
     } catch (error) {
       console.error("Error adding reservation: ", error);
@@ -338,10 +342,16 @@ export default function CarRentingScreen({ route }) {
               const reservationRef = doc(db, "Reservation", reservationId);
               await deleteDoc(reservationRef);
               setReservationStatus(null);
-              Alert.alert("Reservation Cancelled", "Your reservation has been cancelled.");
+              Alert.alert(
+                "Reservation Cancelled",
+                "Your reservation has been cancelled."
+              );
             } catch (error) {
               console.error("Error cancelling reservation: ", error);
-              Alert.alert("Error", "Failed to cancel reservation. Please try again later.");
+              Alert.alert(
+                "Error",
+                "Failed to cancel reservation. Please try again later."
+              );
             }
           },
         },
@@ -349,7 +359,6 @@ export default function CarRentingScreen({ route }) {
       { cancelable: false }
     );
   };
-
 
   return (
     <View className="flex-1">
@@ -370,7 +379,15 @@ export default function CarRentingScreen({ route }) {
         <View style={styles.container}>
           {/* Car Owner Data */}
           <View className="flex-row justify-between items-center">
-            <TouchableOpacity style={styles.profileContainer} onPress={() => navigation.replace("ProfileScreen",{ visitorData: userData ,userData:ownerData}) }>
+            <TouchableOpacity
+              style={styles.profileContainer}
+              onPress={() =>
+                navigation.replace("ProfileScreen", {
+                  visitorData: userData,
+                  userData: ownerData,
+                })
+              }
+            >
               <Image
                 source={{ uri: ownerData.profileImage }}
                 style={styles.profileImage}
@@ -380,35 +397,34 @@ export default function CarRentingScreen({ route }) {
                 <Text>{carData.address.label}</Text>
               </View>
             </TouchableOpacity>
-             {/* FavoriteButton */}
+            {/* FavoriteButton */}
             {!isOwner && (
-              <View className='flex-row'>
-                <TouchableOpacity className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2" 
-                onPress={() => {
-                  const firstImageUrl = images[0];
-                console.log("First image URL:", firstImageUrl);
-                  const message = `Hello, ${ownerData.name} this is ${userData.name} I am interested in your car ${carData.brand}-${carData.model}(${carData.year})\n\n ${firstImageUrl}.`;
-                  const phoneNumber = ownerData.phoneNumber;
-                  const url = `whatsapp://send?text=${encodeURIComponent(
-                    message
-                  )}&phone=${phoneNumber}`;
-                  Linking.openURL(url);
-                }}
+              <View className="flex-row">
+                <TouchableOpacity
+                  className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2"
+                  onPress={() => {
+                    const firstImageUrl = images[0];
+                    console.log("First image URL:", firstImageUrl);
+                    const message = `Hello, ${ownerData.name} this is ${userData.name} I am interested in your car ${carData.brand}-${carData.model}(${carData.year})\n\n ${firstImageUrl}.`;
+                    const phoneNumber = ownerData.phoneNumber;
+                    const url = `whatsapp://send?text=${encodeURIComponent(
+                      message
+                    )}&phone=${phoneNumber}`;
+                    Linking.openURL(url);
+                  }}
                 >
-                <FontAwesome name="whatsapp" size={26} color="#7F5AF0" />
+                  <FontAwesome name="whatsapp" size={26} color="#7F5AF0" />
                 </TouchableOpacity>
-              <View className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2">
-                <FavoriteButton
-                  userId={userData.id}
-                  postId={postId}
-                  userData={userData}
-                  addToFavorites={addToFavorites}
-                />
-              </View>
-              
+                <View className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2">
+                  <FavoriteButton
+                    userId={userData.id}
+                    postId={postId}
+                    userData={userData}
+                    addToFavorites={addToFavorites}
+                  />
+                </View>
               </View>
             )}
-           
           </View>
           {/* Grid */}
           <View>
@@ -486,9 +502,13 @@ export default function CarRentingScreen({ route }) {
         >
           {isOwner ? (
             <>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("EditCarRegistrationScreen", { postId, carData,userData });
+                  navigation.navigate("EditCarRegistrationScreen", {
+                    postId,
+                    carData,
+                    userData,
+                  });
                 }}
                 style={{
                   backgroundColor: "#7F5AF0",
@@ -539,13 +559,14 @@ export default function CarRentingScreen({ route }) {
                 <Text style={styles.buttonText}>{buttonText}</Text>
               )}
             </TouchableOpacity>
-            
           )}
 
-        {!isOwner && reservationStatus === "pending" && (
-            <View className='justify-center items-center'>
-              <TouchableOpacity onPress={cancelReservation} >
-                <Text className='text-[#7F5AF0] font-bold'>Cancel Reservation</Text>
+          {!isOwner && reservationStatus === "pending" && (
+            <View className="justify-center items-center">
+              <TouchableOpacity onPress={cancelReservation}>
+                <Text className="text-[#7F5AF0] font-bold">
+                  Cancel Reservation
+                </Text>
               </TouchableOpacity>
             </View>
           )}
