@@ -11,7 +11,6 @@ import EditProfile from "../Screens/Profile/EditProfile";
 import CarTextInput from "../Screens/CarRegister/CarTextInput";
 import ProfileScreen from "../Screens/Profile/ProfileScreen";
 import Trips from "../Screens/Trips/Trips";
-import Message from "../Screens/Message/Messages";
 import FilterResult from "../Screens/FilterResult/FilterResult";
 import showRoom from "../Screens/HomeScreen/showRoom";
 import SignUpForToRent from "../Screens/Registration/SignUpForToRent";
@@ -87,14 +86,6 @@ export default function HomeScreenNavigation({ route }) {
         name="FilterResult"
         component={FilterResult}
         options={{ header: () => <CustomHeader2 /> }}
-      />
-      <Stack.Screen
-        name="Message"
-        component={Message}
-        options={{ headerShown: true,
-          header: () => <CustomHeader2 />
-         }}
-        initialParams={{ userData: userData }}
       />
     </Stack.Navigator>
   );
