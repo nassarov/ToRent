@@ -47,7 +47,7 @@ const CustomTabButton = ({ children, onPress }) => {
 
 const TabNavigation = ({ route }) => {
   const { userData } = route.params;
-  const [newNotifications, setNewNotifications] = useState(false);
+  const [newNotifications, setNewNotifications] = useState(0);
 
   return (
     <Tab.Navigator
@@ -128,6 +128,7 @@ const TabNavigation = ({ route }) => {
       initialParams={{ userData:userData, setNewNotifications }}
       options={{
         headerShown: true,
+        tabBarBadge:newNotifications,
         header: () => <CustomHeader2 text={"Notifications"} />,
         tabBarIcon: ({ focused }) => (
           <View>
@@ -136,7 +137,7 @@ const TabNavigation = ({ route }) => {
               size={24}
               color={focused ? "#7F5AF0" : "#A4A4A4"}
             />
-            {newNotifications && <Badge status="error" containerStyle={{ position: 'absolute', top: -4, right: -4 }} />}
+            {/* {newNotifications && <Badge status="error" containerStyle={{ position: 'absolute', top: -4, right: -4 }} />} */}
           </View>
         ),
       }}

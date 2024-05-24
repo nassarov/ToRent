@@ -8,6 +8,8 @@ import Registration from "./Apps/Navigations/Registration";
 import HomeScreenNavigation from "./Apps/Navigations/HomeScreenNavigation";
 import { doc, getFirestore, getDoc } from "firebase/firestore";
 import { app } from './firebaseConfig';
+import { LogBox } from 'react-native';
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -17,6 +19,9 @@ export default function App() {
   const db = getFirestore(app);
 
   useEffect(() => {
+    LogBox.ignoreLogs([
+      'Non-serializable values were found in the navigation state',
+    ]);
     const checkFirstTimeUser = async () => {
       const isFirstTime = await AsyncStorage.getItem('alreadyLaunched');
       if (isFirstTime === null) {
