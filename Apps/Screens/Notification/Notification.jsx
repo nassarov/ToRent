@@ -57,7 +57,7 @@ export default function NotificationPage({ route }) {
           return mergedData;
         });
         setLoading(false);
-        setNewNotifications(newData.length > 0);
+        setNewNotifications(newData.length);
       });
     };
 
@@ -85,7 +85,7 @@ export default function NotificationPage({ route }) {
           return mergedData;
         });
         setLoading(false);
-        setNewNotifications(newData.length > 0);
+        setNewNotifications(newData.length);
       });
     };
 
@@ -145,8 +145,15 @@ export default function NotificationPage({ route }) {
       .slice()
       .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
     setSortedReservations(sorted);
+    
   }, [reservations]);
 
+  useEffect(() => {
+    console.log(sortedReservations.length)
+    setNewNotifications(sortedReservations.length);
+  }, [sortedReservations, setNewNotifications]);
+  
+  
   return (
     <View>
       {loading ? (

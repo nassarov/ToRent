@@ -66,7 +66,7 @@ export default function ProfileScreen({ route }) {
   };
    
   return (
-    <ScrollView showsVerticalScrollIndicator={false} className='pb-5 bg-white'>
+    <ScrollView showsVerticalScrollIndicator={false} className='pb-5'>
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         {loading ? ( // Show loading indicator if data is being fetched
           <ActivityIndicator size="large" color="#0000ff" />

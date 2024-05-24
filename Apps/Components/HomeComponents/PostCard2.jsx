@@ -16,7 +16,6 @@ export default function PostCardTrips({
 
   const customWidth = horizontal ? widthPercentageToDP(50) : widthPercentageToDP(45);
   const customHeight = horizontal ? widthPercentageToDP(50) : widthPercentageToDP(50);
-
   const start = new Date(reservationData.startDate.seconds * 1000);
   const end = new Date(reservationData.endDate.seconds * 1000);
   
@@ -225,7 +224,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: "100%",
-    marginBottom: 25,
+    marginBottom: 20,
     borderWidth: 2,
     borderRadius: 10,
     padding: 10,
@@ -268,7 +267,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   remainingDaysContainer: {
-    marginTop: 20,
     borderWidth: 2,
     borderRadius: 10,
     padding: 10,
