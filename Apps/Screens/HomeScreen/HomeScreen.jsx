@@ -129,11 +129,11 @@ export default function HomeScreen({ route }) {
       < >
         <StatusBar backgroundColor={"#F6F6F6"} translucent={true} />
         <View className='flex-row justify-between' style={{paddingTop:Constants.statusBarHeight}}>
-          <View className="flex-row mb-2 ">
+          <View className="flex-row mb-2 mt-2">
             <Text className="text-[#7F5AF0] text-xl font-bold ml-4">Find</Text>
             <Text className="text-xl"> Your Favorite Car</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("Explore")} className='mr-2 mb-3 items-center justify-center'>
+          <TouchableOpacity onPress={() => navigation.navigate("Explore")} className='mr-2 mb-3 mt-2 items-center justify-center'>
             <FontAwesome5 name="search" size={25} color="#7F5AF0" /> 
             <Text className='text-[#7F5AF0]'>Explore</Text>
           </TouchableOpacity>
