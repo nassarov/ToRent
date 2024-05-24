@@ -173,6 +173,7 @@ export default function HomeScreen({ route }) {
       ListFooterComponent={renderFooter}
       onEndReached={handleLoadMore}
       onEndReachedThreshold={0.5}
+    
     />
   );
 }

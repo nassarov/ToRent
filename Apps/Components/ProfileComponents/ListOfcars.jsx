@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { View, ActivityIndicator, StyleSheet, FlatList, Text } from "react-native";
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  FlatList,
+  Text,
+} from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useNavigation } from "@react-navigation/native";
 import PostCard from "../../Components/HomeComponents/PostCard";
-import { onSnapshot, getFirestore, doc, collection, query, where } from "firebase/firestore";
+import {
+  onSnapshot,
+  getFirestore,
+  doc,
+  collection,
+  query,
+  where,
+} from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -26,11 +39,18 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
     setLoading(true);
     const db = getFirestore(app);
     const userDocRef = doc(db, "users", userData.id);
-  
+
     const unsubscribe = onSnapshot(userDocRef, (snapshot) => {
       const updatedUserData = snapshot.data();
-      if (updatedUserData && updatedUserData.favorites && updatedUserData.favorites.length > 0) {
-        const favPostsQuery = query(collection(db, "car_post"), where("carDetails.postId", "in", updatedUserData.favorites));
+      if (
+        updatedUserData &&
+        updatedUserData.favorites &&
+        updatedUserData.favorites.length > 0
+      ) {
+        const favPostsQuery = query(
+          collection(db, "car_post"),
+          where("carDetails.postId", "in", updatedUserData.favorites)
+        );
         const favPostsUnsubscribe = onSnapshot(favPostsQuery, (snapshot) => {
           const newData = [];
           snapshot.forEach((doc) => {
@@ -46,7 +66,7 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
         setLoading(false);
       }
     });
-  
+
     return unsubscribe;
   };
 
@@ -56,14 +76,14 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
         tabBarIndicatorStyle: { backgroundColor: '#7F5AF0' },
         tabBarIcon: ({ color, size }) => {
           let iconName;
-          if (route.name === 'YourPosts') {
-            iconName = 'view-grid-outline';
-          } else if (route.name === 'Favorites') {
-            iconName = 'bookmark-multiple';
+          if (route.name === "YourPosts") {
+            iconName = "view-grid-outline";
+          } else if (route.name === "Favorites") {
+            iconName = "bookmark-multiple";
           }
           return <MaterialCommunityIcons name={iconName} size={23} color={color} />;
         },
-        tabBarLabel: () => null 
+        tabBarLabel: () => null,
       })}
     >
       <Tab.Screen name="YourPosts">
@@ -120,13 +140,15 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
                   showsVerticalScrollIndicator={false}
                 />
               ) : (
-                <View style={{ alignItems: 'center', marginTop: 20 }}>
+                <View style={{ alignItems: "center", marginTop: 20 }}>
                   <Text style={{ fontSize: 20 }}>No favorite posts yet</Text>
                 </View>
               )
             ) : (
-              <View style={{ alignItems: 'center', marginTop: 20 }}>
-                <Text style={{ fontSize: 20 }}>This profile's favorite posts are private</Text>
+              <View style={{ alignItems: "center", marginTop: 20 }}>
+                <Text style={{ fontSize: 20 }}>
+                  This profile's favorite posts are private
+                </Text>
               </View>
             )}
           </View>
@@ -135,4 +157,3 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
     </Tab.Navigator>
   );
 }
-
