@@ -51,7 +51,7 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
   };
 
   return (
-    <Tab.Navigator
+    <Tab.Navigator 
       screenOptions={({ route }) => ({ 
         tabBarIndicatorStyle: { backgroundColor: '#7F5AF0' },
         tabBarIcon: ({ color, size }) => {
@@ -61,7 +61,6 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
           } else if (route.name === 'Favorites') {
             iconName = 'bookmark-multiple';
           }
-
           return <MaterialCommunityIcons name={iconName} size={23} color={color} />;
         },
         tabBarLabel: () => null 
@@ -69,13 +68,13 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
     >
       <Tab.Screen name="YourPosts">
         {() => (
-          <FlatList
+          <FlatList 
             scrollEnabled={false}
             data={userPosts}
             numColumns={2}
             renderItem={({ item }) => (
-              <View style={{ flex: 1 ,backgroundColor:'white'}}>
-                <View style={{ margin: 8 }}>
+              <View style={{ flex: 1 }}>
+                <View style={{ margin: 8 }} >
                   <PostCard
                     car={item.carDetails.carData}
                     imageUrls={item.carDetails.imageUrls}
@@ -94,18 +93,18 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
       </Tab.Screen>
       <Tab.Screen name="Favorites">
         {() => (
-          <View>
+          <View >
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : isProfileOwner ? (
               favPosts.length > 0 ? (
-                <FlatList
+                <FlatList 
                   scrollEnabled={false}
                   data={favPosts}
                   numColumns={2}
                   renderItem={({ item }) => (
-                    <View style={{ flex: 1 ,backgroundColor:'white'}}>
-                      <View style={{ margin: 8 }}>
+                    <View style={{ flex: 1 }}>
+                      <View style={{ margin: 8 }} >
                         <PostCard
                           car={item.carDetails.carData}
                           imageUrls={item.carDetails.imageUrls}
