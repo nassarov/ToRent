@@ -1,4 +1,4 @@
-import { View, Text, Linking, Share } from "react-native";
+import { View, Text, Linking, Share,ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar, Title, Caption } from "react-native-paper";
@@ -7,7 +7,6 @@ import styles from "../ProfileComponents/profileStyle";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, getFirestore, onSnapshot, query, where } from "firebase/firestore";
-
 export default function ProfileDetails({
   userData,
   numberOfPosts,
@@ -21,7 +20,7 @@ export default function ProfileDetails({
   const UserRole = userData.role;
   const [role, setRole] = useState("");
   const [numberOfReservations, setNumberOfReservations] = useState(0);
-
+  const [loading,setLoading]=useState(true);
 
   const handleRole = () => {
     if (UserRole === "1") {
@@ -80,6 +79,7 @@ export default function ProfileDetails({
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
         setNumberOfReservations(snapshot.size);
+        setLoading(false)
       });
 
       return () => unsubscribe();
@@ -119,9 +119,12 @@ export default function ProfileDetails({
         </View>
         {/* Displaying the number of reservations */}
         <View style={{ alignItems: "center" }}>
+        {loading ? (
+          <ActivityIndicator size="small" color="#7F5AF0" />
+        ) : (
           <Text style={{ fontSize: 24, fontWeight: "bold", color: "black" }}>
             {numberOfReservations}
-          </Text>
+          </Text> )}
           <Text style={{ fontSize: 16, color: "black" }}>Total Client's</Text>
           <Text style={{ fontSize: 16, color: "black" }}> Reservations</Text>
         </View>
