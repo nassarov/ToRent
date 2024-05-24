@@ -57,6 +57,7 @@ export default function NotificationPage({ route }) {
           return mergedData;
         });
         setLoading(false);
+        setNewNotifications(newData.length);
       });
     };
 
@@ -84,6 +85,7 @@ export default function NotificationPage({ route }) {
           return mergedData;
         });
         setLoading(false);
+        setNewNotifications(newData.length);
       });
     };
 
@@ -145,10 +147,12 @@ export default function NotificationPage({ route }) {
     setSortedReservations(sorted);
     
   }, [reservations]);
-  useEffect(()=>{
+
+  useEffect(() => {
     console.log(sortedReservations.length)
-  setNewNotifications(sortedReservations.length);
-  })
+    setNewNotifications(sortedReservations.length);
+  }, [sortedReservations, setNewNotifications]);
+  
   
   return (
     <View>
