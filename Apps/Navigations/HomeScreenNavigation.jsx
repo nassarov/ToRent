@@ -43,6 +43,7 @@ export default function HomeScreenNavigation({ route }) {
         name="Filter"
         component={Filter}
         options={{ header: () => <CustomHeader2 /> }}
+        initialParams={{ userData: userData }}
       />
       <Stack.Screen
         name="Explore"

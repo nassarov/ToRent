@@ -40,7 +40,7 @@ import AddressDropdownModal from "../../Components/CarRegistrationComponents/Add
 const { height } = Dimensions.get("window");
 const yearOptions = [];
 const currentYear = new Date().getFullYear();
-const startYear = 1990; // You can adjust the start year as needed
+const startYear = 1990; //start year
 
 // Loop to generate years from startYear to currentYear
 for (let year = currentYear; year >= startYear; year--) {
