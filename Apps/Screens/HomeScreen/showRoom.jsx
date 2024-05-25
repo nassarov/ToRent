@@ -17,6 +17,7 @@ import {
   getFirestore,
   onSnapshot,
   query,
+  where,
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 
@@ -31,30 +32,34 @@ export default function ShowRoom() {
   const [page, setPage] = useState(1); // Track current page
   const pageSize = 10; // Number of items to fetch per page
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const q = query(collection(db, "car_post"));
-      const unsubscribe = onSnapshot(
-        q,
-        (querySnapshot) => {
-          const carPosts = [];
-          querySnapshot.forEach((doc) => {
-            carPosts.push(doc.data());
-          });
-          setData(carPosts);
-          setFilteredData(carPosts.slice(0, page * pageSize)); // Update filtered data with the current page
-          setLoading(false);
-        },
-        (error) => {
-          console.error("Error fetching car posts: ", error);
-          setLoading(false);
-        }
+  const fetchData = async () => {
+    setLoading(true);
+    const q = query(collection(db, "car_post"));
+    const querySnapshot = await getDocs(q);
+    let newData = [];
+
+    for (const postDoc of querySnapshot.docs) {
+      const ownerSnapshot = await getDocs(
+        query(
+          collection(db, "users"),
+          where("id", "==", postDoc.data().ownerId)
+        )
       );
+      ownerSnapshot.forEach((doc) => {
+        newData.push({
+          favData: postDoc.data(),
+          ownerData: doc.data(),
+        });
+      });
+    }
 
-      return () => unsubscribe();
-    };
+    console.log(newData);
+    setData(newData);
+    setFilteredData(newData.slice(0, page * pageSize));
+    setLoading(false);
+  };
 
+  useEffect(() => {
     fetchData();
   }, [page]);
 
@@ -171,32 +176,34 @@ export default function ShowRoom() {
         selected={selectedChoice}
         setSelected={setSelectedChoice}
       />
-      <FlatList
-        data={filteredData}
-        numColumns={2}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.flatListContainer}
-        renderItem={({ item }) => (
-          <View style={styles.cardContainer}>
-            <PostCard
-              car={item.carDetails.carData}
-              imageUrls={item.carDetails.imageUrls}
-              ownerId={item.ownerId}
-              ownerData={item.ownerData || {}}
-              horizontal={false}
-              postId={item.carDetails.postId}
-            />
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        showsVerticalScrollIndicator={false}
-        onEndReached={handleLoadMore} // Load more data when end is reached
-        onEndReachedThreshold={0.1} // Load more data when the end is within 10% of the list length
-        ListFooterComponent={() =>
-          // Show loading indicator at the end of the list
-          loading ? <ActivityIndicator size="large" color="#0000ff" /> : null
-        }
-      />
+      {data && (
+        <FlatList
+          data={filteredData}
+          numColumns={2}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.flatListContainer}
+          renderItem={({ item }) => (
+            <View style={styles.cardContainer}>
+              <PostCard
+                car={item.favData.carDetails.carData}
+                imageUrls={item.favData.carDetails.imageUrls}
+                ownerId={item.ownerId}
+                ownerData={item.ownerData}
+                horizontal={false}
+                postId={item.favData.carDetails.postId}
+              />
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+          onEndReached={handleLoadMore} // Load more data when end is reached
+          onEndReachedThreshold={0.1} // Load more data when the end is within 10% of the list length
+          ListFooterComponent={() =>
+            // Show loading indicator at the end of the list
+            loading ? <ActivityIndicator size="large" color="#0000ff" /> : null
+          }
+        />
+      )}
     </View>
   );
 }

@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import {
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
+import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 import PostCard from "../../Components/HomeComponents/PostCard";
 
@@ -8,7 +14,9 @@ import PostCard from "../../Components/HomeComponents/PostCard";
 const Bubble = ({ label, value }) => {
   return (
     <View style={styles.bubble}>
-      <Text style={styles.bubbleText}>{label}: {value}</Text>
+      <Text style={styles.bubbleText}>
+        {label}: {value}
+      </Text>
     </View>
   );
 };
@@ -27,29 +35,41 @@ export default function FilterResult({ route }) {
     setLoading(true);
     try {
       const querySnapshot = await getDocs(collection(db, "car_post"));
-      const newData = [];
-      querySnapshot.forEach((doc) => {
-        newData.push(doc.data());
-      });
+      let newData = [];
+
+      for (const postDoc of querySnapshot.docs) {
+        const ownerSnapshot = await getDocs(
+          query(
+            collection(db, "users"),
+            where("id", "==", postDoc.data().ownerId)
+          )
+        );
+        ownerSnapshot.forEach((doc) => {
+          newData.push({
+            favData: postDoc.data(),
+            ownerData: doc.data(),
+          });
+        });
+      }
       console.log("Fetched Data:", newData);
       // Filter the fetched data based on matching at least one value in carData
-      const filteredItems = newData.filter(item => {
+      const filteredItems = newData.filter((item) => {
         return Object.entries(carData).some(([key, value]) => {
-          if (key === 'address') {
-            const address = item.carDetails?.carData?.address;
+          if (key === "address") {
+            const address = item.favData.carDetails?.carData?.address;
             return address && address.label === value;
           }
-          return item.carDetails?.carData[key] === value;
+          return item.favData.carDetails?.carData[key] === value;
         });
       });
-      console.log("FILL",filteredItems)
+      console.log("FILL", filteredItems);
       setFilteredData(filteredItems);
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
     setLoading(false);
   };
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.resultsText}>Results</Text>
@@ -71,16 +91,18 @@ export default function FilterResult({ route }) {
           renderItem={({ item }) => (
             <View style={styles.cardContainer}>
               <PostCard
-                car={item.carDetails.carData}
-                imageUrls={item.carDetails.imageUrls}
+                car={item.favData.carDetails.carData}
+                imageUrls={item.favData.carDetails.imageUrls}
                 ownerId={item.ownerId}
-                ownerData={item.ownerData || {}}
+                ownerData={item.ownerData }
                 horizontal={false}
-                postId={item.carDetails.postId}
+                postId={item.favData.carDetails.postId}
               />
             </View>
           )}
-          ListEmptyComponent={<Text style={styles.noResultsText}>No matching cars found</Text>}
+          ListEmptyComponent={
+            <Text style={styles.noResultsText}>No matching cars found</Text>
+          }
         />
       )}
     </View>
@@ -91,7 +113,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    marginTop:-50
+    marginTop: -50,
   },
   resultsText: {
     fontSize: 23,
@@ -100,26 +122,26 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   bubblesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
     marginBottom: 20,
   },
   bubble: {
-    backgroundColor: '#7F5AF0',
+    backgroundColor: "#7F5AF0",
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 20,
     marginVertical: 5,
     marginHorizontal: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
     elevation: 5,
   },
   bubbleText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 14,
   },
   flatListContent: {

@@ -16,9 +16,11 @@ import {
   collection,
   query,
   where,
+  getDocs,
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { get } from "firebase/database";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -51,14 +53,31 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
           collection(db, "car_post"),
           where("carDetails.postId", "in", updatedUserData.favorites)
         );
-        const favPostsUnsubscribe = onSnapshot(favPostsQuery, (snapshot) => {
-          const newData = [];
-          snapshot.forEach((doc) => {
-            newData.push(doc.data());
-          });
-          setFavPosts(newData);
-          setLoading(false);
-        });
+        const favPostsUnsubscribe = onSnapshot(
+          favPostsQuery,
+          async (snapshot) => {
+            let newData = [];
+            // Using Promise.all to wait for all async tasks to complete
+            await Promise.all(
+              snapshot.docs.map(async (postDoc) => {
+                const querySnapshot = await getDocs(
+                  query(
+                    collection(db, "users"),
+                    where("id", "==", postDoc.data().ownerId)
+                  )
+                );
+                querySnapshot.forEach((doc) => {
+                  newData.push({
+                    favData: postDoc.data(),
+                    ownerData: doc.data(), // Assuming you want to include the owner data
+                  });
+                });
+              })
+            );
+            setFavPosts(newData);
+            setLoading(false);
+          }
+        );
         return favPostsUnsubscribe;
       } else {
         // If userData.favorites is empty or undefined, set favPosts to an empty array
@@ -71,9 +90,9 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
   };
 
   return (
-    <Tab.Navigator 
-      screenOptions={({ route }) => ({ 
-        tabBarIndicatorStyle: { backgroundColor: '#7F5AF0' },
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIndicatorStyle: { backgroundColor: "#7F5AF0" },
         tabBarIcon: ({ color, size }) => {
           let iconName;
           if (route.name === "YourPosts") {
@@ -81,20 +100,22 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
           } else if (route.name === "Favorites") {
             iconName = "bookmark-multiple";
           }
-          return <MaterialCommunityIcons name={iconName} size={23} color={color} />;
+          return (
+            <MaterialCommunityIcons name={iconName} size={23} color={color} />
+          );
         },
         tabBarLabel: () => null,
       })}
     >
       <Tab.Screen name="YourPosts">
         {() => (
-          <FlatList 
+          <FlatList
             scrollEnabled={false}
             data={userPosts}
             numColumns={2}
             renderItem={({ item }) => (
               <View style={{ flex: 1 }}>
-                <View style={{ margin: 8 }} >
+                <View style={{ margin: 8 }}>
                   <PostCard
                     car={item.carDetails.carData}
                     imageUrls={item.carDetails.imageUrls}
@@ -113,25 +134,25 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
       </Tab.Screen>
       <Tab.Screen name="Favorites">
         {() => (
-          <View >
+          <View>
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : isProfileOwner ? (
               favPosts.length > 0 ? (
-                <FlatList 
+                <FlatList
                   scrollEnabled={false}
                   data={favPosts}
                   numColumns={2}
                   renderItem={({ item }) => (
                     <View style={{ flex: 1 }}>
-                      <View style={{ margin: 8 }} >
+                      <View style={{ margin: 8 }}>
                         <PostCard
-                          car={item.carDetails.carData}
-                          imageUrls={item.carDetails.imageUrls}
+                          car={item.favData.carDetails.carData}
+                          imageUrls={item.favData.carDetails.imageUrls}
                           ownerId={item.ownerId}
-                          ownerData={item.ownerData || {}}
+                          ownerData={item.ownerData}
                           horizontal={false}
-                          postId={item.carDetails.postId}
+                          postId={item.favData.carDetails.postId}
                         />
                       </View>
                     </View>
