@@ -59,7 +59,6 @@ export default function FilterResult({ route }) {
           return item.favData.carDetails?.carData[key] === value;
         });
       });
-      console.log("FILL", filteredItems);
       setFilteredData(filteredItems);
     } catch (error) {
       console.error("Error fetching data: ", error);
