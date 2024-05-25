@@ -18,7 +18,6 @@ export default function CompletedTrips({route}) {
             const newData = [];
             snapshot.forEach((doc) => {
               const reservationData = doc.data();
-              console.log("Car Data: ", reservationData);
               // Check if current time is less than end date
               const endDateInSeconds = reservationData.endDate.seconds;
               if (Date.now() > endDateInSeconds * 1000) {

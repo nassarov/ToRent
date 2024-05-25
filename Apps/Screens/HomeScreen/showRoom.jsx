@@ -52,7 +52,6 @@ export default function ShowRoom() {
       });
     }
 
-    console.log(newData);
     setData(newData);
     setFilteredData(newData.slice(0, page * pageSize));
     setLoading(false);

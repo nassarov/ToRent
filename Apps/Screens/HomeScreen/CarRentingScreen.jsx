@@ -95,7 +95,7 @@ export default function CarRentingScreen({ route }) {
       [
         {
           text: "No",
-          onPress: () => console.log("No pressed"),
+          onPress: () => {},
           style: "cancel",
         },
         {
@@ -201,7 +201,6 @@ export default function CarRentingScreen({ route }) {
   };
 
   const addToReservation = async () => {
-    console.log(daysDifference);
     try {
       if (
         selectedStartDate &&
@@ -230,7 +229,6 @@ export default function CarRentingScreen({ route }) {
         };
 
         await setDoc(doc(db, "Reservation", reservationId), reservationData);
-        console.log("Reservation added with ID: ", reservationId);
         setLoading(false);
         Alert.alert(
           "Success",
@@ -263,13 +261,11 @@ export default function CarRentingScreen({ route }) {
         const reservationData = reservationDoc.data();
         const endDateInSeconds = reservationData.endDate.seconds;
         if (Date.now() < endDateInSeconds * 1000) {
-          console.log(endDateInSeconds * 1000);
           setEnded(false);
         } else {
           setEnded(true);
         }
         setReservationStatus(reservationData.status);
-        console.log(reservationData.status);
       } else {
         setReservationStatus(null);
       }
@@ -306,7 +302,7 @@ export default function CarRentingScreen({ route }) {
       [
         {
           text: "No",
-          onPress: () => console.log("No pressed"),
+          onPress: () =>{},
           style: "cancel",
         },
         {
@@ -377,7 +373,6 @@ export default function CarRentingScreen({ route }) {
                   className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2"
                   onPress={() => {
                     const firstImageUrl = images[0];
-                    console.log("First image URL:", firstImageUrl);
                     const message = `Hello, ${ownerData.name} this is ${userData.name} I am interested in your car ${carData.brand}-${carData.model}(${carData.year})\n\n ${firstImageUrl}.`;
                     const phoneNumber = ownerData.phoneNumber;
                     const url = `whatsapp://send?text=${encodeURIComponent(

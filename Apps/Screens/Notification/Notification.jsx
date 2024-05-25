@@ -149,7 +149,6 @@ export default function NotificationPage({ route }) {
   }, [reservations]);
 
   useEffect(() => {
-    console.log(sortedReservations.length)
     setNewNotifications(sortedReservations.length);
   }, [sortedReservations, setNewNotifications]);
   

@@ -28,7 +28,7 @@ export default function ProfileHeader({ userData , visitorData}) {
             [
                 {
                     text: "No",
-                    onPress: () => console.log("Logout cancelled"),
+                    onPress: () => {},
                     style: "cancel"
                 },
                 {

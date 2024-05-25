@@ -17,8 +17,6 @@ export default function PendingTrips({ route }) {
         const newData = [];
         snapshot.forEach((doc) => {
           const reservationData = doc.data();
-          console.log("Car Data: ", reservationData);
-          console.log("Reservation Status: ", reservationData.status); 
           newData.push(reservationData);
         });
         setReservations(newData);
@@ -29,7 +27,6 @@ export default function PendingTrips({ route }) {
     if (userData.role !== undefined) {
 
     fetchReservations();}
-    console.log(reservations);
   }, [userData.id]);
 
   if (loading) {

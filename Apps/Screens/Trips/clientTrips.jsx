@@ -18,11 +18,9 @@ export default function ClientTripsScreen({route}) {
         const newData = [];
         snapshot.forEach((doc) => {
           const reservationData = doc.data();
-          console.log("Car Data: ", reservationData);
           newData.push(reservationData);
         });
         setReservations(newData);
-        console.log("RRRR",reservations[0])
         setLoading(false);
       });
       return unsubscribe;
