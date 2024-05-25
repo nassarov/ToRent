@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   Modal,
-  Button,
   Alert,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -12,8 +11,6 @@ import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from "react-native-responsive-screen";
-import CalendarPicker from "react-native-calendar-picker";
-import { MaterialCommunityIcons } from "@expo/vector-icons/";
 import { Calendar } from "react-native-calendars";
 import {
   collection,
@@ -38,12 +35,9 @@ export default function CarRentingDetails({
   const db = getFirestore(app);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false); // State variable to control calendar visibility
   const [daysDifference, setdaysDifference] = useState(0); // State variable to control calendar visibility
-  const [rangeColor, setRangeColor] = useState("white");
-  const [rangeColorText, setRangeColorText] = useState("white");
   const currentDate = new Date();
-  const minDate = `${currentDate.getFullYear()}-${
-    currentDate.getMonth() + 1
-  }-${currentDate.getDate()}`; // Today
+  const minDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1 }-${currentDate.getDate()}`; // Today
+    
   const maxDate = new Date(2024, 6, 11);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -186,19 +180,10 @@ export default function CarRentingDetails({
     setIsCalendarVisible(!isCalendarVisible);
   };
 
-  const onDateChange = (date, type) => {
-    if (type === "END_DATE") {
-      onEndDateChange(date); // Update via parent's handler
-    } else {
-      onStartDateChange(date); // Update via parent's handler
-    }
-  };
-
   const calculateDaysDifference = (start, end) => {
     if (start != "" && end != "") {
       return Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
     } else if (start != "") {
-      console.log("raaaaaaaaaaaaaaaaaaaaaaaaaaaah");
       return 1;
     } else {
       return 0;

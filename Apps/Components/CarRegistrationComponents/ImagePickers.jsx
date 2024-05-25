@@ -56,7 +56,7 @@ export default function ImagePickers({ image, setImage, whichImage }) {
           />
         ) : (
           <Text className="text-slate-500 border-2 border-slate-500 border-dashed p-1 ">
-            Click To Add Photooooooooooooooo
+            Click To Add Photo
           </Text>
         )}
       </TouchableOpacity>
