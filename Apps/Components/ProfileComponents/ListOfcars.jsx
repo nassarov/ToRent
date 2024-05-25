@@ -143,7 +143,7 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
                         <PostCard
                           car={item.favData.carDetails.carData}
                           imageUrls={item.favData.carDetails.imageUrls}
-                          ownerId={item.ownerId}
+                          ownerId={item.favData.ownerId}
                           ownerData={item.ownerData}
                           horizontal={false}
                           postId={item.favData.carDetails.postId}

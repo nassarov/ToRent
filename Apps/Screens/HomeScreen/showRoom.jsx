@@ -20,7 +20,8 @@ import {
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 
-export default function ShowRoom() {
+export default function ShowRoom({route}) {
+  const {userData}=route.params
   const db = getFirestore(app);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -185,7 +186,7 @@ export default function ShowRoom() {
               <PostCard
                 car={item.favData.carDetails.carData}
                 imageUrls={item.favData.carDetails.imageUrls}
-                ownerId={item.ownerId}
+                ownerId={item.favData.ownerId}
                 ownerData={item.ownerData}
                 horizontal={false}
                 postId={item.favData.carDetails.postId}
