@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
-import PostCard from '../../Components/HomeComponents/PostCard';
 import PostCardTrips from '../../Components/HomeComponents/PostCard2';
 
 export default function ClientTripsScreen({route}) {
