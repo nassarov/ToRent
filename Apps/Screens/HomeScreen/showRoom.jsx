@@ -61,14 +61,12 @@ export default function ShowRoom({route}) {
 
   useEffect(() => {
     fetchData();
-    console.log(data)
   }, [page]);
 
   useEffect(() => {
     let filteredData = [];
     if (searchQuery === "") {
       setFilteredData(data.slice(0, page * pageSize)); 
-      console.log(filteredData)
       return;
     }
     if (selectedChoice === "") {

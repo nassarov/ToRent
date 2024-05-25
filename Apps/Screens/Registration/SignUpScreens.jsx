@@ -174,7 +174,7 @@ export default function SignUpScreen({ route }) {
                   <TextInput
                     placeholder="Email"
                     style={styles.input}
-                    onChangeText={(text) => setEmail(text)}
+                    onChangeText={(text) => setEmail(text.toLowerCase())}
                     onBlur={handleBlur("email")}
                     value={email}
                   />

@@ -62,8 +62,7 @@ export default function LoginScreen() {
         CommonActions.reset({
           index: 0,
           routes: [
-            {name:"HomeScreenNavigation", params:{ userData } },
-        
+            { name: "HomeScreenNavigation", params: { userData } },
           ],
         })
       );
@@ -98,7 +97,7 @@ export default function LoginScreen() {
         return errors;
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+      {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue }) => (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={styles.container}>
             <StatusBar backgroundColor={"#F6F6F6"} translucent={true} />
@@ -107,7 +106,7 @@ export default function LoginScreen() {
                 <TextInput
                   placeholder="Email"
                   style={styles.input}
-                  onChangeText={handleChange("email")}
+                  onChangeText={(text) => setFieldValue('email', text.toLowerCase())}
                   onBlur={handleBlur("email")}
                   value={values.email}
                 />
