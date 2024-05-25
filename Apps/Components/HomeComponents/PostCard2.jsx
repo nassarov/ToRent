@@ -72,7 +72,7 @@ export default function PostCardTrips({
             >
               <Ionicons name="close" size={30} color="#7F5AF0" />
             </TouchableOpacity>
-            <Image source={{ uri: imageUrls[0] }} style={styles.carPhoto} />
+            <View className='mb-2 border-2 rounded-xl'><Image source={{ uri: imageUrls[0] }} style={styles.carPhoto} /></View>
             <View style={styles.dateContainer}>
               <Text style={styles.dateText}>
                 From: {`${start.getDate()}-${start.getMonth() + 1}-${start.getFullYear()}   `}
@@ -99,7 +99,9 @@ export default function PostCardTrips({
               </View>
             </View>
             <View style={styles.remainingDaysContainer}>
-              <Text style={styles.remainingDaysText}>Remaining Days: {remainingDays}</Text>
+            <Text style={styles.remainingDaysText}>
+              {remainingDays < 0 ? 'Ended' : `Remaining Days: ${remainingDays}`}
+            </Text>
             </View>
           </View>
         </View>
@@ -187,6 +189,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    borderWidth:3
   },
   closeButton: {
     position: "absolute",
@@ -200,7 +203,6 @@ const styles = StyleSheet.create({
   carPhoto: {
     width: 350,
     height: 200,
-    marginBottom: 5,
     borderRadius: 10,
   },
   dateContainer: {
@@ -211,11 +213,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 7,
     backgroundColor: '#7F5AF0',
-    borderColor: '#7F5AF0',
+    borderColor: 'black',
+    borderWidth:2
   },
   dateText: {
     fontSize: 16,
     color: 'white',
+    fontWeight:'bold'
   },
   bottomInfoContainer: {
     flexDirection: 'row',
@@ -226,7 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     backgroundColor: '#7F5AF0',
-    borderColor: '#7F5AF0',
+    borderColor: 'black',
   },
   clientInfo: {
     flex: 1,
@@ -239,6 +243,7 @@ const styles = StyleSheet.create({
   clientInfoText: {
     fontSize: 16,
     color: 'white',
+    fontWeight:'bold'
   },
   carDetails: {
     flex: 1,
@@ -248,6 +253,7 @@ const styles = StyleSheet.create({
   carDetailsText: {
     fontSize: 16,
     color: 'white',
+    fontWeight:'bold'
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -268,10 +274,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     backgroundColor: '#7F5AF0',
-    borderColor: '#7F5AF0',
+    borderColor: 'black',
   },
   remainingDaysText: {
     fontSize: 16,
     color: 'white',
+    fontWeight:'bold'
   },
 });

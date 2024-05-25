@@ -19,6 +19,7 @@ import {
   where,
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
+import * as Animatable from "react-native-animatable";
 
 export default function ShowRoom({route}) {
   const {userData}=route.params
@@ -159,7 +160,8 @@ export default function ShowRoom({route}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
+      <Animatable.View style={styles.searchContainer} animation="fadeInDown" 
+            duration={1500} >
         <SearchBarCar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -170,11 +172,12 @@ export default function ShowRoom({route}) {
         >
           <FontAwesome6 name="sliders" size={24} color="black" />
         </TouchableOpacity>
-      </View>
+      </Animatable.View>
+      <Animatable.View animation="fadeInRight"  duration={1000} >
       <SearchChoices
         selected={selectedChoice}
         setSelected={setSelectedChoice}
-      />
+      /></Animatable.View>
       {data && (
         <FlatList
           data={filteredData}
@@ -182,7 +185,10 @@ export default function ShowRoom({route}) {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.flatListContainer}
           renderItem={({ item }) => (
-            <View style={styles.cardContainer}>
+            <Animatable.View style={styles.cardContainer} 
+            animation="bounceInDown" 
+            duration={2500} 
+            >
               <PostCard
                 car={item.favData.carDetails.carData}
                 imageUrls={item.favData.carDetails.imageUrls}
@@ -191,14 +197,14 @@ export default function ShowRoom({route}) {
                 horizontal={false}
                 postId={item.favData.carDetails.postId}
               />
-            </View>
+            </Animatable.View>
           )}
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
           onEndReached={handleLoadMore} 
           onEndReachedThreshold={0.1} 
           ListFooterComponent={() =>
-            loading ? <ActivityIndicator size="large" color="#0000ff" /> : null
+            loading ? <ActivityIndicator size="large" color="#7F5AF0"/> : null
           }
         />
       )}
