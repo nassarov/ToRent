@@ -122,7 +122,7 @@ export default function ProfileDetails({
         {loading ? (
           <ActivityIndicator size="small" color="#7F5AF0" />
         ) : (
-          <Text style={{ fontSize: 24, fontWeight: "bold", color: "black" }}>
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: "black" ,marginTop:15}}>
             {numberOfReservations}
           </Text> )}
           <Text style={{ fontSize: 16, color: "black" }}>Total Client's</Text>

@@ -53,7 +53,7 @@ export default function PictureSwitching({ images }) {
                 source={{ uri: item }}
                 style={{
                   width: widthPercentageToDP(86 / images.length),
-                  height: widthPercentageToDP(15),
+                  height: widthPercentageToDP(13),
                 }}
                 resizeMode="contain"
               />
