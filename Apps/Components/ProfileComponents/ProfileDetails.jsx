@@ -7,6 +7,7 @@ import styles from "../ProfileComponents/profileStyle";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, getFirestore, onSnapshot, query, where } from "firebase/firestore";
+import CountryFlag from "react-native-country-flag";
 export default function ProfileDetails({
   userData,
   numberOfPosts,
@@ -136,14 +137,14 @@ export default function ProfileDetails({
         {userData.name}
       </Text>
       <Text style={{ color: "black", marginTop: 4 }}>{userData.email}</Text>
-      <Text style={{ color: "black", marginTop: 4 }}>
+      <Text style={{ color: "black", marginTop: 4 }}><CountryFlag isoCode="LB" size={15} />
         {userData.phoneNumber}
       </Text>
       {userData.role === "1" && (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Icon
             name="map-marker-radius"
-            color="#777777"
+            color="#7F5AF0"
             size={20}
             style={{ paddingRight: 10 }}
           />

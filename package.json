@@ -33,6 +33,7 @@
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-calendar-picker": "^8.0.2",
     "react-native-calendars": "^1.1304.1",
+    "react-native-country-flag": "^2.0.2",
     "react-native-element-dropdown": "^2.10.4",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.14.0",
