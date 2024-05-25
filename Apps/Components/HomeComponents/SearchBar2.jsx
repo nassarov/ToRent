@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { SearchBar } from "react-native-elements";
 
@@ -7,12 +7,8 @@ const CarSearch = ({ searchQuery, setSearchQuery }) => {
     setSearchQuery(text);
   };
 
-  const handlePressOutside = () => {
-    // Handle press outside the search bar
-  };
-
   return (
-    <TouchableWithoutFeedback onPress={handlePressOutside}>
+    <TouchableWithoutFeedback >
       <View className="flex-1 z-10">
         <SearchBar
           placeholder="What are you looking for..."

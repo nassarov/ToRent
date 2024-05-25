@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   ActivityIndicator,
-  StyleSheet,
   FlatList,
   Text,
 } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { useNavigation } from "@react-navigation/native";
 import PostCard from "../../Components/HomeComponents/PostCard";
 import {
   onSnapshot,
@@ -20,12 +18,10 @@ import {
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { get } from "firebase/database";
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function ListOfCars({ userPosts, visitorData, userData }) {
-  const navigation = useNavigation();
   const [favPosts, setFavPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const isProfileOwner = userData.id === visitorData.id;
@@ -57,7 +53,6 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
           favPostsQuery,
           async (snapshot) => {
             let newData = [];
-            // Using Promise.all to wait for all async tasks to complete
             await Promise.all(
               snapshot.docs.map(async (postDoc) => {
                 const querySnapshot = await getDocs(
@@ -69,7 +64,7 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
                 querySnapshot.forEach((doc) => {
                   newData.push({
                     favData: postDoc.data(),
-                    ownerData: doc.data(), // Assuming you want to include the owner data
+                    ownerData: doc.data(), 
                   });
                 });
               })
@@ -80,7 +75,6 @@ export default function ListOfCars({ userPosts, visitorData, userData }) {
         );
         return favPostsUnsubscribe;
       } else {
-        // If userData.favorites is empty or undefined, set favPosts to an empty array
         setFavPosts([]);
         setLoading(false);
       }

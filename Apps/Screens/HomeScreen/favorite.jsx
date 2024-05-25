@@ -5,7 +5,7 @@ import { updateDoc, doc, getFirestore, getDoc } from "firebase/firestore";
 
 const FavoriteButton = ({ userId, postId, userData }) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false); 
   const db = getFirestore();
 
   useEffect(() => {
@@ -15,7 +15,6 @@ const FavoriteButton = ({ userId, postId, userData }) => {
         const userRef = doc(db, "users", userId);
         const userSnapshot = await getDoc(userRef);
         const userData = userSnapshot.data();
-        // Check if postId is in favorites
         setIsFavorite(userData?.favorites?.includes(postId) || false);
         setLoading(false); 
       } catch (error) {
@@ -27,20 +26,18 @@ const FavoriteButton = ({ userId, postId, userData }) => {
 
   const handleFavorite = async () => {
     try {
-      setLoading(true); // Set loading to true when starting the operation
+      setLoading(true); 
       const userRef = doc(db, "users", userId);
       const userSnapshot = await getDoc(userRef);
       const userData = userSnapshot.data();
       
       if (isFavorite) {
-        // Remove postId from favorites
         const updatedFavorites = userData.favorites.filter(id => id !== postId);
         await updateDoc(userRef, {
           favorites: updatedFavorites
         });
         setIsFavorite(false);
       } else {
-        // Add postId to favorites
         const updatedFavorites = [...userData.favorites, postId];
         await updateDoc(userRef, {
           favorites: updatedFavorites
@@ -49,7 +46,6 @@ const FavoriteButton = ({ userId, postId, userData }) => {
       }
     } catch (error) {
       console.error("Error updating favorites:", error);
-      // Show an error message to the user
       Alert.alert("Error", "Failed to update favorites. Please try again.");
     } finally {
       setLoading(false); 

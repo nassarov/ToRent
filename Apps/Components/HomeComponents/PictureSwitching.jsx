@@ -63,7 +63,6 @@ export default function PictureSwitching({ images }) {
         />
       </View>
 
-      {/* Modal for full-screen image viewer */}
       <Modal
         visible={modalVisible}
         transparent={true}

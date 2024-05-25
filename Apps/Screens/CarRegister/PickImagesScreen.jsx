@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
   Alert,
   Modal,
 } from "react-native";
@@ -16,8 +15,6 @@ import {
 import ImagePickers from "../../Components/CarRegistrationComponents/ImagePickers";
 import {
   getFirestore,
-  collection,
-  addDoc,
   doc,
   getDoc,
   setDoc,
@@ -43,9 +40,7 @@ export default function PickImagesScreen({ route }) {
 
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
   const navigation = useNavigation();
-  // Fetch the latest post count from the database
   const fetchPostCount = async () => {
     const db = getFirestore();
     const postCountDocRef = doc(db, "post_counts", userEmail);
@@ -68,7 +63,6 @@ export default function PickImagesScreen({ route }) {
   };
 
   const updatePostCount = async (newPostCount) => {
-    // Update the post count in the database
     const postCountDocRef = doc(db, "post_counts", userEmail);
     await setDoc(postCountDocRef, { count: newPostCount });
   };
@@ -99,7 +93,7 @@ export default function PickImagesScreen({ route }) {
 
   const handleSave = async () => {
     setLoading(true);
-    setUploading(true); // Start uploading process
+    setUploading(true); 
 
     try {
       if (!frontImage || !backImage || !interiorImage) {
@@ -111,7 +105,6 @@ export default function PickImagesScreen({ route }) {
         );
         return;
       }
-      // Upload each image and get their download URLs
       if (frontImage) {
         const frontImageUrl = await uploadImageToStorage(
           frontImage,
@@ -157,15 +150,13 @@ export default function PickImagesScreen({ route }) {
         imageUrls.push(rightSideImageUrl);
       }
 
-      //add car post
       addCar();
 
-      // Increment the post count and update it in the database
       const newPostCount = postCount + 1;
       await updatePostCount(newPostCount);
       setPostCount(newPostCount);
       setLoading(false);
-      setUploading(false); // Finished uploading
+      setUploading(false); 
       navigation.replace("TabNavigation");
       Alert.alert(
         "Success",

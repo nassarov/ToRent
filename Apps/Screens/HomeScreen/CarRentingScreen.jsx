@@ -2,7 +2,6 @@ import {
   View,
   Text,
   Image,
-  Dimensions,
   Linking,
   Alert,
   StyleSheet,
@@ -10,11 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {
   heightPercentageToDP,
   widthPercentageToDP,
@@ -27,28 +22,19 @@ import {
   FontAwesome,
   Ionicons,
   FontAwesome6,
-  MaterialIcons,
 } from "@expo/vector-icons/";
-import CalendarPicker from "react-native-calendar-picker";
 import PictureSwitching from "../../Components/HomeComponents/PictureSwitching";
 import DetailsGrid from "../../Components/HomeComponents/DetailsGrid";
 import CarRentingDetails from "../../Components/CarRegistrationComponents/CarRentingDetails";
 import {
-  collection,
-  collectionGroup,
   deleteDoc,
   doc,
-  getDocs,
   getFirestore,
-  query,
-  where,
   updateDoc,
   getDoc,
   serverTimestamp,
-  addDoc,
   setDoc,
 } from "firebase/firestore";
-import { Card } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import FavoriteButton from "./favorite";
 
@@ -56,7 +42,7 @@ export default function CarRentingScreen({ route }) {
   const { userData, carData, images, ownerId, ownerData, postId } =
     route.params;
   const isOwner = userData.id === ownerId;
-  const minDate = new Date(); // Today
+  const minDate = new Date();
   const maxDate = new Date(2025, 6, 3);
   const [buttonVisible, setButtonVisible] = useState(true);
   const scrollViewRef = useRef(null);
@@ -75,12 +61,10 @@ export default function CarRentingScreen({ route }) {
     setSelectedStartDate(date);
   };
 
-  // Function to update selected end date
   const handleEndDateChange = (date) => {
     setSelectedEndDate(date);
   };
 
-  // Function to update total price
   const handleTotalPriceChange = (totalPrice) => {
     setTotalPrice(totalPrice);
   };
@@ -88,12 +72,10 @@ export default function CarRentingScreen({ route }) {
     setDaysDifference(difference);
   };
   const handlePress = () => {
-    // Open Google Maps with the location of Beirut
     const url = locationLink;
     Linking.openURL(url);
   };
 
-  // Function to handle scroll event
   const handleScroll = (event) => {
     const { y } = event.nativeEvent.contentOffset;
     if (y > 350) {
@@ -102,7 +84,6 @@ export default function CarRentingScreen({ route }) {
       setButtonVisible(true);
     }
   };
-  // Function to scroll to the bottom
   const scrollToBottom = () => {
     scrollViewRef.current.scrollToEnd({ animated: true, duration: 1000 });
   };
@@ -195,7 +176,6 @@ export default function CarRentingScreen({ route }) {
     },
   ];
 
-  // Function to update user data when a post is favorited
   const addToFavorites = async (postId) => {
     try {
       const userRef = doc(db, "users", userData.id);
@@ -203,7 +183,6 @@ export default function CarRentingScreen({ route }) {
       const userData = userSnapshot.data();
 
       let updatedFavorites = [];
-      // Check if favorites array exists, if not create it
       if (userData.favorites) {
         updatedFavorites = [...userData.favorites, postId];
       } else {
@@ -230,10 +209,8 @@ export default function CarRentingScreen({ route }) {
         daysDifference <= carData.maxdays
       ) {
         setLoading(true);
-        // reservation ID hiye combination of userData.id and postId
         const reservationId = userData.id + "_" + postId;
 
-        // reservation data
         const reservationData = {
           reservationId: reservationId,
           clientId: userData.id,
@@ -294,7 +271,6 @@ export default function CarRentingScreen({ route }) {
         setReservationStatus(reservationData.status);
         console.log(reservationData.status);
       } else {
-        // If reservation does not exist, set status to null
         setReservationStatus(null);
       }
     } catch (error) {
@@ -323,7 +299,6 @@ export default function CarRentingScreen({ route }) {
     buttonDisabled = false;
   }
 
-  // Function to cancel reservation
   const cancelReservation = async () => {
     Alert.alert(
       "Cancel Reservation",
@@ -377,7 +352,6 @@ export default function CarRentingScreen({ route }) {
         </View>
 
         <View style={styles.container}>
-          {/* Car Owner Data */}
           <View className="flex-row justify-between items-center">
             <TouchableOpacity
               style={styles.profileContainer}
@@ -397,7 +371,6 @@ export default function CarRentingScreen({ route }) {
                 <Text>{carData.address.label}</Text>
               </View>
             </TouchableOpacity>
-            {/* FavoriteButton */}
             {!isOwner && (
               <View className="flex-row">
                 <TouchableOpacity
@@ -426,14 +399,12 @@ export default function CarRentingScreen({ route }) {
               </View>
             )}
           </View>
-          {/* Grid */}
           <View>
             <Text className="ml-2 font-bold text-lg mb-[-12px] mt-2">
               Car Details
             </Text>
             <DetailsGrid details={details} />
           </View>
-          {/* Description */}
           <View>
             <Text className="ml-2 font-bold text-lg mb-[-12px] ">
               Description
@@ -442,7 +413,6 @@ export default function CarRentingScreen({ route }) {
               <Text>{carData.description}</Text>
             </View>
           </View>
-          {/* Address  */}
           <Text className="ml-2 font-bold text-lg mb-[-12px] ">Address</Text>
           <View
             className="m-4 border-2 border-violet-600 rounded-lg p-2"
@@ -471,7 +441,6 @@ export default function CarRentingScreen({ route }) {
             </TouchableOpacity>
           </View>
         </View>
-        {/* Calendar */}
         <View style={styles.container} className="pb-5">
           <Text className="ml-2 font-bold text-lg mb-[2px] mt-2">
             Car Pick-up and Drop-off Dates
@@ -489,7 +458,6 @@ export default function CarRentingScreen({ route }) {
             postId={postId}
           />
         </View>
-        {/* TouchableOpacity fixed at center bottom */}
         <View
           style={{
             position: "relative",
@@ -497,7 +465,7 @@ export default function CarRentingScreen({ route }) {
             justifyContent: "center",
             alignItems: "center",
             columnGap: 10,
-            marginBottom: 20, // Adjust as needed
+            marginBottom: 20,
           }}
         >
           {isOwner ? (
@@ -521,7 +489,6 @@ export default function CarRentingScreen({ route }) {
                   alignItems: "center",
                 }}
               >
-                {/* Button content */}
                 <Text style={{ color: "white", fontWeight: "bold" }}>
                   Update Post
                 </Text>
@@ -541,7 +508,6 @@ export default function CarRentingScreen({ route }) {
                   alignItems: "center",
                 }}
               >
-                {/* Button content */}
                 <Text style={{ color: "red", fontWeight: "bold" }}>
                   Delete Post
                 </Text>

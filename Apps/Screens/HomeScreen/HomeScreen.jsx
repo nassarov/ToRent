@@ -5,8 +5,6 @@ import Slider from "../../Components/HomeComponents/Slider";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { getAuth } from "firebase/auth";
 import Constants from 'expo-constants';
 
 import {
@@ -24,13 +22,10 @@ import { StatusBar } from "expo-status-bar";
 
 export default function HomeScreen({ route }) {
   const db = getFirestore(app);
-  const auth = getAuth();
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [lastVisible, setLastVisible] = useState(null);
-  const screenWidth = Dimensions.get("window").width;
-  const { userData } = route.params;
   const navigation = useNavigation();
   const images = [
     require("../../../assets/HomeSlider/s0.jpg"),

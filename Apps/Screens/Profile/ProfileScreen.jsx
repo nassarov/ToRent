@@ -1,15 +1,13 @@
-import { View, StyleSheet, Text, ActivityIndicator, Alert } from "react-native";
+import { View, ActivityIndicator, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import UserProfile from "../../Components/ProfileComponents/UserProfile";
 import ListofCars from "../../Components/ProfileComponents/ListOfcars";
 import {
   collection,
-  getDocs,
   getFirestore,
   query,
   where,
-  onSnapshot // Import onSnapshot for real-time updates
+  onSnapshot 
 } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 import ProfileHeader from "../../Components/ProfileComponents/ProfileHeader";
@@ -21,7 +19,7 @@ export default function ProfileScreen({ route }) {
   const { userData, visitorData } = route.params;
   const db = getFirestore(app);
   const [userPosts, setUserPosts] = useState([]);
-  const [loading, setLoading] = useState(true); // State for loading indicator
+  const [loading, setLoading] = useState(true); 
   const navigation = useNavigation();
   console.log(userData)
   useEffect(() => {
@@ -41,13 +39,11 @@ export default function ProfileScreen({ route }) {
     const unsubscribe = navigation.addListener("focus", (e) => {
       if (userData.role !== undefined) {
         const unsubscribeUserPosts = fetchData();
-        // Cleanup subscriptions on unmount
         return () => {
           unsubscribeUserPosts();
         };
       }
     });
-    // Clean up the listener when component unmounts
     return unsubscribe;
   }, [navigation, userData]);
 
@@ -60,7 +56,7 @@ export default function ProfileScreen({ route }) {
         newData.push(doc.data());
       });
       setUserPosts(newData);
-      setLoading(false); // Set loading to false once data is fetched
+      setLoading(false); 
     });
     return unsubscribe;
   };
@@ -68,7 +64,7 @@ export default function ProfileScreen({ route }) {
   return (
     <ScrollView showsVerticalScrollIndicator={false} className='pb-5'>
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-        {loading ? ( // Show loading indicator if data is being fetched
+        {loading ? ( 
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           <>

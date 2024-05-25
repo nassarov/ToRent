@@ -1,10 +1,6 @@
-import { View, Text, Image, Dimensions } from "react-native";
+import { View, Image, Dimensions } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import {
-  heightPercentageToDP,
-  widthPercentageToDP,
-} from "react-native-responsive-screen";
 
 export default function Carousel() {
   const screenWidth = Dimensions.get("window").width - 20;
@@ -28,8 +24,8 @@ export default function Carousel() {
       });
     }, 2000);
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, [activeIndex]); // Add activeIndex as a dependency
+    return () => clearInterval(interval); 
+  }, [activeIndex]); 
 
 
   const renderItem = ({ item, index }) => {

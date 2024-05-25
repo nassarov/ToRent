@@ -46,7 +46,6 @@ export default function EditCarRegistrationScreen({ route }) {
   };
 
   const handleSave = async () => {
-    // Check for empty fields
     for (const [key, value] of Object.entries(formData)) {
       if (value === "" || value === null) {
         Alert.alert("Validation Error", `Please fill in the ${key} field.`);

@@ -10,7 +10,6 @@ import { getFirestore, collection, getDocs, query, where } from "firebase/firest
 import { app } from "../../../firebaseConfig";
 import PostCard from "../../Components/HomeComponents/PostCard";
 
-// Bubble component to display car data
 const Bubble = ({ label, value }) => {
   return (
     <View style={styles.bubble}>
@@ -52,7 +51,6 @@ export default function FilterResult({ route }) {
         });
       }
       console.log("Fetched Data:", newData);
-      // Filter the fetched data based on matching at least one value in carData
       const filteredItems = newData.filter((item) => {
         return Object.entries(carData).some(([key, value]) => {
           if (key === "address") {
@@ -75,7 +73,7 @@ export default function FilterResult({ route }) {
       <Text style={styles.resultsText}>Results</Text>
       <View style={styles.bubblesContainer}>
         {Object.entries(carData)
-          .filter(([key, value]) => value) // Filter out entries with empty values
+          .filter(([key, value]) => value) 
           .map(([key, value], index) => (
             <Bubble key={index} label={key} value={value} />
           ))}

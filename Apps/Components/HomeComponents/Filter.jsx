@@ -3,19 +3,10 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Modal,
-  FlatList,
   StyleSheet,
-  Dimensions,
-  Image,
-  Alert,
-  TextInput,
-  Keyboard,
-  TouchableWithoutFeedback,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
 } from "react-native";
 
 import {
@@ -24,11 +15,9 @@ import {
 } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
 import { useLayoutEffect } from "react";
-import { app, auth } from "../../../firebaseConfig";
+import { app } from "../../../firebaseConfig";
 import {
-  doc,
   getFirestore,
-  updateDoc,
   collection,
   getDocs,
   query,
@@ -37,7 +26,6 @@ import {
 import DropdownModal from "../../Components/CarRegistrationComponents/DropdownModal";
 import AddressDropdownModal from "../../Components/CarRegistrationComponents/AddressDropDownModal";
 
-const { height } = Dimensions.get("window");
 const yearOptions = [];
 const currentYear = new Date().getFullYear();
 const startYear = 1990; //start year
@@ -78,7 +66,6 @@ export default function Filter() {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
-  // hide bottom tab bar
   useLayoutEffect(() => {
     navigation.setOptions({
       tabBarStyle: { display: "none" },
@@ -105,12 +92,6 @@ export default function Filter() {
       console.error("Error fetching cities:", error);
     }
     setLoading(false);
-  };
-
-  const handleBrandSelect = (brand) => {
-    setSelectedBrand(brand);
-    setSelectedModel(null);
-    setSelectedType(null);
   };
 
   const onApply = async () => {

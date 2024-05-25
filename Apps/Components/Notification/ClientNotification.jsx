@@ -11,7 +11,6 @@ import {
   AntDesign,
   Feather,
   Ionicons,
-  MaterialIcons,
 } from "@expo/vector-icons";
 
 export default function NotificationItem({
@@ -51,14 +50,9 @@ export default function NotificationItem({
     const updateDifference = () => {
       setTimeDifference(calculateTimeDifference());
     };
-
-    // Calculate time difference initially
     updateDifference();
-
-    // Update time difference every minute
     const intervalId = setInterval(updateDifference, 60000);
 
-    // Clear interval on component unmount
     return () => clearInterval(intervalId);
   }, [createdAt]);
 

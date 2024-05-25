@@ -8,15 +8,12 @@ import {
   Fontisto,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HomeScreen from "../Screens/HomeScreen/HomeScreen";
-import CarRentingScreen from "../Screens/HomeScreen/CarRentingScreen";
 import CarRegistrationScreen from "../Screens/CarRegister/CarRegistrationScreen";
 import CustomHeader2 from "../Components/CustomHeader2";
 import ProfileScreen from "../Screens/Profile/ProfileScreen";
 import Notification from "../Screens/Notification/Notification";
 import Trips from "../Screens/Trips/Trips";
-import { Badge } from 'react-native-elements';
 
 const Tab = createBottomTabNavigator();
 

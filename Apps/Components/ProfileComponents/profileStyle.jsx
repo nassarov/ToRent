@@ -1,5 +1,4 @@
-import { Platform, StyleSheet } from "react-native";
-import { TextInput } from "react-native-paper";
+import {  StyleSheet } from "react-native";
 import {
   heightPercentageToDP,
   widthPercentageToDP,

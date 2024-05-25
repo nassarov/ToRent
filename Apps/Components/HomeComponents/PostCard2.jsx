@@ -7,9 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 export default function PostCardTrips({
   car,
   imageUrls,
-  ownerId,
   horizontal,
-  postId,
   reservationData
 }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -19,7 +17,6 @@ export default function PostCardTrips({
   const start = new Date(reservationData.startDate.seconds * 1000);
   const end = new Date(reservationData.endDate.seconds * 1000);
   
-  // Calculate remaining days
   const today = new Date();
   const remainingTime = end.getTime() - today.getTime();
   const remainingDays = Math.ceil(remainingTime / (1000 * 3600 * 24));

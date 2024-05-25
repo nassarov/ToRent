@@ -19,7 +19,6 @@
     carPhoto,
     TotalDays,
     TotalPrice,
-    Status,
     StartDate,
     EndDate,
     onReject,
@@ -50,13 +49,10 @@
         setTimeDifference(calculateTimeDifference());
       };
 
-      // Calculate time difference initially
       updateDifference();
 
-      // Update time difference every minute
       const intervalId = setInterval(updateDifference, 60000);
 
-      // Clear interval on component unmount
       return () => clearInterval(intervalId);
     }, [createdAt]);
 

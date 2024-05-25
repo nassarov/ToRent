@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   TextInput,
   ImageBackground,
   ActivityIndicator,
@@ -15,7 +14,6 @@ import styles from "../../Components/ProfileComponents/profileStyle";
 import * as ImagePicker from "expo-image-picker";
 import {
   collection,
-  doc,
   getDocs,
   getFirestore,
   query,
@@ -35,7 +33,7 @@ export default function EditProfile({ route }) {
   const [profileImage, setProfileImage] = useState(null);
   const [name, setName] = useState(userData.name);
   const [showButtons, setShowButtons] = useState(false);
-  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   const onApply = async () => {
@@ -43,13 +41,11 @@ export default function EditProfile({ route }) {
     setModalVisible(true);
     try {
       if (profileImage) {
-        // Upload the new profile image to Firebase Storage
         const imageUrl = await uploadImageToStorage(
           profileImage,
           userData.email
         );
 
-        // Update user data in Firestore with the new image URL
         const querySnapshot = await getDocs(
           query(collection(db, "users"), where("email", "==", userData.email))
         );
@@ -65,7 +61,7 @@ export default function EditProfile({ route }) {
         userData.profileImage = imageUrl;
         
       } else {
-        // Update user data in Firestore without changing the profile image
+        
         const querySnapshot = await getDocs(
           query(collection(db, "users"), where("email", "==", userData.email))
         );
@@ -77,7 +73,6 @@ export default function EditProfile({ route }) {
 
         userData.name = name;
       }
-      // Navigate back to the previous screen
       setLoading(false);
       setModalVisible(false);
       navigation.goBack({ userData: userData });
@@ -111,7 +106,7 @@ export default function EditProfile({ route }) {
       
     } catch (error) {
       console.error("Error uploading image:", error);
-      throw error; // Throw the error so it can be caught in the calling function
+      throw error; 
     }
   };
 
@@ -211,7 +206,6 @@ export default function EditProfile({ route }) {
         </TouchableOpacity>
       </View>
 
-       {/* Loading Modal */}
        <Modal
           animationType="fade"
           transparent={true}

@@ -1,12 +1,10 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
-  heightPercentageToDP,
   widthPercentageToDP,
 } from "react-native-responsive-screen";
-import { getFirestore, doc, getDoc } from "firebase/firestore"; // Import necessary Firestore functions
 
 export default function PostCard({
   car,

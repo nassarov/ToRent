@@ -10,7 +10,6 @@ import CustomHeader2 from "../Components/CustomHeader2";
 import ChangePasswordScreen from "../Screens/Registration/ChangePasswordScreen";
 import AddressScreen from "../Screens/Registration/AddressScreen";
 import HomescreenNavigation from "../Navigations/HomeScreenNavigation";
-import TabNavigation from "./TabNavigation";
 import CustomHeader3 from "../Components/CustomHeader3";
 const Stack = createStackNavigator();
 

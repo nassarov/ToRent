@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  Modal,
   FlatList,
   StyleSheet,
   Dimensions,
   Image,
   Alert,
-  TextInput,
-  Keyboard,
-  TouchableWithoutFeedback,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -23,25 +19,13 @@ import {
 } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
 import { useLayoutEffect } from "react";
-import { app, auth } from "../../../firebaseConfig";
-import {
-  doc,
-  getFirestore,
-  updateDoc,
-  collection,
-  getDocs,
-  query,
-  orderBy,
-} from "firebase/firestore";
+
 import DropdownModal from "../../Components/CarRegistrationComponents/DropdownModal";
-import { color } from "react-native-elements/dist/helpers";
 import AddressDropdownModal from "../../Components/CarRegistrationComponents/AddressDropDownModal";
-const { height } = Dimensions.get("window");
 const yearOptions = [];
 const currentYear = new Date().getFullYear();
-const startYear = 1990; // You can adjust the start year as needed
+const startYear = 1990;
 
-// Loop to generate years from startYear to currentYear
 for (let year = currentYear; year >= startYear; year--) {
   yearOptions.push({ label: year.toString(), value: year });
 }
@@ -122,7 +106,6 @@ export default function CarRegistrationScreen({ route }) {
     setSelectedYear(null);
   };
   const navigation = useNavigation();
-  // hide bottom tab bar
   useLayoutEffect(() => {
     navigation.setOptions({
       tabBarStyle: { display: "none" },
@@ -159,7 +142,7 @@ export default function CarRegistrationScreen({ route }) {
                         borderColor: "#7F5AF0",
                         borderWidth: 2,
                         borderRadius: 10,
-                      }, // Adjust borderWidth as needed
+                      }, 
                   ]}
                   onPress={() => handleBrandSelect(item)}
                 >

@@ -57,12 +57,9 @@ export default function ProfileDetails({
   
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
-          // Shared with activity type of result.activityType
         } else {
-          // Shared
         }
       } else if (result.action === Share.dismissedAction) {
-        // Dismissed
       }
     } catch (error) {
       console.error(error.message);
@@ -117,7 +114,6 @@ export default function ProfileDetails({
           </Text>
           <Text style={{ fontSize: 16, color: "black" }}>Posts</Text>
         </View>
-        {/* Displaying the number of reservations */}
         <View style={{ alignItems: "center" }}>
         {loading ? (
           <ActivityIndicator size="small" color="#7F5AF0" />
@@ -128,12 +124,6 @@ export default function ProfileDetails({
           <Text style={{ fontSize: 16, color: "black" }}>Total Client's</Text>
           <Text style={{ fontSize: 16, color: "black" }}> Reservations</Text>
         </View>
-        {/* <View style={{ width: 75, alignItems: "center" }}>
-          <Text style={{ fontSize: 15, fontWeight: "bold", color: "black" }}>
-            {userData.role === "1" ? "Car Owner" : "Client"}
-          </Text>
-          <Text style={{ fontSize: 16, color: "black" }}>Role</Text>
-        </View> */}
       </View>
       <Text
         style={{

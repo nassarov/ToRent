@@ -8,18 +8,19 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import {
+  heightPercentageToDP,
+  widthPercentageToDP,
+} from "react-native-responsive-screen";
 
-
-export default function CarTextInput({route}) {
-    const [carDatalist ,setCarDatalist] = useState(null)
-    const { carData } = route.params;
-    const { userData } = route.params;
-    const navigation = useNavigation();
+export default function CarTextInput({ route }) {
+  const { carData } = route.params;
+  const { userData } = route.params;
+  const navigation = useNavigation();
   const [carseat, setCarseat] = useState("");
   const [minDays, setMinDays] = useState("");
   const [maxDays, setMaxDays] = useState("");
@@ -30,7 +31,6 @@ export default function CarTextInput({route}) {
     if (text !== "" && text.charAt(0) !== "0") {
       setCarseat(text);
     }
-  
   };
 
   const handleMinDaysChange = (text) => {
@@ -42,12 +42,12 @@ export default function CarTextInput({route}) {
   };
 
   const handlePriceChange = (text) => {
-    const cleanText = text.replace(/[$,]/g, '').replace(/[^\d]/g, '');
+    const cleanText = text.replace(/[$,]/g, "").replace(/[^\d]/g, "");
     if (cleanText.length === 1 && cleanText === "0") {
       setPrice("");
       return;
     }
-    const formattedText = `$${cleanText.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+    const formattedText = `$${cleanText.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
     setPrice(formattedText);
   };
 
@@ -61,12 +61,12 @@ export default function CarTextInput({route}) {
     if (!minDays) missingParams.push("Minimum Days");
     if (!carseat) missingParams.push("Car Seats");
     if (!price) missingParams.push("Price");
-  
+
     if (missingParams.length === 0) {
       const minDaysValue = parseInt(minDays);
       const maxDaysValue = parseInt(maxDays);
-      const priceValue = parseFloat(price.replace(/[$,]/g, ''));
-  
+      const priceValue = parseFloat(price.replace(/[$,]/g, ""));
+
       if (minDaysValue > maxDaysValue) {
         Alert.alert(
           "Invalid Input",
@@ -74,17 +74,20 @@ export default function CarTextInput({route}) {
         );
         return;
       }
-  
+
       const updatedCarData = {
         ...carData,
         carseat: carseat,
         mindays: minDays,
         maxdays: maxDays,
         price: priceValue,
-        description: description
+        description: description,
       };
- 
-      navigation.push("PickImagesScreen", { carData: updatedCarData, userData });
+
+      navigation.push("PickImagesScreen", {
+        carData: updatedCarData,
+        userData,
+      });
     } else {
       Alert.alert(
         "Required",
@@ -105,9 +108,11 @@ export default function CarTextInput({route}) {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <View>
-          <Text style={styles.dropdownTitle}>Car Seats <MaterialCommunityIcons name="car-seat" size={30} color="#7F5AF0" /></Text>
+          <Text style={styles.dropdownTitle}>
+            Car Seats{" "}
+            <MaterialCommunityIcons name="car-seat" size={30} color="#7F5AF0" />
+          </Text>
           <TextInput
-          
             style={styles.input}
             keyboardType="numeric"
             placeholder="Enter number of seats"
@@ -117,7 +122,9 @@ export default function CarTextInput({route}) {
         </View>
 
         <View>
-          <Text style={styles.dropdownTitle}>Minimum <Text style={{color:"#7F5AF0"}}>Days</Text></Text>
+          <Text style={styles.dropdownTitle}>
+            Minimum <Text style={{ color: "#7F5AF0" }}>Days</Text>
+          </Text>
           <TextInput
             style={styles.input}
             keyboardType="numeric"
@@ -128,18 +135,24 @@ export default function CarTextInput({route}) {
         </View>
 
         <View>
-          <Text style={styles.dropdownTitle}>Maximum <Text style={{color:"#7F5AF0"}}>Days</Text></Text>
+          <Text style={styles.dropdownTitle}>
+            Maximum <Text style={{ color: "#7F5AF0" }}>Days</Text>
+          </Text>
           <TextInput
             style={styles.input}
             keyboardType="numeric"
             placeholder="Enter maximum days to rent"
             value={maxDays}
-            onChangeText={handleMaxDaysChange}dolldescriptio
+            onChangeText={handleMaxDaysChange}
+            dolldescriptio
           />
         </View>
 
         <View>
-        <Text style={styles.dropdownTitle}>Price <Text style={{color:"#7F5AF0"}}>/day</Text><FontAwesome name="dollar" size={16} color="#7F5AF0"  /></Text>
+          <Text style={styles.dropdownTitle}>
+            Price <Text style={{ color: "#7F5AF0" }}>/day</Text>
+            <FontAwesome name="dollar" size={16} color="#7F5AF0" />
+          </Text>
           <TextInput
             style={styles.input}
             keyboardType="numeric"
@@ -149,8 +162,11 @@ export default function CarTextInput({route}) {
           />
         </View>
 
-        <View className='mb-[-30]'>
-          <Text style={styles.dropdownTitle}>Description<MaterialIcons name="description" size={24} color="#7F5AF0" /></Text>
+        <View className="mb-[-30]">
+          <Text style={styles.dropdownTitle}>
+            Description
+            <MaterialIcons name="description" size={24} color="#7F5AF0" />
+          </Text>
           <TextInput
             style={[styles.input, styles.descriptionInput]}
             multiline={true}
@@ -168,7 +184,6 @@ export default function CarTextInput({route}) {
           <Text style={styles.ApplyButtonText}>Apply</Text>
         </TouchableOpacity>
       </View>
-      
     </ScrollView>
   );
 }
@@ -189,7 +204,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
-   
   },
   descriptionInput: {
     height: 120, // Adjust the height as needed

@@ -15,7 +15,6 @@ import {
   collection,
   getDocs,
   getFirestore,
-  onSnapshot,
   query,
   where,
 } from "firebase/firestore";
@@ -29,8 +28,8 @@ export default function ShowRoom() {
   const [selectedChoice, setSelectedChoice] = useState("");
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1); // Track current page
-  const pageSize = 10; // Number of items to fetch per page
+  const [page, setPage] = useState(1); 
+  const pageSize = 10; 
 
   const fetchData = async () => {
     setLoading(true);
@@ -66,7 +65,7 @@ export default function ShowRoom() {
   useEffect(() => {
     let filteredData = [];
     if (searchQuery === "") {
-      setFilteredData(data.slice(0, page * pageSize)); // Update filtered data with the current page
+      setFilteredData(data.slice(0, page * pageSize)); 
       return;
     }
 
@@ -151,11 +150,11 @@ export default function ShowRoom() {
           break;
       }
     }
-    setFilteredData(filteredData.slice(0, page * pageSize)); // Update filtered data with the current page
+    setFilteredData(filteredData.slice(0, page * pageSize)); 
   }, [searchQuery, selectedChoice, data, page]);
 
   const handleLoadMore = () => {
-    setPage(page + 1); // Load next page
+    setPage(page + 1); 
   };
 
   return (
@@ -196,10 +195,9 @@ export default function ShowRoom() {
           )}
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
-          onEndReached={handleLoadMore} // Load more data when end is reached
-          onEndReachedThreshold={0.1} // Load more data when the end is within 10% of the list length
+          onEndReached={handleLoadMore} 
+          onEndReachedThreshold={0.1} 
           ListFooterComponent={() =>
-            // Show loading indicator at the end of the list
             loading ? <ActivityIndicator size="large" color="#0000ff" /> : null
           }
         />
