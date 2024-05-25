@@ -21,7 +21,6 @@ export default function ProfileScreen({ route }) {
   const [userPosts, setUserPosts] = useState([]);
   const [loading, setLoading] = useState(true); 
   const navigation = useNavigation();
-  console.log(userData)
   useEffect(() => {
     if (userData.role === undefined) {
       Alert.alert(

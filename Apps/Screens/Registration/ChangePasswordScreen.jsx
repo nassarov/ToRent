@@ -34,8 +34,7 @@ export default function ChangePasswordScreen() {
         confirmPassword: "",
       }}
       onSubmit={(values) => {
-        console.log(values);
-        // Your submission logic goes here
+        
       }}
       validate={(values) => {
         const errors = {};
