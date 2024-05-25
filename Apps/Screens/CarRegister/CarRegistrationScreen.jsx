@@ -22,6 +22,8 @@ import { useLayoutEffect } from "react";
 
 import DropdownModal from "../../Components/CarRegistrationComponents/DropdownModal";
 import AddressDropdownModal from "../../Components/CarRegistrationComponents/AddressDropDownModal";
+import * as Animatable from "react-native-animatable";
+
 const yearOptions = [];
 const currentYear = new Date().getFullYear();
 const startYear = 1990;

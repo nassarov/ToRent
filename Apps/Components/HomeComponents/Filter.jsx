@@ -25,6 +25,7 @@ import {
 } from "firebase/firestore";
 import DropdownModal from "../../Components/CarRegistrationComponents/DropdownModal";
 import AddressDropdownModal from "../../Components/CarRegistrationComponents/AddressDropDownModal";
+import * as Animatable from "react-native-animatable";
 
 const yearOptions = [];
 const currentYear = new Date().getFullYear();
@@ -126,7 +127,9 @@ export default function Filter() {
       behavior={Platform.OS === "ios" ? "padding" : null}
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
     >
-      <View style={styles.container}>
+      <Animatable.View style={styles.container} animation="slideInUp" 
+            duration={900} 
+            delay={200}>
         <ScrollView showsVerticalScrollIndicator={false}>
           
             <AddressDropdownModal
@@ -240,7 +243,7 @@ export default function Filter() {
             setFilteredItems={setFilteredYear}
           />
         </ScrollView>
-      </View>
+      </Animatable.View>
       <View style={styles.bottomContainer} className="bg-slate-300 ">
         <TouchableOpacity onPress={clearAllSelections}>
           <Text style={styles.clearAllText}>Clear All</Text>

@@ -9,6 +9,7 @@ import {
 import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
 import { app } from "../../../firebaseConfig";
 import PostCard from "../../Components/HomeComponents/PostCard";
+import * as Animatable from "react-native-animatable";
 
 const Bubble = ({ label, value }) => {
   return (
@@ -69,23 +70,25 @@ export default function FilterResult({ route }) {
   return (
     <View style={styles.container}>
       <Text style={styles.resultsText}>Results</Text>
-      <View style={styles.bubblesContainer}>
+      <Animatable.View style={styles.bubblesContainer} animation="tada" duration={10500} delay={500} >
         {Object.entries(carData)
           .filter(([key, value]) => value) 
           .map(([key, value], index) => (
             <Bubble key={index} label={key} value={value} />
           ))}
-      </View>
+      </Animatable.View>
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#7F5AF0" />
       ) : (
         <FlatList
           data={filteredData}
+          showsVerticalScrollIndicator={false}
           numColumns={2}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={styles.flatListContent}
           renderItem={({ item }) => (
-            <View style={styles.cardContainer}>
+            <Animatable.View style={styles.cardContainer} animation="slideInDown" 
+            duration={1500} >
               <PostCard
                 car={item.favData.carDetails.carData}
                 imageUrls={item.favData.carDetails.imageUrls}
@@ -94,7 +97,7 @@ export default function FilterResult({ route }) {
                 horizontal={false}
                 postId={item.favData.carDetails.postId}
               />
-            </View>
+            </Animatable.View>
           )}
           ListEmptyComponent={
             <Text style={styles.noResultsText}>No matching cars found</Text>
