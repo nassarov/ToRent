@@ -50,7 +50,6 @@ export default function FilterResult({ route }) {
           });
         });
       }
-      console.log("Fetched Data:", newData);
       const filteredItems = newData.filter((item) => {
         return Object.entries(carData).some(([key, value]) => {
           if (key === "address") {
