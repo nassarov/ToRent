@@ -107,23 +107,22 @@
               >
                 <Ionicons name="close" size={30} color="#7F5AF0" />
               </TouchableOpacity>
-              <Image source={{ uri: carPhoto }} style={styles.carPhoto} />
-              <View className="flex-row mb-4 mt-1 border-2 rounded-xl p-2 border-[#7F5AF0] bg-[#7F5AF0] text-center">
-                <Text className="text-white">
+              <View className='mb-2 border-2 rounded-xl'><Image source={{ uri: carPhoto }} style={styles.carPhoto} /></View>
+              
+              <View className="flex-row mb-4 mt-1 border-2 rounded-xl p-2 border-black bg-[#7F5AF0] text-center">
+                <Text className="text-white font-bold">
                   Start Date:{" "}
-                  {`${start.getFullYear()}-${
-                    start.getMonth() + 1
-                  }-${start.getDate()}`}{" "}
+                  {`${start.getDate()}-${ start.getMonth() + 1 }-${start.getFullYear()}`}{" "}
                   Till{" "}
                 </Text>
-                <Text className="text-white">
+                <Text className="text-white font-bold">
                   End Date:{" "}
-                  {`${end.getFullYear()}-${end.getMonth() + 1}-${end.getDate()}`}
+                  {`${end.getDate()}-${end.getMonth() + 1}-${end.getFullYear()}`}
                 </Text>
               </View>
               <View
                 style={styles.bottomInfoContainer}
-                className="border-2 rounded-xl p-4 border-[#7F5AF0] bg-[#7F5AF0] "
+                className="border-2 rounded-xl p-4 border-black bg-[#7F5AF0] "
               >
                 <View
                   style={styles.clientInfo}
@@ -137,10 +136,10 @@
                     />
                     <Text className="text-white text-[18px] ml-2">Client</Text>
                   </View>
-                  <Text className="text-white text-[16px]">
+                  <Text className="text-white text-[16px] font-bold">
                     - Name: {clientName}
                   </Text>
-                  <Text className="text-white text-[16px] mt-1">
+                  <Text className="text-white text-[16px] mt-1 font-bold">
                     - Phone: {clientPhone}
                   </Text>
                 </View>
@@ -149,13 +148,13 @@
                     <Ionicons name="car-outline" size={20} color="white" />
                     <Text className="text-white text-[18px] ml-2">Car</Text>
                   </View>
-                  <Text className="text-white text-[16px]">
+                  <Text className="text-white text-[16px] font-bold">
                     - {carBrand} {carModel} ({carYear})
                   </Text>
-                  <Text className="text-white text-[16px] mt-1">
+                  <Text className="text-white text-[16px] mt-1 font-bold">
                     - Total Days: {TotalDays}
                   </Text>
-                  <Text className="text-white text-[16px] mt-1">
+                  <Text className="text-white text-[16px] mt-1 font-bold">
                     - Total Price: ${TotalPrice}
                   </Text>
                 </View>
@@ -238,6 +237,7 @@
       color: "#FFF",
       fontSize: 14,
       marginLeft: 5,
+      fontWeight:'bold'
     },
     rightContainer: {
       flexDirection: "row",
@@ -273,11 +273,11 @@
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+      borderWidth:3,
     },
     carPhoto: {
       width: 350,
       height: 200,
-      marginBottom: 5,
       borderRadius: 10,
     },
     bottomInfoContainer: {
