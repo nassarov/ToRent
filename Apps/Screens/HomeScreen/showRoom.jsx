@@ -72,7 +72,7 @@ export default function ShowRoom({route}) {
 
     if (selectedChoice === "") {
       filteredData = data.filter((item) => {
-        const { carData } = item.carDetails;
+        const { carData } = item.favData.carDetails;
         const ownerName = item.ownerData?.name?.toLowerCase() || "";
 
         return (

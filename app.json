@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/torent-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.TORENT"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "25fc903c-2b97-44e7-a899-0660d4c4370e"
+      }
     }
   }
 }
