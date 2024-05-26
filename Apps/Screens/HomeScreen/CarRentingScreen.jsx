@@ -41,7 +41,6 @@ import FavoriteButton from "./favorite";
 export default function CarRentingScreen({ route }) {
   const { userData, carData, images, ownerId, ownerData, postId } =
     route.params;
-    console.log(ownerId)
   const isOwner = userData.id === ownerId;
   const minDate = new Date();
   const maxDate = new Date(2025, 6, 3);
