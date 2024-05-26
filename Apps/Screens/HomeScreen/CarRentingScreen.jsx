@@ -285,6 +285,7 @@ export default function CarRentingScreen({ route }) {
   let buttonText = "Request Rent";
   let buttonDisabled = false;
 
+  
   if (reservationStatus === "pending") {
     buttonText = "Awaiting Owner Response";
     buttonDisabled = true;
@@ -368,7 +369,7 @@ export default function CarRentingScreen({ route }) {
                 <Text>{carData.address.label}</Text>
               </View>
             </TouchableOpacity>
-            {!isOwner && (
+            {!isOwner && ((userData.role =='1')||(userData.role =='0'))&&(
               <View className="flex-row">
                 <TouchableOpacity
                   className="items-center mr-1 rounded-full border-violet-500 border-2 px-3 py-2"
@@ -464,52 +465,53 @@ export default function CarRentingScreen({ route }) {
             marginBottom: 20,
           }}
         >
-          {isOwner ? (
-            <>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("EditCarRegistrationScreen", {
-                    postId,
-                    carData,
-                    userData,
-                  });
-                }}
-                style={{
-                  backgroundColor: "#7F5AF0",
-                  padding: 10,
-                  borderRadius: 10,
-                  marginTop: 10,
-                  width: widthPercentageToDP(40),
-                  height: heightPercentageToDP(7),
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ color: "white", fontWeight: "bold" }}>
-                  Update Post
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  handleDelete();
-                }}
-                style={{
-                  backgroundColor: "#fff",
-                  padding: 10,
-                  borderRadius: 10,
-                  marginTop: 10,
-                  width: widthPercentageToDP(40),
-                  height: heightPercentageToDP(7),
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ color: "red", fontWeight: "bold" }}>
-                  Delete Post
-                </Text>
-              </TouchableOpacity>
-            </>
-          ) : (
+         {isOwner ? (
+          <>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("EditCarRegistrationScreen", {
+                  postId,
+                  carData,
+                  userData,
+                });
+              }}
+              style={{
+                backgroundColor: "#7F5AF0",
+                padding: 10,
+                borderRadius: 10,
+                marginTop: 10,
+                width: widthPercentageToDP(40),
+                height: heightPercentageToDP(7),
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                Update Post
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                handleDelete();
+              }}
+              style={{
+                backgroundColor: "#fff",
+                padding: 10,
+                borderRadius: 10,
+                marginTop: 10,
+                width: widthPercentageToDP(40),
+                height: heightPercentageToDP(7),
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: "red", fontWeight: "bold" }}>
+                Delete Post
+              </Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          (userData.role == '0' || userData.role == '1') ? (
             <TouchableOpacity
               onPress={addToReservation}
               disabled={buttonDisabled}
@@ -521,7 +523,17 @@ export default function CarRentingScreen({ route }) {
                 <Text style={styles.buttonText}>{buttonText}</Text>
               )}
             </TouchableOpacity>
-          )}
+          ) : (
+            <TouchableOpacity
+            style={[styles.button, buttonDisabled && styles.disabledButton]}
+              onPress={() => {
+                Alert.alert("Guest Login", "You Need To Have an Account To Request a Reservation");
+              }}
+            >
+              <Text style={styles.buttonText}>Request Rent</Text>
+            </TouchableOpacity>
+          )
+        )}
 
           {!isOwner && reservationStatus === "pending" && (
             <View className="justify-center items-center">
