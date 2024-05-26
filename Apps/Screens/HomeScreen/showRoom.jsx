@@ -69,7 +69,6 @@ export default function ShowRoom({route}) {
       setFilteredData(data.slice(0, page * pageSize)); 
       return;
     }
-
     if (selectedChoice === "") {
       filteredData = data.filter((item) => {
         const { carData } = item.favData.carDetails;
@@ -97,7 +96,7 @@ export default function ShowRoom({route}) {
       switch (selectedChoice) {
         case "brand":
           filteredData = data.filter((item) =>
-            item.carDetails.carData.brand
+            item.favData.carDetails.carData.brand
               .toLowerCase()
               .includes(searchQuery.toLowerCase())
           );
@@ -111,7 +110,7 @@ export default function ShowRoom({route}) {
           break;
         case "year":
           filteredData = data.filter((item) =>
-            item.carDetails.carData.year
+            item.favData.carDetails.carData.year
               .toString()
               .toLowerCase()
               .includes(searchQuery.toLowerCase())
@@ -119,21 +118,21 @@ export default function ShowRoom({route}) {
           break;
         case "location":
           filteredData = data.filter((item) =>
-            item.carDetails.carData.address.label
+            item.favData.carDetails.carData.address.label
               .toLowerCase()
               .includes(searchQuery.toLowerCase())
           );
           break;
         case "model":
           filteredData = data.filter((item) =>
-            item.carDetails.carData.model
+            item.favData.carDetails.carData.model
               .toLowerCase()
               .includes(searchQuery.toLowerCase())
           );
           break;
         case "price":
           filteredData = data.filter((item) =>
-            item.carDetails.carData.price
+            item.favData.carDetails.carData.price
               .toString()
               .toLowerCase()
               .includes(searchQuery.toLowerCase())
@@ -141,7 +140,7 @@ export default function ShowRoom({route}) {
           break;
         case "fuel":
           filteredData = data.filter((item) =>
-            item.carDetails.carData.fuelType
+            item.favData.carDetails.carData.fuelType
               .toLowerCase()
               .includes(searchQuery.toLowerCase())
           );

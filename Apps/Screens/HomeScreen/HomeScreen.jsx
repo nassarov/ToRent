@@ -134,7 +134,7 @@ export default function HomeScreen({ route }) {
           </TouchableOpacity>
         </View>
         <Carousel images={images} />
-        <Text className="font-bold text-lg">Top <Text className="font-bold text-lg text-[#7F5AF0]">Car</Text> Renting Companies</Text>
+        <Text className="font-bold text-lg ml-3">Top <Text className="font-bold text-lg text-[#7F5AF0]">Car</Text> Renting Companies</Text>
       </>
     );
   };
